@@ -1,0 +1,18 @@
+[28-Dec-2022 16:13:31 Asia/Karachi] PHP Deprecated:  The behavior of unparenthesized expressions containing both '.' and '+'/'-' will change in PHP 8: '+'/'-' will take a higher precedence in /home/ranglnbo/public_html/znjevents/app/Http/Controllers/Api/EventController.php on line 183
+[31-Jan-2023 06:52:34 UTC] PHP Fatal error:  Uncaught ReflectionException: Class config does not exist in /home/ranglnbo/public_html/znjevents/vendor/laravel/framework/src/Illuminate/Container/Container.php:877
+Stack trace:
+#0 /home/ranglnbo/public_html/znjevents/vendor/laravel/framework/src/Illuminate/Container/Container.php(877): ReflectionClass->__construct('config')
+#1 /home/ranglnbo/public_html/znjevents/vendor/laravel/framework/src/Illuminate/Container/Container.php(758): Illuminate\Container\Container->build('config')
+#2 /home/ranglnbo/public_html/znjevents/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(851): Illuminate\Container\Container->resolve('config', Array, true)
+#3 /home/ranglnbo/public_html/znjevents/vendor/laravel/framework/src/Illuminate/Container/Container.php(694): Illuminate\Foundation\Application->resolve('config', Array)
+#4 /home/ranglnbo/public_html/znjevents/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(836): Illuminate\Container\Container->make('config', Array)
+#5 /home/ranglnbo/public_ in /home/ranglnbo/public_html/znjevents/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 879
+[28-Mar-2023 09:26:47 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 7.4.0". You are running 7.3.33. in /home/ranglnbo/public_html/znjevents/vendor/composer/platform_check.php on line 24
+[28-Mar-2023 09:27:45 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 7.4.0". You are running 7.3.33. in /home/ranglnbo/public_html/znjevents/vendor/composer/platform_check.php on line 24
+[05-Apr-2023 08:46:14 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 7.4.0". You are running 7.2.34. in /home/ranglnbo/public_html/znjevents/vendor/composer/platform_check.php on line 24
+[31-Mar-2025 05:52:43 UTC] PHP Warning:  Undefined array key "HTTP_REFERER" in /home/znjemvgy/public_html/index.php on line 1
+[31-Mar-2025 05:53:01 UTC] PHP Warning:  Undefined array key "HTTP_REFERER" in /home/znjemvgy/public_html/index.php on line 1
+[31-Mar-2025 05:53:01 UTC] PHP Warning:  Undefined array key "HTTP_REFERER" in /home/znjemvgy/public_html/index.php on line 1
+[31-Mar-2025 05:53:01 UTC] PHP Warning:  Undefined array key "HTTP_REFERER" in /home/znjemvgy/public_html/index.php on line 1
+[31-Mar-2025 05:53:01 UTC] PHP Warning:  Undefined array key "HTTP_REFERER" in /home/znjemvgy/public_html/index.php on line 1
+[31-Mar-2025 05:53:09 UTC] PHP Warning:  Undefined array key "HTTP_REFERER" in /home/znjemvgy/public_html/index.php on line 1
