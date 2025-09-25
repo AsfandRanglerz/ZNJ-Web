@@ -64,7 +64,7 @@
                     <p class="title-of-event">{{ $event->title }}</p>
                     <p class="price-of-event-ticket-recruiter">Rs.{{ $event->price ?? 'Free' }}</p>
                     <button type="button" class="btn btn-sm btn-blak position-absolute bottom-0 end-0 m-0 p-2">
-                      <img src="{{ asset('public/web/assets/images/edit-icon.png') }}" class="edit-icon-create-join-event-recruiter-image" alt="Edit">
+                      <img src="{{ asset('public/web/assets/images/arriow.png') }}" class="edit-icon-create-join-event-recruiter-image-arrow" alt="Edit">
                     </button>
                   </div>
                 </a>

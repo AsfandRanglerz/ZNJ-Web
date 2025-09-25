@@ -7,7 +7,7 @@
 
 
 
-<div class="container bg-white min-vh-100 create-event-container-div">
+<div class="bg-white min-vh-100 create-event-container-div">
   <div class="bg-white p-4 rounded dashboard-div-main">
     
     <h3 class="dashboard-heading">WELCOME TO YOUR DASHBOARD</h3>

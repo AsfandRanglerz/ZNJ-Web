@@ -4,21 +4,19 @@
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
 }
-html{
+html {
     font-size: 16px;
 }
 body {
     background-color: black;
 }
-/* Web Header*/
 .my-web-navbar .my-nav-link-header,
 .my-web-navbar .login-register-btn {
-
-    font-size: 1rem;                    
-    font-weight: 500;                                   
+    font-size: 1rem;
+    font-weight: 500;
 }
 
-.my-web-navbar{
+.my-web-navbar {
     position: sticky;
     top: 0%;
     z-index: 555;
@@ -26,65 +24,68 @@ body {
 .my-web-navbar,
 .button-form-mynav {
     background-color: #121416;
-   
-
 }
-.header-logo{
+.header-logo {
     height: 4rem;
     width: 2.5rem;
 }
-.my-nav-link-header{
-     color: white;
-      margin-left:1.25rem;
+.my-nav-link-header {
+    color: white;
+    margin-left: 1.25rem;
 }
 .my-nav-link-header:hover,
-.plus-sign-header{
+.plus-sign-header {
     color: #e5c530;
 }
-.login-register-btn{
+.login-register-btn {
     color: white;
-    
 }
-.login-phone-btn{
-  background-color: #e5c530;
-color: black;  
-font-weight: 600;
-}
-.login-register-btn:hover,
-.login-phone-btn:hover,
-.login-phone-btn:focus{
-background-color: #e5c530;
-color: black;
-}
-#login-btn-header{
+.login-phone-btn {
     background-color: #e5c530;
     color: black;
     font-weight: 600;
 }
-#login-btn-header:hover{
+.login-register-btn:hover,
+.login-phone-btn:hover,
+.login-phone-btn:focus {
+    background-color: #e5c530;
+    color: black;
+}
+#login-btn-header {
+    background-color: #e5c530;
+    color: black;
+    font-weight: 600;
+}
+#login-btn-header:hover {
     color: #e5c530;
     background-color: black;
     border: 1px solid #e5c530;
-    
 }
-/* Web Footer */
-.my-web-footer{
- background-color: #121416;
- color: rgb(175, 175, 174);
+li .drop-down-for-services {
+    background-color: #121416;
 }
-.footer-links-div ul li a{
+li .drop-down-items-for-services {
+    color: white;
+}
+li .drop-down-items-for-services:hover {
+    background-color: #e5c530;
+    color: black;
+}
+.my-web-footer {
+    background-color: #121416;
+    color: rgb(175, 175, 174);
+}
+.footer-links-div ul li a {
     color: rgb(156, 156, 155);
-
 }
-.adress-last-link-highlight{
+.adress-last-link-highlight {
     color: #e5c530;
 }
-.adress-link-highlight{
+.adress-link-highlight {
     color: #e5c530;
     border-bottom: 1px solid rgb(175, 175, 174);
 }
-/*Login Form*/
-.form-container{
+.form-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -92,62 +93,59 @@ color: black;
     background-color: #2b2a2a;
     border-radius: 0.4rem;
     padding: 4rem;
-    }
-    .login-form{
-        width: 100%;
-        color: rgb(175, 175, 174);
-    }
-    .form-label{
-        font-size: 0.8rem;
-    }
-    form div input{
-        height: 3rem;
-    }
-    form div input:focus {
-    border: none !important; 
-    box-shadow: none !important ; 
-    outline: none !important ;    
-   }
-   .fa-eye-slash {
+}
+.login-form {
+    width: 100%;
+    color: rgb(175, 175, 174);
+}
+.form-label {
+    font-size: 0.8rem;
+}
+form div input {
+    height: 3rem;
+}
+form div input:focus {
+    border: none !important;
+    box-shadow: none !important ;
+    outline: none !important ;
+}
+.fa-eye-slash {
     font-size: 0.7rem;
     position: relative;
-    top: 0.03rem; 
-    } 
-    .form-check-input{
-        border-radius: 0 !important;
-    }
-   .form-check-input:checked {
-   
-    background-color: #e5c530; 
+    top: 0.03rem;
+}
+.form-check-input {
+    border-radius: 0 !important;
+}
+.form-check-input:checked {
+    background-color: #e5c530;
     border-color: #e5c530;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='black'  d='M16.704 5.29a1 1 0 0 1 0 1.42l-8.01 8.01a1 1 0 0 1-1.42 0l-4.01-4.01a1 1 0 0 1 1.42-1.42l3.3 3.3 7.3-7.3a1 1 0 0 1 1.42 0z'/%3e%3c/svg%3e");
-    }
-    .check-box-for-remember{
-        font-size: 0.8rem;
-    }     
-   
-   
+}
+.check-box-for-remember {
+    font-size: 0.8rem;
+}
 
-    .submit-btn-for-forms{
-        width: 100%;
-        height: 3rem;
-        color: black;
-        background-color: #e5c530;
-        font-weight: 500;
-        font-size: 1.2rem;
-    }
-    .submit-btn-for-forms:hover{
-        color: black;
-        background-color: #b1961e;    
-    }
-    .login-form-anchor{
-        color: rgb(175, 175, 174); 
-        font-weight: 600;
-    }
-    .devider-for-login-form{
-        color: #e5c530;
-    }
-    .devider-for-login-form::before,
+.submit-btn-for-forms {
+    width: 100%;
+    height: 3rem;
+    color: black;
+    background-color: #e5c530;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+.submit-btn-for-forms:hover {
+    color: black;
+    background-color: #b1961e;
+}
+.login-form-anchor {
+    color: rgb(175, 175, 174);
+    font-weight: 600;
+}
+.devider-for-login-form {
+    color: #e5c530;
+}
+.devider-for-login-form::before,
 .devider-for-login-form::after {
     content: "";
     flex: 1;
@@ -161,114 +159,105 @@ color: black;
 .devider-for-login-form:not(:empty)::after {
     margin-left: 0.625rem;
 }
-/* OTP */
-.resend-btn-otp-form{
+.resend-btn-otp-form {
     color: #e5c530;
     font-size: 0.8rem;
 }
-.resend-btn-otp-form:hover{
+.resend-btn-otp-form:hover {
     color: #b1961e;
 }
- /* Event Page */
- .event-page-search-city-date-div{
+.event-page-search-city-date-div {
     background-color: #2b2a2a;
-    color : rgb(175, 175, 174);
+    color: rgb(175, 175, 174);
     padding: 2rem;
- }
- .search-event-feild:focus,
- .search-city-date-btn:focus{
-        border: none !important; 
-    box-shadow: none !important ; 
-    outline: none !important ;
-    
- }
- #search-btn-in-event{
+}
+.dropdown-for-city-location{
     background-color: white;
     color: black;
- }
-  #search-btn-in-event:focus,
- .search-city-date-btn:focus{
-  background-color: #e5c530;
-    
- }
- 
-  .btn.search-city-date-btn,
-  .search-event-feild,
-  .search-city-date-btn {
+}
+
+
+.search-event-feild:focus,
+.search-city-date-btn:focus {
+    border: none !important;
+    box-shadow: none !important ;
+    outline: none !important ;
+}
+#search-btn-in-event {
+    background-color: white;
+    color: black;
+}
+#search-btn-in-event:focus,
+.search-city-date-btn:focus {
+    background-color: #e5c530;
+}
+.btn.search-city-date-btn,
+.search-event-feild,
+.search-city-date-btn {
     height: 2.5rem !important;
     font-size: 0.9rem;
-  }
-
-  .input-group-text {
+}
+.input-group-text {
     height: 2.5rem !important;
-  }
-
-
- .main-div-contain-event-box{
+}
+.main-div-contain-event-box {
     background-color: #2b2a2a;
     color: white;
     margin-left: 1rem;
     margin-right: 1rem;
     padding: 1rem;
- }
- .event-box-for-image-text{
-
+}
+.event-box-for-image-text {
     display: flex;
     border-radius: 0.5rem;
- }
- .event-box-anchor{
-     height: 18rem ;
-    width: 17rem ; 
+}
+.event-box-anchor {
+    height: 18rem;
+    width: 17rem;
     overflow: hidden;
     border-radius: 0.5rem;
-     border: 0.04rem solid #e5c530;
-
- }
- .event-box-iamge{
-    
+    border: 0.04rem solid #e5c530;
+}
+.event-box-iamge {
     height: 75%;
     width: 100%;
-    opacity: 50%;
     object-fit: cover;
- }
- .event-box-text-div{
+}
+.event-box-text-div {
     background-color: #2b2a2a;
     height: 25%;
     width: 100%;
- }
- .title-of-event{
+}
+.title-of-event {
     font-size: 0.7rem;
- }
- /* Event Detail */
-.event-detail-top-image{
+}
+.event-detail-top-image {
     height: 70lvh;
     width: 100%;
     object-fit: cover;
 }
-.calender-watch-image{
-    height:50% ;
+.calender-watch-image {
+    height: 50%;
     width: 10%;
     object-fit: contain;
 }
-.heading-watch-calender{
+.heading-watch-calender {
     font-size: 1.7rem;
 }
-ul li .btn-pill-venue-ticket-event{
-    width: 100% ;
-    background-color: white ;
-    color: black ;
+ul li .btn-pill-venue-ticket-event {
+    width: 100%;
+    background-color: white;
+    color: black;
     margin: 2rem;
     font-weight: 500;
 }
-
-
 .btn-pill-venue-ticket-event:focus,
 .btn-pill-venue-ticket-event:active,
 .btn-pill-venue-ticket-event.show {
     background-color: #e5c530 !important;
-    color: #000 !important; 
+    color: #000 !important;
     outline: none !important;
-    box-shadow: none !important; 
+    box-shadow: none !important;
 }
 .btn-pill-venue-ticket-event.active {
     background-color: #e5c530 !important;
@@ -276,85 +265,80 @@ ul li .btn-pill-venue-ticket-event{
     outline: none !important;
     box-shadow: none !important;
 }
-.btn-pill-venue-ticket-event:hover{
+.btn-pill-venue-ticket-event:hover {
     color: #000;
 }
-.join-fee-main-div{
+.join-fee-main-div {
     margin: 3rem;
-    font-weight: 500;    
+    font-weight: 500;
 }
-.join-fee{
+.join-fee {
     font-size: 2rem;
- border-bottom:0.09rem solid #e5c530 ;
+    border-bottom: 0.09rem solid #e5c530;
 }
-.btn-sign-plus-negative-div{
+.btn-sign-plus-negative-div {
     font-size: 1.5rem;
 }
 .plus-negative-btn {
-    width: 1.6rem;             
+    width: 1.6rem;
     height: 1.6rem;
-    border-radius: 50%;      
+    border-radius: 50%;
     font-weight: 500;
     background-color: white;
     color: black;
-    border: 1px solid #ccc;   
-    padding: 0;               
+    border: 1px solid #ccc;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-
 .plus-negative-btn:hover,
-.plus-negative-btn:focus{
+.plus-negative-btn:focus {
     background-color: #e5c530;
     color: black;
 }
-.join-event-btn{
+.join-event-btn {
     width: 30%;
     background-color: #e5c530;
     color: black;
     font-weight: 500;
 }
-.join-event-btn:hover{
+.join-event-btn:hover {
     background-color: #b1961e;
 }
-/* Event Detail Sub Page */
 .event-organizer-div,
-.event-entertainer-div{
+.event-entertainer-div {
     background-color: #2b2a2a;
 }
-.organizer-singer-musician-image{
-    width: 8rem;        
-    height:8rem ;
-    border-radius: 50%;  
-    object-fit: cover;  
+.organizer-singer-musician-image {
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    object-fit: cover;
 }
-.user-review-main-div{
+.user-review-main-div {
     font-size: 0.8rem;
     font-weight: 500;
 }
-.review-user-image{
+.review-user-image {
     height: 2.2rem;
     width: 2.2rem;
     object-fit: cover;
 }
-.rating-review-user-div{
+.rating-review-user-div {
     color: #e5c530;
     font-size: 1.5rem;
 }
-.show-all-review-div{
+.show-all-review-div {
     font-size: 1.2rem;
     color: #e5c530;
 }
-/* Veneu */
-.venue-image{
+.venue-image {
     height: 75lvh;
     width: 100%;
     object-fit: cover;
-
 }
-/*Join Event */
-.form-container-join-event{
+.form-container-join-event {
     background-color: #2b2a2a;
     font-size: 1rem;
     padding: 2rem;
@@ -364,14 +348,12 @@ ul li .btn-pill-venue-ticket-event{
     height: calc(2.5rem + 2px) !important;
     font-size: 1rem;
 }
-.input-uniform:focus{
-        
-        border: none !important; 
-    box-shadow: none !important ; 
+.input-uniform:focus {
+    border: none !important;
+    box-shadow: none !important ;
     outline: none !important ;
-    
- }
-.submit-btn-for-genrate-ticket{
+}
+.submit-btn-for-genrate-ticket {
     color: black;
     background-color: #e5c530;
     width: 40%;
@@ -379,28 +361,25 @@ ul li .btn-pill-venue-ticket-event{
     font-weight: 500;
     font-size: 1.2rem;
 }
-.submit-btn-for-genrate-ticket:hover{
+.submit-btn-for-genrate-ticket:hover {
     color: black;
-    background-color:#b1961e;
+    background-color: #b1961e;
 }
-.lebel-of-join-event-input{
+.lebel-of-join-event-input {
     color: white;
     font-size: 1rem;
 }
-/* Recruiter Pages */
-/* Sidebar Default */
 .sidebar {
-    width: 18%; 
-    transition: width 0.2s ease-in-out; 
+    width: 13.75rem;
+    transition: margin 0.25s ease-out;
     overflow: hidden;
-    background:black;
+    background: black;
     height: 100%;
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 1001;
+    z-index: 5555;
 }
-
 .sidebar-logo {
     display: block;
     height: 5rem;
@@ -418,7 +397,6 @@ ul li .btn-pill-venue-ticket-event{
 .sidebar-item {
     margin: 0.625rem 0;
 }
-
 .sidebar-link {
     display: flex;
     align-items: center;
@@ -426,7 +404,6 @@ ul li .btn-pill-venue-ticket-event{
     text-decoration: none;
     padding: 0.5rem 1.25rem;
 }
-
 .sidebar-link:hover {
     background-color: #e5c530;
     color: #fff;
@@ -445,11 +422,7 @@ ul li .btn-pill-venue-ticket-event{
 .sidebar-link:hover .sidebar-icon {
     filter: brightness(0) saturate(100%);
 }
-#dashboardSidebarRightContent{
-  margin-left: 13.75rem;
-}
-/* Dashboard Nav */
-.dashboard-nav{
+.dashboard-nav {
     position: sticky;
     top: 0%;
     z-index: 555;
@@ -459,58 +432,53 @@ ul li .btn-pill-venue-ticket-event{
     height: 2rem;
     width: 2rem;
 }
-/* Collapsed Sidebar */
 body.collapsed .sidebar {
     width: 0;
     overflow: hidden;
-    transition: width 0.2s ease-in-out; 
+    transition: width 0.2s ease-in-out;
 }
 #dashboardSidebarRightContent {
-    margin-left: 18%;
+    margin-left: 13.75rem;
     transition: margin-left 0.2s ease-in-out;
-  
 }
 body.collapsed #dashboardSidebarRightContent {
-    margin-left: 0%;
+    margin-left: 0;
     transition: margin-left 0.2s ease-in-out;
-    
 }
 body.collapsed .create-event-container-div,
-       .create-event-container-main-div{
-      max-width: 100%;
-    }
-    
-.dashboard-heading{
+.create-event-container-main-div {
+    max-width: 100%;
+}
+
+.dashboard-heading {
     font-weight: 800;
 }
-.icon-circle{
-    height: 2.5rem ;
-    width: 2.5rem ;
+.icon-circle {
+    height: 2.5rem;
+    width: 2.5rem;
 }
-.dash-card-image{
-    height:1.5rem ;
+.dash-card-image {
+    height: 1.5rem;
     width: 1.5rem;
     object-fit: contain;
 }
-.dashboard-text-div-top{
- color: rgb(123, 123, 123);
-  font-size: 1.1rem;
-  font-weight: 500;
-
+.dashboard-text-div-top {
+    color: rgb(123, 123, 123);
+    font-size: 1.1rem;
+    font-weight: 500;
 }
-.dashboard-text-div-bottom{
-  font-weight: 500;
-  font-size: 1.4rem;  
+.dashboard-text-div-bottom {
+    font-weight: 500;
+    font-size: 1.4rem;
 }
-/* Create Event */
-.create-event-container-main-div{
+.create-event-container-main-div {
     background-color: #202020;
 }
-.create-event-container-div{
-    background-color:  #2b2a2a;
+.create-event-container-div {
+    background-color: #2b2a2a;
 }
 .myprofile-update-btn,
-.create-event-submit-btn{
+.create-event-submit-btn {
     background-color: #e5c530;
     color: black;
     width: 40%;
@@ -519,27 +487,26 @@ body.collapsed .create-event-container-div,
     border: none;
 }
 .myprofile-update-btn:hover,
-.create-event-submit-btn:hover{
+.create-event-submit-btn:hover {
     background-color: #b1961e;
-    color: black;    
+    color: black;
 }
-.myprofile-image{
+.myprofile-image {
     height: 12.25rem;
     width: 12.25rem;
 }
 .profile-edit-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  cursor: pointer;
+    width: 2.5rem;
+    height: 2.5rem;
+    cursor: pointer;
 }
-/* My Events */
-.create-join-recruiter-pills{
+.create-join-recruiter-pills {
     width: 50%;
 }
-.create-join-recruiter-pills-btn.active{
-   background-color: #e5c530 !important;
+.create-join-recruiter-pills-btn.active {
+    background-color: #e5c530 !important;
 }
-.create-join-recruiter-pills-btn{
+.create-join-recruiter-pills-btn {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -547,100 +514,95 @@ body.collapsed .create-event-container-div,
     color: white !important;
 }
 .create-join-recruiter-pills-btn:active,
-.create-join-recruiter-pills-btn.show{
+.create-join-recruiter-pills-btn.show {
     background-color: #e5c530 !important;
     color: white;
 }
-.create-join-recruiter-pills-btn:hover{
+.create-join-recruiter-pills-btn:hover {
     color: white !important;
 }
- .event-box-anchor-recruiter{
-    height: 14rem ;
-    width: 16rem ;
+.event-box-anchor-recruiter {
+    height: 14rem;
+    width: 16rem;
     overflow: hidden;
     border-radius: 0.5rem;
     border: 0.04rem solid #e5c530;
- }
-  .event-box-iamge-recruiter{
-    
+}
+.event-box-iamge-recruiter {
     height: 75%;
     width: 100%;
-    opacity: 50%;
     object-fit: cover;
- }
-  .event-box-text-div-recruiter{
+}
+.event-box-text-div-recruiter {
     background-color: black;
     height: 25%;
     width: 100%;
     position: relative;
- }
-   .event-box-text-div-recruiter p{
-   margin: 0.2rem;
- }
- .price-of-event-ticket-recruiter{
+}
+.event-box-text-div-recruiter p {
+    margin: 0.2rem;
+}
+.price-of-event-ticket-recruiter {
     font-size: 0.9rem;
     width: 100%;
- }
- .edit-icon-create-join-event-recruiter-image{
-    height: 1rem ;
+}
+.edit-icon-create-join-event-recruiter-image {
+    height: 1rem;
     width: 1rem;
- }
- /* My Ticket */
- /* .event-ticket-div{
-    height: 13rem ;
-    width: 14rem;
- } */
- .ticket-logo-div{
+}
+.edit-icon-create-join-event-recruiter-image-arrow{
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 0.2rem;
+    object-fit: cover;
+}
+.ticket-logo-div {
     height: 40%;
     width: 100%;
- }
- .ticket-logo-image{
+}
+.ticket-logo-image {
     height: 4rem;
     width: 3rem;
-        display: flex;
+    display: flex;
     justify-content: center;
     align-self: center;
     object-fit: contain;
- }
- .ticket-info-div{
+}
+.ticket-info-div {
     height: 60%;
     width: 100%;
     font-size: 0.5rem;
- }
- .ticket-scan-image{
+}
+.ticket-scan-image {
     height: 4rem;
     width: 3rem;
-   object-fit: cover;
- }
- .ticket-info-div div ul{
+    object-fit: cover;
+}
+.ticket-info-div div ul {
     padding: 0.3rem;
- }
- .ticket-info-div div ul li{
+}
+.ticket-info-div div ul li {
     margin-bottom: 1.3rem;
- }
- .left-content-of-ticket{
+}
+.left-content-of-ticket {
     font-weight: 600;
- }
- .right-content-of-ticket{
-   color: rgb(123, 123, 123);
- }
-/* Pagination */
+}
+.right-content-of-ticket {
+    color: rgb(123, 123, 123);
+}
 .roboto.custom-pagination {
     background-color: black;
     padding: 0.625rem;
     border-radius: 0.313rem;
-
     font-family: "Roboto", sans-serif;
 }
 .pagination .page-item.active .page-link {
-    color: #e5c530; 
+    color: #e5c530;
     font-weight: bold;
 }
-
-
 .custom-pagination .page-link {
     border: none;
-  background-color: #2b2a2a;
+    background-color: #2b2a2a;
     color: white;
     font-size: 1rem;
     font-weight: 600;
@@ -654,199 +616,201 @@ body.collapsed .create-event-container-div,
     font-weight: 400 !important;
     color: #e5c530 !important;
 }
-/* Add space before numbers */
 .custom-pagination .page-item:first-child {
     margin-right: 1.9rem;
 }
-
-/* Add space after numbers */
 .custom-pagination .page-item:last-child {
     margin-left: 1.9rem;
 }
 .page-link:hover,
- .page-link.active {
+.page-link.active {
     color: #e5c530;
-    /* background-color: transparent; */
 }
-
 .custom-select-input,
 /* Select2 container ko Bootstrap form-control-lg jaisa banane ke liye */
 .select2-container--default .select2-selection--multiple {
-  appearance: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  
-  border: 1px solid #ced4da;
-  height: 3rem;                 /* same height as form-control-lg */
-  background-color: #fff;
-  border-radius: 0.5rem;         /* bootstrap rounded */
-  display: flex;
-  align-items: center;           /* vertical center */
-  padding: 0.375rem 0.75rem;     /* bootstrap spacing */
-  box-shadow: none;              /* remove unwanted shadows */
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+
+    border: 1px solid #ced4da;
+    height: 3rem;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    box-shadow: none;
 }
 
 /* Placeholder aur chips ke liye alignment */
-.select2-container--default .select2-selection--multiple .select2-selection__rendered {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;               /* agar multiple entertainer select ho jaye */
-  gap: 0.25rem;                  /* thoda spacing chips me */
+.select2-container--default
+    .select2-selection--multiple
+    .select2-selection__rendered {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
 }
+/* Select2 multiple ko Bootstrap form-control-lg jaisa banane ke liye */
+.select2-container--default .select2-selection--multiple {
+    min-height: 3rem !important; /* same as form-control-lg */
+    height: auto !important; /* force fixed height */
+    padding: 0.5rem 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+/* Selected items (chips) ka text black */
+.select2-container--default
+    .select2-selection--multiple
+    .select2-selection__choice {
+    color: #000 !important; /* text black */
+    background-color: #e9ecef; /* halka gray background for contrast */
+    border: 1px solid #ced4da;
+    padding: 0 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.95rem;
+}
+
+/* Chips ke andar jo remove (x) button hota hai */
+.select2-container--default
+    .select2-selection--multiple
+    .select2-selection__choice__remove {
+    color: #000 !important;
+    margin-right: 0.25rem;
+    cursor: pointer;
+}
+
 /* Jab tak user ne koi option select nahi kiya */
 select:required:invalid {
-  color: #585e64;      /* grey */
- 
-  font-size: 0.95rem;   /* chhota text */
-  height: 3rem;        /* fixed height, chhota nahi hoga */
-   /* text vertical center */
+    color: #585e64;
+    font-size: 0.95rem;
+    height: 3rem;
 }
 /* base */
 .input-uniform[type="file"] {
-  height: calc(2.5rem + 2px) !important;   /* tumhara value */
-  font-size: 1rem;
-  line-height: calc(2.5rem + 2px) !important; /* vertically center filename text */
-  padding: 0 .75rem !important;
-  display: block;
-  box-sizing: border-box;
-  background-clip: padding-box;
+    height: calc(2.5rem + 2px) !important;
+    font-size: 1rem;
+    line-height: calc(2.5rem + 2px) !important;
+    padding: 0 0.75rem !important;
+    display: block;
+    box-sizing: border-box;
+    background-clip: padding-box;
 }
-
 /* remove focus outline/shadow */
 .input-uniform:focus {
-  border: none !important;
-  box-shadow: none !important;
-  outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
 }
-
 /* Chrome / Edge / WebKit button */
 .input-uniform[type="file"]::-webkit-file-upload-button {
-  height: 100%;
-  padding: 0 12px;
-  border: none;
-  background: rgb(250, 246, 246);
-  color: black;
-  cursor: pointer;
-  border-radius: .25rem;
-  vertical-align: middle;
+    height: 100%;
+    padding: 0 12px;
+    border: none;
+    background: rgb(250, 246, 246);
+    color: black;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    vertical-align: middle;
 }
-
 /* Firefox button */
 .input-uniform[type="file"]::-moz-file-upload-button {
-  height: 100%;
-  padding: 0 12px;
-  border: none;
-  background:rgb(250, 246, 246);
-  color: black;
-  cursor: pointer;
-  border-radius: .25rem;
-  vertical-align: middle;
-}
-
-
-
-
-
-.custom-select-input:focus{
+    height: 100%;
+    padding: 0 12px;
     border: none;
-     box-shadow: none;
+    background: rgb(250, 246, 246);
+    color: black;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    vertical-align: middle;
 }
-.thank-you-heading{
+.custom-select-input:focus {
+    border: none;
+    box-shadow: none;
+}
+.thank-you-heading {
     font-size: 3rem;
 }
-.thank-you-anchors{
-    text-decoration: none; 
+.thank-you-anchors {
+    text-decoration: none;
     color: #e5c530;
     font-size: 0.8rem;
 }
-
-
-@media (max-width: 991px){
-  html{
-       font-size: 14px;
-       }
-         /* Web Header*/
-    .my-web-navbar .my-nav-link-header{
-      border-bottom: 1px solid rgb(87, 86, 86) ;
-    }
-    .button-form-mynav{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-   }
-       /*Log In Form*/
-    .form-container{
-     width: 80%;
-    }
-    .sidebar{
-        width: 25%;
-    }
-    #dashboardSidebarRightContent {
-    margin-left: 25%;
-    transition: margin-left 0.2s ease-in-out;
-    }
-    /* Create Event */
-     
-       .create-event-container-main-div{
-      max-width: 100%;
-    }
-
-
+/* remove bootstrap default dropdown arrow */
+.dropdown-toggle::after {
+    display: none !important;
 }
-@media (max-width:767px){
-    html{
+/* Sidebar collapsed */
+.sidebar-toggle {
+    margin-left: -13.75rem; /* Collapsed width */
+}
+.right-toggled {
+    margin-left: 0!important;
+}
+@media (max-width: 991px) {
+    html {
+        font-size: 14px;
+    }
+    .my-web-navbar .my-nav-link-header {
+        border-bottom: 1px solid rgb(87, 86, 86);
+    }
+    .button-form-mynav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .form-container {
+        width: 80%;
+    }
+    .create-event-container-main-div {
+        max-width: 100%;
+    }
+    /* Content area default (sidebar expanded) */
+    #dashboardSidebarRightContent {
+        margin-left: 0; /* same as sidebar width */
+    }
+    #sideNavOverlay {
+        background-color: rgba(0, 0, 0, 0.55);
+        height: 100vh;
+        left: 0px;
+        right: 0px;
+        top: 0px;
+        width: 100vw;
+        z-index: 555;
+    }
+}
+@media (max-width: 767px) {
+    html {
         font-size: 12px;
     }
-    /*Footer*/
-    .anchor-btn-to-download{
+    .anchor-btn-to-download {
         height: 6rem;
         width: 9rem;
         object-fit: contain;
     }
-    .sidebar {
-    width: 25%;
-    }
-    #dashboardSidebarRightContent {
-    margin-left: 25%;
-    transition: margin-left 0.2s ease-in-out;
-    }
-
-    .create-event-container-div{
+    .create-event-container-div {
         max-width: 100%;
     }
-    .create-event-container-main-div{
-      max-width: 100%;
+    .create-event-container-main-div {
+        max-width: 100%;
     }
-
-
 }
-@media (max-width:575px){
-        html{
-        font-size: 10px;
-    }
-        .sidebar {
-    width: 60%;
-    }
-      #dashboardSidebarRightContent {
-    margin-left: 0%;
-    transition: margin-left 0.2s ease-in-out;
-    }
-
-    
-}
-@media (max-width:400px){
-        html{
+@media (max-width: 575px) {
+    html {
         font-size: 10px;
     }
 
-  .event-box-anchor{
-    height: 17rem ;
-    width: 20rem ;
-   }
-     .event-box-anchor-recruiter{
-    height: 17rem ;
-    width: 20rem ;
-   }
-    
+    /* Sidebar default (expanded) */
+    #dashboardSidebar {
+        background-color: var(--theme-clr);
+        height: 100%;
+        left: 0;
+        position: fixed;
+        z-index: 5555;
+    }
 }

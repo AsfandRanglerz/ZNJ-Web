@@ -31,9 +31,9 @@
       <!-- Select City -->
    <div class="col-md-2 col-4">
     <select name="city" class="form-select search-city-date-btn">
-        <option selected disabled>Select Location</option>
+        <option class="dropdown-for-city-location" selected disabled>Select Location</option>
         @foreach($cities as $city)
-            <option value="{{ $city }}" {{ request('city') == $city ? 'selected' : '' }}>
+            <option class="dropdown-for-city-location" value="{{ $city }}" {{ request('city') == $city ? 'selected' : '' }}>
                 {{ $city }}
             </option>
         @endforeach

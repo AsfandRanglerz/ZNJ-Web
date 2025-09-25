@@ -11,9 +11,18 @@
                     experience.</p>
             </div>
             <div>
-                <img src="{{ asset('public/web/assets/images/app-store.png') }}" alt="Google Play Store"
-                    class="img-fluid me-2 anchor-btn-to-download " />
-                <img src="{{ asset('public/web/assets/images/google-play-store.png') }}" alt="App Store" class="img-fluid anchor-btn-to-download" />
+<a href="https://apps.apple.com/pk/app/znj/id6453476597" target="_blank" class="text-decoration-none">
+    <img src="{{ asset('public/web/assets/images/app-store.png') }}" 
+         alt="App Store"
+         class="img-fluid me-2  anchor-btn-to-download" />
+</a>
+
+<a href="https://play.google.com/store/apps/details?id=com.znj" target="_blank" class="text-decoration-none">
+    <img src="{{ asset('public/web/assets/images/google-play-store.png') }}" 
+         alt="Google Play Store" 
+         class="img-fluid  anchor-btn-to-download" />
+</a>
+
             </div>
         </div>
         <div class="row footer-links-div">
@@ -21,21 +30,21 @@
                 <h6 class="text-white my-5">OUR SERVICES</h6>
                 <div class="d-flex justify-content-between ">
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-decoration-none">Event Management</a></li>
-                        <li><a href="#" class="text-decoration-none">Event Creation</a></li>
-                        <li><a href="#" class="text-decoration-none">Ticket Sales</a></li>
-                        <li><a href="#" class="text-decoration-none">Vendor Services</a></li>
-                        <li><a href="#" class="text-decoration-none">Venue Booking</a></li>
-                        <li><a href="#" class="text-decoration-none">Talent Booking</a></li>
+                        <li><a href="https://znjevents.com/service/event-management/" class="text-decoration-none">Event Management</a></li>
+                        <li><a href="https://znjevents.com/service/event-creation/" class="text-decoration-none">Event Creation</a></li>
+                        <li><a href="https://znjevents.com/service/ticket-sales/" class="text-decoration-none">Ticket Sales</a></li>
+                        <li><a href="https://znjevents.com/service/vendor-services/" class="text-decoration-none">Vendor Services</a></li>
+                        <li><a href="https://znjevents.com/service/venue-booking/" class="text-decoration-none">Venue Booking</a></li>
+                        <li><a href="https://znjevents.com/service/talent-booking/" class="text-decoration-none">Talent Booking</a></li>
                     </ul>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-decoration-none">About Us</a></li>
-                        <li><a href="#" class="text-decoration-none">Our Portfolio</a></li>
-                        <li><a href="#" class="text-decoration-none">Blogs</a></li>
-                        <li><a href="#" class="text-decoration-none">Contact Us</a></li>
-                        <li><a href="#" class="text-decoration-none">Privacy Policy</a></li>
-                        <li><a href="#" class="text-decoration-none">FAQ's</a></li>
-                        <li><a href="#" class="text-decoration-none">Terms and Conditions</a></li>
+                        <li><a href="https://znjevents.com/about-us/" class="text-decoration-none">About Us</a></li>
+                        <li><a href="https://znjevents.com/our-portfolio/" class="text-decoration-none">Our Portfolio</a></li>
+                        <li><a href="https://znjevents.com/blog/" class="text-decoration-none">Blogs</a></li>
+                        <li><a href="https://znjevents.com/contact-us/" class="text-decoration-none">Contact Us</a></li>
+                        <li><a href="href="/privacy-policy/" class="text-decoration-none">Privacy Policy</a></li>
+                        <li><a href="https://znjevents.com/faqs/" class="text-decoration-none">FAQ's</a></li>
+                        <li><a href="https://znjevents.com/terms-and-conditions/" class="text-decoration-none">Terms and Conditions</a></li>
                     </ul>
                 </div>
             </div>
@@ -57,6 +66,6 @@
                 </div>
             </div>
         </div>
-        <p class="text-center text-white" id="znjCopyRight"></p>
+        <p class="text-center mt-5 text-white" id="znjCopyRight"></p>
     </div>
 </footer>

@@ -1,4 +1,5 @@
 <nav class="navbar bg-black text-white dashboard-nav">
+  <div id="sideNavOverlay" class="position-fixed d-none"></div>
   <div class="container-fluid d-flex justify-content-between align-items-center">
 
     <!-- Left: Toggle Button -->

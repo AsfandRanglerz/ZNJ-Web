@@ -15,7 +15,7 @@
         <!-- Dynamic Ticket -->
         <div class="col-lg-3 col-sm-4 col-6 event-ticket-div">
           <!-- Make the whole card clickable -->
-          <a href="{{ route('event.detail', $ticket->event->slug) }}" class="text-decoration-none text-dark">
+          <a href="{{ route('event.detail', $ticket->event->id) }}" class="text-decoration-none text-dark">
             
             <!-- Top Black Section (Logo) -->
             <div class="bg-black d-flex justify-content-center align-items-center ticket-logo-div">

@@ -18,7 +18,7 @@
         <!-- Profile Image -->
         <div class="d-flex justify-content-center pt-4 pb-4 mb-4">
           <div class="position-relative d-inline-block">
-            <img src="{{ $user->image ? asset($user->image) : asset('web/assets/images/myprofileimg.png') }}" 
+            <img src="{{ $user->image ? asset($user->image) : asset('public/web/assets/images/avatar.png') }}" 
                  class="rounded-circle myprofile-image" 
                  alt="Profile Image">
 
@@ -65,7 +65,7 @@
           </div>
           <div class="col-md-6">
             <label class="form-label">Designation</label>
-            <input type="text" name="designation" class="form-control bg-white"
+            <input type="text" name="designation" class="form-control bg-white" placeholder="Designation"
                    value="{{ old('designation', $user->designation) }}">
             @error('designation')
               <span class="text-warning validation-error">{{ $message }}</span>
@@ -134,20 +134,6 @@
             toastr.error("{!! implode('<br>', $errors->all()) !!}");
         @endif
 
-        // Password Toggle
-        $(".toggle-password").click(function() {
-            let input = $($(this).attr("toggle"));
-            let labelSpan = $(this).closest("span");
-            if (input.attr("type") === "password") {
-                input.attr("type", "text");
-                $(this).removeClass("fa-eye-slash").addClass("fa-eye");
-                labelSpan.find("small").text("Show");
-            } else {
-                input.attr("type", "password");
-                $(this).removeClass("fa-eye").addClass("fa-eye-slash");
-                labelSpan.find("small").text("Hide");
-            }
-        });
     });
 
     // Validation error auto remove on click anywhere

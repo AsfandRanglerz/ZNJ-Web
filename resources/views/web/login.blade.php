@@ -50,10 +50,12 @@
       </div>
 
       <!-- Remember Me -->
-      <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="remember" name="remember">
-        <label class="form-check-label check-box-for-remember" for="remember">Remember me</label>
-      </div>
+<div class="mb-3 form-check">
+  <input type="checkbox" class="form-check-input" id="remember_fake">
+  <label class="form-check-label check-box-for-remember" for="remember_fake">
+    Remember me
+  </label>
+</div>
 
       <!-- Submit Button -->
       <button type="submit" class="btn submit-btn-for-forms">Login</button>
@@ -92,20 +94,16 @@
         // Toastr Messages
         @if(session('success'))
             toastr.success("{{ session('success') }}");
-        @endif
-
-        @if(session('error'))
+        @elseif(session('error'))
             toastr.error("{{ session('error') }}");
-        @endif
-
-        @if($errors->any())
-            toastr.error("{!! implode('<br>', $errors->all()) !!}");
+        @elseif($errors->any())
+            toastr.error("{{ $errors->first() }}"); 
         @endif
 
         // Password Toggle
         $(".toggle-password").click(function() {
             let input = $($(this).attr("toggle"));
-            let labelSpan = $(this).closest("span"); // 👈 parent span jisme icon + small dono hain
+            let labelSpan = $(this).closest("span");
 
             if (input.attr("type") === "password") {
                 input.attr("type", "text");

@@ -8,6 +8,7 @@
     <meta name="description"
         content="ZNJ Events offers exceptional event creation, talent booking, venue sourcing, vendor services, ticket sales, SEO, and website development. Elevate your event with expert planning, management, and marketing solutions designed for global success.">
     <title>@yield('title') - Website</title>
+     <link rel="icon" type="image/png" href="{{ asset('public/web/assets/images/favicon.png') }}">
 
     {{-- Bootstrap 5.3.7 CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"

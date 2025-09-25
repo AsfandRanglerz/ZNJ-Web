@@ -79,7 +79,7 @@
         <div class="row mb-3">
           <div class="col-lg-4 ">
             <label class="form-label">Select Entertainers</label>
-            <select name="entertainer_id[]" class="form-control form-control-lg bg-white select2" multiple>
+            <select name="entertainer_id[]" class="form-control form-control-lg bg-white  select2" multiple>
                 @foreach($entertainers as $entertainer)
                     <option value="{{ $entertainer->id }}" >
                         {{ $entertainer->user->name ?? 'Unnamed Entertainer' }}

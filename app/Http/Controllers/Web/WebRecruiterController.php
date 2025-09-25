@@ -59,7 +59,7 @@ class WebRecruiterController extends Controller
 public function create()
     {
         $entertainers = EntertainerDetail::with('User')->get();
-        $venues = Venue::select('category_id')->with('venueCategory')->distinct('category_id')->get();
+        $venues = Venue::with('venueCategory')->get();
         return view('web.recruiter.createevent', compact('entertainers', 'venues'));
     }
 
