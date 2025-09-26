@@ -79,7 +79,7 @@
 
       <!-- Google Icon -->
       <div class="mt-2 mb-5 d-flex justify-content-center align-items-center">
-        <a href="#">
+        <a href="{{ route('google.login') }}">
           <img src="{{ asset('public/web/assets/images/googlett.png') }}" alt="Google" class="google-anchor-image">
         </a>
       </div>

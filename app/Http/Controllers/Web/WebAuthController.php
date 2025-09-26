@@ -1,18 +1,48 @@
 <?php
 namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller; 
-use Illuminate\Http\Request;
+use Socialite;
+use Exception;
 use App\Models\User; 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Controller; 
 
 class WebAuthController extends Controller
-{     
+{    
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    } 
+
+    public function handleGoogleCallback()
+    {
+        try {
+            $googleUser = Socialite::driver('google')->stateless()->user();
+            $user = User::where('email', $googleUser->getEmail())->first();
+
+            if ($user) {
+                Auth::login($user);
+                return redirect('/dashboard')->with('success', 'Logged In Successfully');
+            } else {
+                $newUser = User::create([
+                    'name' => $googleUser->getName(),
+                    'email' => $googleUser->getEmail(),
+                    'google_id' => $googleUser->getId(),
+                    'role' => 'recruiter',
+                ]);
+                Auth::login($newUser);
+                return redirect('/dashboard')->with('success', 'Account Created and Logged In Successfully');
+            }
+        } catch (Exception $e) {
+            return redirect()->route('web.login')->with('error', 'Something went wrong, please try again.');
+        }
+    }
     //Sign Up
     public function register(Request $request)
     {   
@@ -59,7 +89,7 @@ class WebAuthController extends Controller
         'role' => 'recruiter' // sirf recruiter ko login allow
     ], $request->remember)) {
         $request->session()->regenerate();
-        return redirect()->route('web.recruiter.dashboard')->with('success', 'Logged In Successfully');
+        return redirect('/dashboard')->with('success', 'Logged In Successfully');
     }
 
     return back()->withErrors([

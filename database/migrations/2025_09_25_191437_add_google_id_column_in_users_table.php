@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTalentCategoriesTable extends Migration
+class AddGoogleIdColumnInUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateTalentCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('talent_categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('category')->nullable();
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('google_id')->nullable()->after('email');
         });
     }
 
@@ -27,6 +25,8 @@ class CreateTalentCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('talent_categories');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('google_id');
+        });
     }
 }
