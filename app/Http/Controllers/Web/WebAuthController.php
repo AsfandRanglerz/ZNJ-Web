@@ -27,6 +27,11 @@ class WebAuthController extends Controller
             $user = User::where('email', $googleUser->getEmail())->first();
 
             if ($user) {
+                if (empty($user->google_id)) {
+                $user->update([
+                    'google_id' => $googleUser->getId(),
+                ]);
+            }
                 Auth::login($user);
                 return redirect('/dashboard')->with('success', 'Logged In Successfully');
             } else {
