@@ -36,7 +36,7 @@
         <!-- Row 1: Name & Email -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <label class="form-label">Name</label>
+            <label class="form-label">Name <span class="text-danger">*</span></label>
             <input type="text" name="name" class="form-control bg-white"
                    value="{{ old('name', $user->name) }}">
             @error('name')
@@ -44,7 +44,7 @@
             @enderror
           </div>
           <div class="col-md-6">
-            <label class="form-label">Email</label>
+            <label class="form-label">Email <span class="text-danger">*</span></label>
             <input type="email" name="email" class="form-control bg-white"
                    value="{{ old('email', $user->email) }}" >
             @error('email')
@@ -56,7 +56,7 @@
         <!-- Row 2: Phone & Designation -->
         <div class="row mb-3">
           <div class="col-md-6">
-            <label class="form-label">Phone</label>
+            <label class="form-label">Phone <span class="text-danger">*</span></label>
             <input type="text" name="phone" class="form-control bg-white"
                    value="{{ old('phone', $user->phone) }}">
             @error('phone')

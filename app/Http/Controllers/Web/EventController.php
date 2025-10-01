@@ -66,6 +66,22 @@ public function generateTicket(Request $request, $id)
 }
 public function createTicket(Request $request, $id)
 {
+    $request->validate([
+        'name'    => 'nullable|string|max:50',
+        'surname' => 'nullable|string|max:50',
+        'age'     => 'required|integer',
+        'phone'   => 'required|integer',
+        'email'   => 'required|email|max:100',
+        'photo'   => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+    ],
+    [
+        'age.required'     => 'The age field is required.',
+        'phone.required'   => 'The phone number field is required.',
+        'phone.integer'    => 'The phone number must be an  integer.',
+        'email.required'   => 'The email field is required.',
+        'photo.required'   => 'The id field is required.',
+        'photo.mimes'      => 'The id must be a file of type: jpeg, png, jpg, gif, svg.',
+    ]);
     $event = Event::findOrFail($id);
 
     // Handle image once
