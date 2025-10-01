@@ -21,8 +21,7 @@
               id="otp" 
               name="otp"
               placeholder="Enter your 4 digit OTP" 
-              aria-describedby="otpHelp"
-              required>
+              >
 
           <!-- Resend Button -->
           <div class="d-flex justify-content-end mt-0">
@@ -33,6 +32,9 @@
                 Resend
               </button>
           </div>
+                  @error('otp')
+          <small class="text-warning validation-error">{{ $message }}</small>
+        @enderror
       </div>
 
       <!-- Submit Button -->
@@ -45,12 +47,7 @@
       <input type="hidden" name="email" value="{{ session('reset_email') }}">
   </form>
 
-  <!-- Error Message -->
-  @if(session('error'))
-      <div class="alert alert-danger mt-3">
-          {{ session('error') }}
-      </div>
-  @endif
+
 
 </div>
 @endsection
@@ -73,6 +70,7 @@
         @endif
     });
 
+
     document.addEventListener("click", function() {
     document.querySelectorAll(".validation-error").forEach(el => 
         el.remove());
@@ -81,3 +79,4 @@
 
 
 </script>
+@endsection

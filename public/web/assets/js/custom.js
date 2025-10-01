@@ -1,4 +1,9 @@
 $(function () {
+    /* page loader */
+    $(window).on("load", function () {
+    $("#pgLoader").fadeOut("slow");
+});
+
     //  Current Year in Footer
     const currentYear = new Date().getFullYear();
     $("#znjCopyRight").html(
@@ -47,14 +52,14 @@ $(function () {
     /*dashboard right side content and sidebar toggle switching*/
     sideBarToggleSwitch();
 
-    if($(window).width()<991) {
+    if ($(window).width() < 991) {
         $("#dashboardSidebar").addClass("sidebar-toggle");
     }
 
     $(window).resize(function () {
         /*dashboard right side content and sidebar toggle switching*/
         sideBarToggleSwitch();
-        if($(window).width()<991) {
+        if ($(window).width() < 991) {
             $("#dashboardSidebar").addClass("sidebar-toggle");
         } else {
             $("#dashboardSidebar").removeClass("sidebar-toggle");
@@ -62,8 +67,8 @@ $(function () {
     });
 
     $(".toggle-password").on("click", function () {
-        let input = $("#exampleInputPassword1"); 
-        let $this = $(this); 
+        let input = $("#exampleInputPassword1");
+        let $this = $(this);
 
         if (input.attr("type") === "password") {
             input.attr("type", "text");

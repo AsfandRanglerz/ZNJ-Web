@@ -135,6 +135,20 @@
         @endif
 
     });
+            $(".toggle-password").click(function() {
+            let input = $($(this).attr("toggle"));
+            let labelSpan = $(this).closest("span"); // 👈 parent span jisme icon + small dono hain
+
+            if (input.attr("type") === "password") {
+                input.attr("type", "text");
+                $(this).removeClass("fa-eye-slash").addClass("fa-eye");
+                labelSpan.find("small").text("Show");
+            } else {
+                input.attr("type", "password");
+                $(this).removeClass("fa-eye").addClass("fa-eye-slash");
+                labelSpan.find("small").text("Hide");
+            }
+        });
 
     // Validation error auto remove on click anywhere
     document.addEventListener("click", function() {

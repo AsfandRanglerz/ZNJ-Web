@@ -33,12 +33,14 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     @yield('css')
 </head>
+<!--paste this code under the head tag-->
+<div id="pgLoader">
+    <span id="pgLoaderGif"></span>
+</div>
+<!--paste this code under the head tag-->
 
 <body>
-
-    {{-- Loader --}}
-    <div class="loader"></div>
-
+    
     {{-- App Wrapper --}}
     <div id="app">
         <div class="main-wrapper main-wrapper-1">

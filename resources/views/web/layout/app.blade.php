@@ -35,12 +35,15 @@
     <link rel="stylesheet" href="{{ asset('public/web/assets/css/style.css') }}" />
     @yield('css')
 </head>
+<!--paste this code under the head tag-->
+<div id="pgLoader">
+    <span id="pgLoaderGif"></span>
+</div>
+<!--paste this code under the head tag-->
 
 <body>
 
-    {{-- Loader --}}
-    <div class="loader">
-    </div>
+
 
     {{-- App Wrapper --}}
     <div id="app">

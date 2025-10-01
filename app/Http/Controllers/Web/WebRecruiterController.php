@@ -97,7 +97,7 @@ public function create()
         $event->entertainers()->attach($request->entertainer_id);
     }
 
-    return redirect()->route('event.create')->with('success', 'Event created successfully!');
+    return redirect()->route('event.create')->with('success', 'Event created successfully');
 }
 
     // For User Ticket
@@ -121,13 +121,12 @@ public function create()
 {
     $user = User::findOrFail($id);
 
-
-     $request->validate([
+    $request->validate([
         'name'        => 'required|string|max:255',
         'email'       => 'required|email|unique:users,email,' . $user->id,
         'phone'       => 'required|string|max:20',
         'designation' => 'nullable|string|max:255',
-        'password'    => 'required|min:6|confirmed', 
+        'password'    => 'nullable|min:6|confirmed',  
         'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
@@ -147,16 +146,17 @@ public function create()
         $image = $user->image;
     }
 
-    //  Update user
+    // Update user
     $user->update([
         'name'        => $request->name,
         'email'       => $request->email,
         'phone'       => $request->phone,
         'designation' => $request->designation,
-        'password'    => $request->password ? Hash::make($request->password) : $user->password,
+        'password'    => $request->filled('password') ? Hash::make($request->password) : $user->password,
         'image'       => $image,
     ]);
 
     return redirect()->route('profile.show', $user->id)->with('success', 'Profile Updated Successfully');
 }
+
 }
