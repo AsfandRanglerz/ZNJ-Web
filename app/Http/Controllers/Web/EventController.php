@@ -67,8 +67,8 @@ public function generateTicket(Request $request, $id)
 public function createTicket(Request $request, $id)
 {
     $request->validate([
-        'name'    => 'nullable|string|max:50',
-        'surname' => 'nullable|string|max:50',
+        'name'    => 'nullable|string',
+        'surname' => 'nullable|string',
         'age'     => 'required|integer',
         'phone'   => 'required|integer',
         'email'   => 'required|email|max:100',
