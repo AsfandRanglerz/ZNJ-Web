@@ -47,7 +47,7 @@ Route::get('/change_password/{id}', [AdminController::class, 'change_password'])
 Route::post('/admin-reset-password', [AdminController::class, 'ResetPassword']);
 
 Route::prefix('admin')->middleware('admin')->group(function () {
-    Route::get('dashboard', [AdminController::class, 'getdashboard']);
+    Route::get('dashboard', [AdminController::class, 'getdashboard'])->name('web.recruiter.dashboard');
     Route::get('profile', [AdminController::class, 'getProfile']);
     Route::post('update-profile', [AdminController::class, 'update_profile']);
     Route::post('update-password', [AdminController::class, 'profile_change_password'])->name('profile.change-password');
@@ -202,10 +202,12 @@ Route::post('/logout', [WebAuthController::class, 'logout'])->name('recruiter.lo
      Route::post('/profile-update/{id}', [WebRecruiterController::class, 'update'])->name('profile.update');
     
      // Dashboard
-    Route::get('/dashboard', [WebRecruiterController::class, 'dashboard'])->name('web.recruiter.dashboard');
+    Route::get('/dashboard', [WebRecruiterController::class, 'dashboard']);
 });
 
-
+// Google OAuth
+Route::get('auth/google', [WebAuthController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [WebAuthController::class, 'handleGoogleCallback']);
 
 
 /*Team A routes

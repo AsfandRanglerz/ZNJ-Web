@@ -83,6 +83,7 @@ public function create()
         'about_event' => $request->about_event,
         'event_type' => $request->event_type,
         'date' => $request->date,
+        'end_date' => $request->end_date,
         'from' => $request->from,
         'to' => $request->to,
         'joining_type' => $request->joining_type,
