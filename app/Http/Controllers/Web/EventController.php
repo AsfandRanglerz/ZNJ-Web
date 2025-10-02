@@ -66,7 +66,37 @@ public function generateTicket(Request $request, $id)
 }
 public function createTicket(Request $request, $id)
 {
+    $request->validate([
+        'name'    => 'nullable|string',
+        'surname' => 'nullable|string',
+        'age'     => 'required|integer',
+        'phone'   => 'required|integer',
+        'email'   => 'required|email|max:100',
+        'photo'   => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+    ],
+    [
+        'age.required'     => 'The age field is required.',
+        'phone.required'   => 'The phone number field is required.',
+        'phone.integer'    => 'The phone number must be an  integer.',
+        'email.required'   => 'The email field is required.',
+        'photo.required'   => 'The id field is required.',
+        'photo.mimes'      => 'The id must be a file of type: jpeg, png, jpg, gif, svg.',
+    ]);
     $event = Event::findOrFail($id);
+
+    $bookedTickets = EventTicket::where('event_id', $event->id)->count();
+
+    // ✅ Requested quantity
+    $quantity = (int) $request->input('quantity', 1);
+
+    // ✅ Check available seats
+    $availableSeats = $event->seats - $bookedTickets;
+
+    if ($quantity > $availableSeats) {
+        return back()->withErrors([
+            'quantity' => "Only {$availableSeats} seat(s) left for this event."
+        ])->withInput();
+    }
 
     // Handle image once
     if ($request->hasFile('photo')) {

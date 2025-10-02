@@ -27,32 +27,44 @@
 
       <!-- Age -->
       <div class="col-md-6 col-12 mb-3 mt-2">
-          <label for="age" class="form-label lebel-of-join-event-input">Age</label>
+          <label for="age" class="form-label lebel-of-join-event-input">Age <span class="text-warning">*</span></label>
           <input type="number" class="form-control input-uniform" id="age" name="age"
                  value="{{ old('age') }}"
                  placeholder="Enter your age">
+                @error('age')
+                <div class="text-warning">{{ $message }}</div>
+                @enderror
       </div>
 
       <!-- Phone -->
       <div class="col-md-6 col-12 mb-3 mt-2">
-          <label for="phoneNo" class="form-label lebel-of-join-event-input">Phone</label>
+          <label for="phoneNo" class="form-label lebel-of-join-event-input">Phone <span class="text-warning">*</span></label>
           <input type="text" class="form-control input-uniform" id="phoneNo" name="phone"
                  value="{{ old('phone', Auth::user()->phone ?? '') }}"
                  placeholder="Enter your phone number">
+                 @error('phone')
+                <div class="text-warning">{{ $message }}</div>
+                @enderror
       </div>
 
       <!-- Email -->
       <div class="col-12 mb-3 mt-2">
-          <label for="email" class="form-label lebel-of-join-event-input">Email</label>
+          <label for="email" class="form-label lebel-of-join-event-input">Email <span class="text-warning">*</span></label>
           <input type="email" class="form-control input-uniform" id="email" name="email"
                  value="{{ old('email', Auth::user()->email ?? '') }}"
-                 placeholder="Enter your email" required>
+                 placeholder="Enter your email">
+                @error('email')
+                <div class="text-warning">{{ $message }}</div>
+                @enderror
       </div>
 
       <!-- Upload Your ID -->
 <div class="col-md-8 col-12 mb-3 mt-2">
-    <label for="idUpload" class="form-label lebel-of-join-event-input">Upload Your ID</label>
+    <label for="idUpload" class="form-label lebel-of-join-event-input">Upload Your ID <span class="text-warning">*</span></label>
     <input type="file" class="form-control input-uniform" id="idUpload" name="photo">
+    @error('photo')
+    <div class="text-warning">{{ $message }}</div>
+    @enderror
 </div>
 
 

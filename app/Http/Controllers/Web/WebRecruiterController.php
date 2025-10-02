@@ -65,6 +65,37 @@ public function create()
 
    public function store(Request $request)
 {
+    $request->validate([
+        'title' => 'required|string',
+        'venue_id' => 'required',
+        'about_event' => 'required',
+        'event_type' => 'required|string',
+        'date' => 'required|date|after_or_equal:today',
+        'end_date' => 'required|date|after_or_equal:date',
+        'from' => 'required',
+        'to' => 'required',
+        'joining_type' => 'required',
+        'price' => 'required|integer',
+        'seats' => 'required|integer',
+        'description' => 'required|string',
+        'cover_image' => 'required|image|mimes:jpg,jpeg,png',
+        'entertainer_id' => 'required',
+    ],
+    [
+        'date.required' => 'The start date is required.',
+        'date.after_or_equal' => 'The start date must be a date after or equal to today.',
+        'end_date.required' => 'The end date is required.',
+        'end_date.after_or_equal' => 'The end date must be a date after or equal to start date.',
+        'from.required' => 'The start time is required.',
+        'to.required' => 'The end time is required.',
+        'joining_type.required' => 'The joining type is required.',
+        'cover_image.required' => 'The cover photo is required.',
+        'cover_image.mimes' => 'The cover photo must be a file of type: jpg, jpeg, png.',
+        'entertainer_id.required' => 'Please select at least one entertainer.',
+        'about_event.required' => 'The event information field is required.',
+        'venue_id.required' => 'The venue field is required.',
+    ]);
+
     if ($request->hasFile('cover_image')) {
         $file = $request->file('cover_image');
         $extension = $file->getClientOriginalExtension();
