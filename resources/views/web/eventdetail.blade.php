@@ -59,7 +59,7 @@
     <button class="btn btn-circle mx-2 plus-negative-btn decrement">-</button>
     <span class="mx-2 counter-value">1</span>
     <button class="btn btn-circle mx-2 plus-negative-btn increment">+</button>
-</div>
+    </div>
     </div>
     <div class="col-12 d-flex p-5 justify-content-center align-items-center">
         <a href="javascript:void(0)" id="joinEventBtn" class="btn join-event-btn">Join Event</a>
@@ -198,11 +198,18 @@ document.addEventListener("DOMContentLoaded", function() {
     const decrementBtn = document.querySelector(".decrement");
     const hiddenInput = document.getElementById("ticketQuantity");
     const joinBtn = document.getElementById("joinEventBtn");
+    
+    const maxSeats = {{ $event->seats }};
 
     incrementBtn.addEventListener("click", function() {
         let value = parseInt(counterSpan.textContent);
-        counterSpan.textContent = ++value;
-        hiddenInput.value = value;
+
+        if (value < maxSeats) {   // ✅ Don't allow beyond available seats
+            counterSpan.textContent = ++value;
+            hiddenInput.value = value;
+        } else {
+            alert("Maximum available seats are " + maxSeats);
+        }
     });
 
     decrementBtn.addEventListener("click", function() {

@@ -84,6 +84,20 @@ public function createTicket(Request $request, $id)
     ]);
     $event = Event::findOrFail($id);
 
+    $bookedTickets = EventTicket::where('event_id', $event->id)->count();
+
+    // ✅ Requested quantity
+    $quantity = (int) $request->input('quantity', 1);
+
+    // ✅ Check available seats
+    $availableSeats = $event->seats - $bookedTickets;
+
+    if ($quantity > $availableSeats) {
+        return back()->withErrors([
+            'quantity' => "Only {$availableSeats} seat(s) left for this event."
+        ])->withInput();
+    }
+
     // Handle image once
     if ($request->hasFile('photo')) {
         $file = $request->file('photo');
