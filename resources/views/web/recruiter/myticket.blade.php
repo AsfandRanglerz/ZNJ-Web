@@ -42,7 +42,9 @@
 
               <!-- QR Code -->
               <div class="col-4 mt-2 pt-5 mx-4">
-                <img src="{{ asset('public/web/assets/images/scan.png') }}" class="ticket-scan-image" alt="Scan">
+                @if($ticket->qr_code)
+                <img src="{{ asset($ticket->qr_code) }}" class="ticket-scan-image" alt="Scan">
+                @endif
               </div>
             </div>
           </a>

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Event;
 use App\Models\Venue;
 use App\Models\EventTicket;
+use Illuminate\Http\Request;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\Builder\Builder;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+
 
 
 class EventController extends Controller
@@ -110,11 +113,15 @@ public function createTicket(Request $request, $id)
     }
 
     $quantity = $request->input('quantity', 1);
-
+     $qrPath = public_path('qrcodes/');
+    if (!file_exists($qrPath)) {
+        mkdir($qrPath, 0777, true);
+    }
+     
     for ($i = 0; $i < $quantity; $i++) {
         $serialno = mt_rand(1000, 9999);
 
-        EventTicket::create([
+        $ticket = EventTicket::create([
             'user_id'   => Auth::id(),
             'event_id'  => $event->id,
             'name'      => $request->name,
@@ -125,6 +132,21 @@ public function createTicket(Request $request, $id)
             'photo'     => $image,
             'gender'    => $request->gender,
             'serial_no' => $serialno,
+        ]);
+        $ticketUrl = url('/ticket/' . $ticket->id);
+        $qrImageName = 'qr_' . $ticket->id . '.png';
+
+        Builder::create()
+            ->data($ticketUrl)
+            ->size(500)
+            ->margin(10)
+            ->backgroundColor(new Color(255, 255, 255)) // white
+            ->foregroundColor(new Color(0, 0, 0))       // black
+            ->build()
+            ->saveToFile(public_path('qrcodes/' . $qrImageName));
+
+        $ticket->update([
+            'qr_code' => 'qrcodes/' . $qrImageName
         ]);
     }
 
