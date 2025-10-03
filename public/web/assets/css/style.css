@@ -576,7 +576,7 @@ body.collapsed .create-event-container-div,
 .ticket-scan-image {
     height: 4rem;
     width: 3rem;
-    object-fit: cover;
+    object-fit: contain;
 }
 .ticket-info-div div ul {
     padding: 0.3rem;
