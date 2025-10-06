@@ -102,6 +102,7 @@
             width: '100%' 
         });
     });
+    
 </script>
     @yield('scripts')
 </body>
