@@ -47,7 +47,7 @@ Route::post('/admin-reset-password', [AdminController::class, 'ResetPassword']);
 
 
    
-Route::get('/checkout', [BankAlfalahPaymentController::class, 'showCheckoutPage']);
+Route::get('/checkout/{event_id}', [BankAlfalahPaymentController::class, 'showCheckoutPage'])->name('web.checkout');
 Route::post('/process-payment', [BankAlfalahPaymentController::class, 'processPayment']);
 Route::any('/payment/callback', [BankAlfalahPaymentController::class, 'paymentCallback'])
      ->name('payment.callback');
