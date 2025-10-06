@@ -47,7 +47,14 @@ Route::post('/admin-reset-password', [AdminController::class, 'ResetPassword']);
 
 
    
-Route::get('/checkout/{event_id}', [BankAlfalahPaymentController::class, 'showCheckoutPage'])->name('web.checkout');
+
+Route::prefix('admin')->middleware('admin')->group(function () {
+    Route::get('dashboard', [AdminController::class, 'getdashboard'])->name('web.recruiter.dashboard');
+    Route::get('profile', [AdminController::class, 'getProfile']);
+    Route::post('update-profile', [AdminController::class, 'update_profile']);
+    Route::post('update-password', [AdminController::class, 'profile_change_password'])->name('profile.change-password');
+
+    Route::get('/checkout/{event_id}', [BankAlfalahPaymentController::class, 'showCheckoutPage'])->name('web.checkout');
 Route::post('/process-payment', [BankAlfalahPaymentController::class, 'processPayment']);
 Route::any('/payment/callback', [BankAlfalahPaymentController::class, 'paymentCallback'])
      ->name('payment.callback');
@@ -55,12 +62,6 @@ Route::any('/ZNJ-Web/payment/callback', [BankAlfalahPaymentController::class, 'p
 Route::post('/initiate-auth', [BankAlfalahPaymentController::class, 'initiateAuthentication']);
 Route::post('/authenticate-payer', [BankAlfalahPaymentController::class, 'authenticatePayer']);
 Route::post('/check-auth-status', [BankAlfalahPaymentController::class, 'checkAuthStatus']);
-
-Route::prefix('admin')->middleware('admin')->group(function () {
-    Route::get('dashboard', [AdminController::class, 'getdashboard'])->name('web.recruiter.dashboard');
-    Route::get('profile', [AdminController::class, 'getProfile']);
-    Route::post('update-profile', [AdminController::class, 'update_profile']);
-    Route::post('update-password', [AdminController::class, 'profile_change_password'])->name('profile.change-password');
 
     Route::get('Privacy-policy', [SecurityController::class, 'PrivacyPolicy']);
     Route::get('privacy-policy-edit', [SecurityController::class, 'PrivacyPolicyEdit'])->name('policy.edit');

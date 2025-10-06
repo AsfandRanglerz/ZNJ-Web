@@ -69,14 +69,15 @@ class BankAlfalahPaymentController extends Controller
     /**
      * Show checkout page
      */
-    public function showCheckoutPage(Request $request)
+    public function showCheckoutPage(Request $request, $event_id)
     {
-        $amount = $request->amount ?? "100.00";
-        $email  = $request->email ?? "customer@example.com";
+        $event = \App\Models\Event::findOrFail($event_id);
+
+        $amount = $request->amount ?? $event->price ?? 1.00;
 
         $sessionResponse = $this->createCheckoutSession(new Request([
             'amount' => $amount,
-            'email'  => $email
+            'email'  => Auth()->user()->email ?? 'customer@example.com',
         ]));
 
         $sessionData = json_decode($sessionResponse->getContent(), true);
@@ -89,9 +90,11 @@ class BankAlfalahPaymentController extends Controller
             'session_id' => $sessionData['session_id'],
             'order_id'   => $sessionData['order_id'],
             'amount'     => $sessionData['amount'],
-            'currency'   => $sessionData['currency']
+            'currency'   => $sessionData['currency'],
+            'event'      => $event,
         ]);
     }
+
 
     /**
      * Step 3: Initiate Authentication (3DS)
