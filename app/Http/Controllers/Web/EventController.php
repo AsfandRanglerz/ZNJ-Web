@@ -67,6 +67,7 @@ public function generateTicket(Request $request, $id)
 
 
 }
+
 public function createTicket(Request $request, $id)
 {
     $request->validate([

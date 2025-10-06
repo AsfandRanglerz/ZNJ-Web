@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BankAlfalahPaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -134,5 +135,8 @@ Route::group(['namespace' => 'Api'], function () {
         Route::get('get-event-delete-account', 'AuthController@getEventDeleteAccount');
 
 
+        Route::post('/bankalfalah/create-checkout-session', [BankAlfalahPaymentController::class, 'createCheckoutSession']);
+        Route::post('/payment/make-payment', [BankAlfalahPaymentController::class, 'makePayment']);
+        Route::get('/bankalfalah/retrieve-order/{orderId}', [BankAlfalahPaymentController::class, 'retrieveOrder']);
     });
 });
