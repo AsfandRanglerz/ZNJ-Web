@@ -12,6 +12,9 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        'payment/callback',
+        'payment/callback/*',
+        'ZNJ-Web/payment/callback',
+        'ZNJ-Web/payment/callback/*',
     ];
 }

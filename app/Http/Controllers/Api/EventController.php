@@ -540,7 +540,10 @@ class EventController extends Controller
                     $data = $request->only(['name', 'surname', 'age', 'ticket_type', 'gender', 'phone', 'email']);
                     $data['user_id'] = auth()->id();
                     $data['event_id'] = $request->event_id;
-                    $data['serial_no'] = $last_record->serial_no + 1;
+                    do {
+                    $serialno = mt_rand(1000, 9999);
+                    } while (EventTicket::where('event_id', $request->event_id)->where('serial_no', $serialno)->exists());
+                    $data['serial_no'] = $serialno;
                     $data['qr_code'] = Str::random(30);
                     if ($request->hasfile('photo')) {
                         $file = $request->file('photo');
@@ -630,7 +633,10 @@ class EventController extends Controller
                     $data = $request->only(['name', 'surname', 'age', 'ticket_type', 'gender', 'phone', 'email']);
                     $data['user_id'] = auth()->id();
                     $data['event_id'] = $request->event_id;
-                    $data['serial_no'] = 1;
+                    do {
+                    $serialno = mt_rand(1000, 9999);
+                    } while (EventTicket::where('event_id', $request->event_id)->where('serial_no', $serialno)->exists());
+                    $data['serial_no'] = $serialno;
                     $data['qr_code'] = Str::random(30);
                     if ($request->hasfile('photo')) {
                         $file = $request->file('photo');
