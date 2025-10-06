@@ -12,14 +12,14 @@ class BankAlfalahPaymentController extends Controller
     // ✅ MOST LIKELY CORRECT FOR LIVE
     private $merchantId = "ZNJEVENTSCON";
     private $apiPassword = "62ff0507b23317d047f1274867b42a07"; // API Key
-    private $apiUrl = "https://bankalfalah.gateway.mastercard.com/api/rest/version/100";
+    private $apiUrl = "https://bankalfalah.gateway.mastercard.com/api/rest/version/74";
     /**
      * Step 1 + 2: Create & Update Session
      */
     public function createCheckoutSession(Request $request)
     {
         $orderId = uniqid("ORDER_");
-        $amount = $request->amount ?? "100.00";
+        $amount = floatval($request->amount ?? 100.00);
 
         try {
             // Step 1: Create session
@@ -69,14 +69,15 @@ class BankAlfalahPaymentController extends Controller
     /**
      * Show checkout page
      */
-    public function showCheckoutPage(Request $request)
+    public function showCheckoutPage(Request $request, $event_id)
     {
-        $amount = $request->amount ?? "100.00";
-        $email  = $request->email ?? "customer@example.com";
+        $event = \App\Models\Event::findOrFail($event_id);
+
+        $amount = floatval($request->amount ?? $event->price ?? 100.00);
 
         $sessionResponse = $this->createCheckoutSession(new Request([
             'amount' => $amount,
-            'email'  => $email
+            'email'  => Auth()->user()->email ?? 'customer@example.com',
         ]));
 
         $sessionData = json_decode($sessionResponse->getContent(), true);
@@ -89,9 +90,11 @@ class BankAlfalahPaymentController extends Controller
             'session_id' => $sessionData['session_id'],
             'order_id'   => $sessionData['order_id'],
             'amount'     => $sessionData['amount'],
-            'currency'   => $sessionData['currency']
+            'currency'   => $sessionData['currency'],
+            'event'      => $event,
         ]);
     }
+
 
     /**
      * Step 3: Initiate Authentication (3DS)
@@ -214,7 +217,7 @@ class BankAlfalahPaymentController extends Controller
     {
         $sessionId       = $request->session_id;
         $orderId         = $request->order_id;
-        $amount          = $request->amount;
+        $amount          = number_format((float) $request->amount, 2, '.', '');
         $authTransactionId = $request->auth_transaction_id; // ✅ AUTH TRANSACTION ID
 
         $payload = [
@@ -256,11 +259,16 @@ class BankAlfalahPaymentController extends Controller
      */
     public function paymentCallback(Request $request)
     {
-        Log::info('Callback hit:', $request->all());
+        Log::info('PAY STEP AMOUNT:', ['amount' => $request->amount]);
+        Log::info('Payment Callback Data:', $request->all());
 
-        return response()->json([
-            'status' => 'callback received',
-            'data'   => $request->all()
+        // Optional: You can handle success/failure check here if callback provides status
+        // Example: $status = $request->input('result') ?? 'UNKNOWN';
+
+        // Redirect to thank you page (adjust route name if different)
+        return redirect()->route('web.thankyou')->with([
+            'payment_status' => 'success',
+            'callback_data'  => $request->all(),
         ]);
     }
 }
