@@ -157,7 +157,7 @@ class BankAlfalahPaymentController extends Controller
                     "id" => $sessionId
                 ],
                 "authentication" => [
-                    "redirectResponseUrl" => url("/payment/callback")
+                "redirectResponseUrl" => route('payment.callback')
                 ],
                 "device" => [
                     "browserDetails" => [
@@ -265,7 +265,7 @@ class BankAlfalahPaymentController extends Controller
         // Optional: You can handle success/failure check here if callback provides status
         // Example: $status = $request->input('result') ?? 'UNKNOWN';
 
-        // Redirect to thank you page (adjust route name if different)
+        // Redirect to thank you page
         return redirect()->route('web.thankyou')->with([
             'payment_status' => 'success',
             'callback_data'  => $request->all(),
