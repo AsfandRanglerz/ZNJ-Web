@@ -75,7 +75,7 @@ public function create()
         'from' => 'required',
         'to' => 'required',
         'joining_type' => 'required',
-        'price' => 'required|integer',
+        'price' => 'required',
         'seats' => 'required|integer',
         'description' => 'required|string',
         'cover_image' => 'required|image|mimes:jpg,jpeg,png',

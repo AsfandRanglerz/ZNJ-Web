@@ -25,7 +25,7 @@ class CreateEventsTable extends Migration
             $table->string('from')->nullable();
             $table->string('to')->nullable();
             $table->enum('joining_type',['Paid','Free'])->default('Paid');
-            $table->string('price')->nullable();
+            $table->decimal('price',10,2)->nullable();
             $table->integer('seats')->nullable();
             $table->text('description')->nullable();
             $table->enum('hiring_entertainers_status',['hired','open for hiring'])->default('hired');

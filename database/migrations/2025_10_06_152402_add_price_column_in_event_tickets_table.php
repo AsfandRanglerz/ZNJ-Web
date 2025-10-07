@@ -14,7 +14,7 @@ class AddPriceColumnInEventTicketsTable extends Migration
     public function up()
     {
         Schema::table('event_tickets', function (Blueprint $table) {
-            $table->string('price')->after('ticket_type')->nullable();
+            $table->decimal('price', 10,2)->after('ticket_type')->nullable();
         });
     }
 
