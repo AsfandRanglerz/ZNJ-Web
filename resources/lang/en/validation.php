@@ -125,6 +125,7 @@ return [
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
 
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -140,7 +141,11 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+         'password_confirmation' => [
+        'same' => 'The Password does not match.',
     ],
+    ],
+
 
     /*
     |--------------------------------------------------------------------------

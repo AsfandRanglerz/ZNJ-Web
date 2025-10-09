@@ -176,23 +176,23 @@
 @endsection
 @section('scripts')
 <script>
-    $(document).ready(function() {
-  // Toastr Messages
-        @if(session('success'))
+    $(document).ready(function () {
+
+        // Display success message
+        @if (session('success'))
             toastr.success("{{ session('success') }}");
         @endif
 
-        @if(session('error'))
+        // Display error message
+        @if (session('error'))
             toastr.error("{{ session('error') }}");
         @endif
 
-        // @if($errors->any())
-        //     toastr.error("{!! implode('<br>', $errors->all()) !!}");
-        // @endif
+        // Display validation errors (if any)
+        @if ($errors->any())
+            toastr.error("{!! implode('<br>', $errors->all()) !!}");
+        @endif
+
     });
-
-
-
-
 </script>
 @endsection

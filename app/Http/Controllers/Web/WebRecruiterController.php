@@ -158,7 +158,8 @@ public function create()
         'email'       => 'required|email|unique:users,email,' . $user->id,
         'phone'       => 'required|string|max:20',
         'designation' => 'nullable|string|max:255',
-        'password'    => 'nullable|min:6|confirmed',  
+                    'password' => 'required|min:8',
+            'password_confirmation' => 'same:password',  
         'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 

@@ -24,7 +24,7 @@
       <!-- Search Button -->
       <div class="col-md-2 col-4">
         <button class="btn rounded w-100 search-city-date-btn" id="search-btn-in-event" type="submit">
-          Search
+          <span class="fa fa-search me-1"></span>Search
         </button>
       </div>
 
@@ -43,12 +43,12 @@
       <!-- Select Date -->
       <div class="col-md-2 col-4">
         <div class="input-group">
-          <input type="text" name="date" value="{{ request('date') }}" 
+          <input type="date" name="date" value="{{ request('date') }}" 
                  class="form-control search-city-date-btn" 
                  placeholder="Select date"
                  onfocus="(this.type='date')" 
-                 onblur="if(!this.value)this.type='text'">
-          <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                 onblur="if(!this.value)this.type='date'">
+        
         </div>
       </div>
 
