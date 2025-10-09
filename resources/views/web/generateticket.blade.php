@@ -108,3 +108,4 @@
                 el.remove());
         });
     </script>
+@endsection
