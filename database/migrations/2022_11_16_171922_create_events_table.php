@@ -21,11 +21,11 @@ class CreateEventsTable extends Migration
             $table->string('location')->nullable();
             $table->text('about_event')->nullable();
             $table->enum('event_type',['Private','Public'])->default('Private');
-            $table->string('date')->nullable();
+            $table->date('date')->nullable();
             $table->string('from')->nullable();
             $table->string('to')->nullable();
             $table->enum('joining_type',['Paid','Free'])->default('Paid');
-            $table->string('price')->nullable();
+            $table->decimal('price',10,2)->nullable();
             $table->integer('seats')->nullable();
             $table->text('description')->nullable();
             $table->enum('hiring_entertainers_status',['hired','open for hiring'])->default('hired');

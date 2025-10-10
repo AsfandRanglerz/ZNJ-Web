@@ -24,47 +24,48 @@
                     value="{{ old('surname') }}" placeholder="Enter your surname">
             </div>
 
-      <!-- Age -->
-      <div class="col-md-6 col-12 mb-3 mt-2">
-          <label for="age" class="form-label lebel-of-join-event-input">Age <span class="text-warning">*</span></label>
-          <input type="number" class="form-control input-uniform" id="age" name="age"
-                 value="{{ old('age') }}"
-                 placeholder="Enter your age">
+            <!-- Age -->
+            <div class="col-md-6 col-12 mb-3 mt-2">
+                <label for="age" class="form-label lebel-of-join-event-input">Age <span
+                        class="text-warning">*</span></label>
+                <input type="number" class="form-control input-uniform" id="age" name="age"
+                    value="{{ old('age') }}" placeholder="Enter your age">
                 @error('age')
-                <div class="text-warning">{{ $message }}</div>
+                    <div class="text-warning">{{ $message }}</div>
                 @enderror
-      </div>
+            </div>
 
-      <!-- Phone -->
-      <div class="col-md-6 col-12 mb-3 mt-2">
-          <label for="phoneNo" class="form-label lebel-of-join-event-input">Phone <span class="text-warning">*</span></label>
-          <input type="text" class="form-control input-uniform" id="phoneNo" name="phone"
-                 value="{{ old('phone', Auth::user()->phone ?? '') }}"
-                 placeholder="Enter your phone number">
-                 @error('phone')
-                <div class="text-warning">{{ $message }}</div>
+            <!-- Phone -->
+            <div class="col-md-6 col-12 mb-3 mt-2">
+                <label for="phoneNo" class="form-label lebel-of-join-event-input">Phone <span
+                        class="text-warning">*</span></label>
+                <input type="text" class="form-control input-uniform" id="phoneNo" name="phone"
+                    value="{{ old('phone', Auth::user()->phone ?? '') }}" placeholder="Enter your phone number">
+                @error('phone')
+                    <div class="text-warning">{{ $message }}</div>
                 @enderror
-      </div>
+            </div>
 
-      <!-- Email -->
-      <div class="col-12 mb-3 mt-2">
-          <label for="email" class="form-label lebel-of-join-event-input">Email <span class="text-warning">*</span></label>
-          <input type="email" class="form-control input-uniform" id="email" name="email"
-                 value="{{ old('email', Auth::user()->email ?? '') }}"
-                 placeholder="Enter your email">
+            <!-- Email -->
+            <div class="col-12 mb-3 mt-2">
+                <label for="email" class="form-label lebel-of-join-event-input">Email <span
+                        class="text-warning">*</span></label>
+                <input type="email" class="form-control input-uniform" id="email" name="email"
+                    value="{{ old('email', Auth::user()->email ?? '') }}" placeholder="Enter your email">
                 @error('email')
-                <div class="text-warning">{{ $message }}</div>
+                    <div class="text-warning">{{ $message }}</div>
                 @enderror
-      </div>
+            </div>
 
-      <!-- Upload Your ID -->
-<div class="col-md-8 col-12 mb-3 mt-2">
-    <label for="idUpload" class="form-label lebel-of-join-event-input">Upload Your ID <span class="text-warning">*</span></label>
-    <input type="file" class="form-control input-uniform" id="idUpload" name="photo">
-    @error('photo')
-    <div class="text-warning">{{ $message }}</div>
-    @enderror
-</div>
+            <!-- Upload Your ID -->
+            <div class="col-md-8 col-12 mb-3 mt-2">
+                <label for="idUpload" class="form-label lebel-of-join-event-input">Upload Your ID <span
+                        class="text-warning">*</span></label>
+                <input type="file" class="form-control input-uniform" id="idUpload" name="photo">
+                @error('photo')
+                    <div class="text-warning">{{ $message }}</div>
+                @enderror
+            </div>
 
 
             <!-- Gender -->
@@ -107,3 +108,4 @@
                 el.remove());
         });
     </script>
+@endsection

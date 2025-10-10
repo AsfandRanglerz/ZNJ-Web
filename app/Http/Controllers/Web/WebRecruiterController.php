@@ -75,7 +75,7 @@ public function create()
         'from' => 'required',
         'to' => 'required',
         'joining_type' => 'required',
-        'price' => 'required|integer',
+        'price' => 'required',
         'seats' => 'required|integer',
         'description' => 'required|string',
         'cover_image' => 'required|image|mimes:jpg,jpeg,png',
@@ -152,7 +152,7 @@ public function create()
     public function update(Request $request, $id)
 {
     $user = User::findOrFail($id);
-
+ 
     $request->validate([
         'name'        => 'required|string|max:255',
         'email'       => 'required|email|unique:users,email,' . $user->id,

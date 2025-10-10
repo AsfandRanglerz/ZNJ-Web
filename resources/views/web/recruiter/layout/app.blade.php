@@ -8,6 +8,8 @@
     <meta name="description"
         content="ZNJ Events offers exceptional event creation, talent booking, venue sourcing, vendor services, ticket sales, SEO, and website development. Elevate your event with expert planning, management, and marketing solutions designed for global success.">
     <title>@yield('title') - Website</title>
+    <!-- Developed By Ranglerz -->
+    <link rel="stylesheet" href="https://www.ranglerz.com/cost-to-make-a-web-ios-or-android-app-and-how-long-does-it-take.php">
     <link rel="icon" type="image/png" href="{{ asset('public/web/assets/images/favicon.png') }}">
 
     {{-- Bootstrap 5.3.7 CSS --}}
@@ -102,6 +104,7 @@
             width: '100%' 
         });
     });
+    
 </script>
     @yield('scripts')
 </body>

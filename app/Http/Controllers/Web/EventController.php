@@ -87,15 +87,10 @@ class EventController extends Controller
             ]
         );
         $event = Event::findOrFail($id);
-
-        $bookedTickets = EventTicket::where('event_id', $event->id)->count();
-
-        // ✅ Requested quantity
         $quantity = (int) $request->input('quantity', 1);
 
-        // ✅ Check available seats
+        $bookedTickets = EventTicket::where('event_id', $event->id)->count();
         $availableSeats = $event->seats - $bookedTickets;
-
         if ($quantity > $availableSeats) {
             return back()->withErrors([
                 'quantity' => "Only {$availableSeats} seat(s) left for this event."
@@ -112,6 +107,9 @@ class EventController extends Controller
         } else {
             $image = 'public/avator.png';
         }
+
+        $ticketPrice = $event->price;
+        $totalAmount = $ticketPrice * $quantity;
 
         $quantity = $request->input('quantity', 1);
         $qrPath = public_path('qrcodes/');
@@ -133,6 +131,8 @@ class EventController extends Controller
                 'photo'     => $image,
                 'gender'    => $request->gender,
                 'serial_no' => $serialno,
+                'price'     => $ticketPrice,
+
             ]);
             $ticketUrl = url('/ticket/' . $ticket->id);
             $qrImageName = 'qr_' . $ticket->id . '.png';
@@ -151,8 +151,9 @@ class EventController extends Controller
             ]);
         }
 
-        return redirect()
-            ->route('web.checkout', ['event_id' => $event->id])
-            ->with('success', "Ticket(s) generated successfully");
+        return redirect()->route('web.checkout', [
+            'event_id' => $event->id,
+            'amount'   => $totalAmount,
+        ])->with('success', "Ticket(s) generated successfully. Please complete payment.");
     }
 }

@@ -131,7 +131,9 @@
         @endif
 
         @if($errors->any())
-            toastr.error("{!! implode('<br>', $errors->all()) !!}");
+        @foreach($errors->all() as $error)
+            toastr.error("{{ $error }}");
+        @endforeach
         @endif
 
     });
