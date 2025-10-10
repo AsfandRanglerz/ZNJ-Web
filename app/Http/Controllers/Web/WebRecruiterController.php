@@ -129,7 +129,7 @@ public function create()
         $event->entertainers()->attach($request->entertainer_id);
     }
 
-    return redirect()->route('event.create')->with('success', 'Event created successfully');
+    return redirect()->route('web.recruiter.myevents')->with('success', 'Event created successfully');
 }
 
     // For User Ticket
