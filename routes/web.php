@@ -63,7 +63,7 @@ Route::post('/authenticate-payer', [BankAlfalahPaymentController::class, 'authen
 Route::post('/check-auth-status', [BankAlfalahPaymentController::class, 'checkAuthStatus']);
 
 Route::prefix('admin')->middleware('admin')->group(function () {
-    Route::get('dashboard', [AdminController::class, 'getdashboard'])->name('web.recruiter.dashboard');
+    Route::get('dashboard', [AdminController::class, 'getdashboard']);
     Route::get('profile', [AdminController::class, 'getProfile']);
     Route::post('update-profile', [AdminController::class, 'update_profile']);
     Route::post('update-password', [AdminController::class, 'profile_change_password'])->name('profile.change-password');
@@ -217,7 +217,7 @@ Route::middleware(['checkauth'])->group(function () {
      Route::post('/profile-update/{id}', [WebRecruiterController::class, 'update'])->name('profile.update');
     
      // Dashboard
-    Route::get('/dashboard', [WebRecruiterController::class, 'dashboard']);
+    Route::get('/dashboard', [WebRecruiterController::class, 'dashboard'])->name('web.recruiter.dashboard');
 });
 
 // Google OAuth
