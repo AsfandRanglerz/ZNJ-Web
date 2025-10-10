@@ -17,7 +17,7 @@
 
          <!-- Event Title & Cover Photo -->
     <div class="row mb-3">
-        <div class="col-lg-6">
+        <div class="col-lg-6 mb-lg-0 mb-3">
             <label class="form-label">Event Title <span class="text-warning">*</span></label>
             <input type="text" name="title" class="form-control bg-white"  value="{{ old('title') }}" placeholder="Enter event title">
             @error('title')
@@ -46,7 +46,7 @@
 
     <!-- Date & Time -->
     <div class="row mb-3">
-        <div class="col-lg-6">
+        <div class="col-lg-6 mb-lg-0 mb-3">
             <label class="form-label">Start Date <span class="text-warning">*</span></label>
             <input type="date" name="date" value="{{ old('date') }}" class="form-control bg-white">
             @error('date')
@@ -78,7 +78,7 @@
 
     <!-- Joining Fee, Ticket Price, No of Seats -->
     <div class="row mb-3">
-        <div class="col-lg-4">
+        <div class="col-lg-4 mb-lg-0 mb-3">
         <label class="form-label">Joining Type <span class="text-warning">*</span></label>
         <select name="joining_type" class="form-control form-control-lg bg-white">
             <option value="" disabled {{ old('joining_type') ? '' : 'selected' }} selected hidden >Choose joining type</option>
@@ -90,7 +90,7 @@
             @enderror
       </div>
 
-        <div class="col-lg-4">
+        <div class="col-lg-4 mb-lg-0 mb-3">
             <label class="form-label">Ticket Price <span class="text-warning">*</span></label>
             <input type="number" name="price" class="form-control bg-white" value="{{ old('price') }}" placeholder="Enter ticket price">
             @error('price')
@@ -108,7 +108,7 @@
 
         <!-- Entertainer, Venue, Event Type -->
         <div class="row mb-3">
-          <div class="col-lg-4 ">
+          <div class="col-lg-4 mb-lg-0 mb-3 ">
             <label class="form-label">Select Entertainers <span class="text-warning">*</span></label>
             <select name="entertainer_id[]" class="form-control form-control-lg bg-white  select2" multiple>
                 @foreach($entertainers as $entertainer)
@@ -123,7 +123,7 @@
             </div>
 
 
-            <div class="col-lg-4">
+            <div class="col-lg-4 mb-lg-0 mb-3">
               <label class="form-label">Select Venue <span class="text-warning">*</span></label>
               <select name="venue_id" class="form-control form-control-lg bg-white">
                   <option value="" disabled {{ old('venue_id') ? '' : 'selected' }} selected hidden >Choose Venue</option>
@@ -186,11 +186,19 @@
             toastr.error("{{ session('error') }}");
         @endif
 
+<<<<<<< HEAD
+        // Display validation errors (if any)
+        @if ($errors->any())
+            toastr.error("{!! implode('<br>', $errors->all()) !!}");
+        @endif
+
+=======
       @if($errors->any())
     @foreach($errors->all() as $error)
         toastr.error("{{ $error }}");
     @endforeach
     @endif
+>>>>>>> b0c7b094061932d21beb1003c159d2603f111ae7
     });
 </script>
 @endsection
