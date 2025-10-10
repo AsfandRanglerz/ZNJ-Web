@@ -29,6 +29,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     {{--CSS Toastr--}}
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
+         
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     {{-- Custom CSS --}}
     <link rel="stylesheet" href="{{ asset('public/web/assets/css/style.css') }}" />
     {{-- Select2 CSS --}}
@@ -66,6 +68,7 @@
    {{-- JS for Toastr --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     {{-- Custom JS --}}
     <script src="{{ asset('public/web/assets/js/custom.js') }}"></script>
     <script>
