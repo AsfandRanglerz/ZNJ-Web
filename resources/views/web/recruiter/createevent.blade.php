@@ -77,50 +77,73 @@
     </div>
 
     <!-- Joining Fee, Ticket Price, No of Seats -->
-    <div class="row mb-3">
-        <div class="col-lg-4 mb-lg-0 mb-3">
+   <div class="row mb-3">
+    <div class="col-lg-4 mb-lg-0 mb-3">
         <label class="form-label">Joining Type <span class="text-warning">*</span></label>
-        <select name="joining_type" class="form-control form-control-lg bg-white">
-            <option value="" disabled {{ old('joining_type') ? '' : 'selected' }} selected hidden >Choose joining type</option>
+        <select name="joining_type" id="joining_type" class="form-control form-control-lg bg-white">
+            <option value="" disabled {{ old('joining_type') ? '' : 'selected' }} hidden>Choose joining type</option>
             <option value="Paid" {{ old('joining_type') == 'Paid' ? 'selected' : '' }}>Paid</option>
             <option value="Free" {{ old('joining_type') == 'Free' ? 'selected' : '' }}>Free</option>
         </select>
         @error('joining_type')
             <div class="text-warning">{{ $message }}</div>
-            @enderror
-      </div>
-
-        <div class="col-lg-4 mb-lg-0 mb-3">
-            <label class="form-label">Ticket Price <span class="text-warning">*</span></label>
-            <input type="number" name="price" class="form-control bg-white" value="{{ old('price') }}" placeholder="Enter ticket price">
-            @error('price')
-            <div class="text-warning">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="col-lg-4">
-            <label class="form-label">No. of Seats <span class="text-warning">*</span></label>
-            <input type="number" name="seats" class="form-control bg-white" value="{{ old('seats') }}" placeholder="Enter seats">
-            @error('seats')
-            <div class="text-warning">{{ $message }}</div>
-            @enderror
-        </div>
+        @enderror
     </div>
 
-        <!-- Entertainer, Venue, Event Type -->
-        <div class="row mb-3">
-          <div class="col-lg-4 mb-lg-0 mb-3 ">
-            <label class="form-label">Select Entertainers <span class="text-warning">*</span></label>
-            <select name="entertainer_id[]" class="form-control form-control-lg bg-white  select2" multiple>
-                @foreach($entertainers as $entertainer)
-                    <option value="{{ $entertainer->id }}" @if(collect(old('entertainer_id'))->contains($entertainer->id)) selected @endif>
-                        {{ $entertainer->user->name ?? 'Unnamed Entertainer' }}
-                    </option>
-                @endforeach
-            </select>
-            @error('entertainer_id')
+    <div class="col-lg-4 mb-lg-0 mb-3">
+        <label class="form-label">Ticket Price <span class="text-warning">*</span></label>
+        <input type="number" name="price" id="ticket_price" class="form-control bg-white" 
+               value="{{ old('price', 0) }}" placeholder="Enter ticket price">
+        @error('price')
             <div class="text-warning">{{ $message }}</div>
-            @enderror
-            </div>
+        @enderror
+    </div>
+
+    <div class="col-lg-4">
+        <label class="form-label">No. of Seats <span class="text-warning">*</span></label>
+        <input type="number" name="seats" class="form-control bg-white" value="{{ old('seats') }}" placeholder="Enter seats">
+        @error('seats')
+            <div class="text-warning">{{ $message }}</div>
+        @enderror
+    </div>
+</div>
+
+        <!-- Entertainer, Venue, Event Type -->
+ 
+
+  
+@php
+    // Group entertainers by their user_id (unique entertainer)
+    $groupedEntertainers = $entertainers->groupBy('user_id');
+@endphp
+
+<div class="row mb-3">
+  <div class="col-lg-4 mb-lg-0 mb-3">
+    <label class="form-label">Select Entertainers <span class="text-warning">*</span></label>
+    <select name="entertainer_id[]" class="form-control form-control-lg bg-white select2" multiple>
+        @foreach($groupedEntertainers as $userId => $group)
+            @php
+                $entertainer = $group->first();
+                $name = $entertainer->user->name ?? 'Unnamed Entertainer';
+                // collect all professions for this entertainer
+                $professions = $group->map(fn($e) => $e->talentCategory->category ?? 'N/A')->unique()->implode(', ');
+            @endphp
+            <option value="{{ $entertainer->id }}" 
+                @if(collect(old('entertainer_id'))->contains($entertainer->id)) selected @endif>
+                {{ $name }} - {{ $professions }}
+            </option>
+        @endforeach
+    </select>
+    @error('entertainer_id')
+      <div class="text-warning">{{ $message }}</div>
+    @enderror
+  </div>
+
+
+
+
+
+
 
 
             <div class="col-lg-4 mb-lg-0 mb-3">

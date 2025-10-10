@@ -34,7 +34,13 @@
 
                   <div class="text-white px-2 pt-2 pb-5 event-box-text-div-recruiter">
                     <p class="title-of-event">{{ $event->title }}</p>
-                    <p class="pt-0 price-of-event-ticket-recruiter">Rs.{{ $event->price ?? 'Free' }}</p>
+                    @if($event->price == 0)
+                     <p class="pt-0 price-of-event-ticket-recruiter">Free</p>
+                   @else
+                  <p class="pt-0 price-of-event-ticket-recruiter">Rs.{{ number_format($event->price, 0) }}</p>
+                  @endif
+                    
+                    
                     <button type="button" class="btn btn-sm btn-blak position-absolute bottom-0 end-0 m-0 p-2">
                       <img src="{{ asset('public/web/assets/images/edit-icon.png') }}" class="edit-icon-create-join-event-recruiter-image" alt="Edit">
                     </button>
@@ -62,7 +68,12 @@
 
                   <div class="text-white px-2 pt-2 pb-5 event-box-text-div-recruiter">
                     <p class="title-of-event">{{ $event->title }}</p>
-                    <p class="price-of-event-ticket-recruiter">Rs.{{ $event->price ?? 'Free' }}</p>
+                            @if($event->price == 0)
+                         <p class="price-of-event-ticket-recruiter">Free</p>
+                   @else
+                  <p class="price-of-event-ticket-recruiter">Rs.{{ number_format($event->price, 0) }}</p>
+                  @endif
+                    
                     <button type="button" class="btn btn-sm btn-blak position-absolute bottom-0 end-0 m-0 p-2">
                       <img src="{{ asset('public/web/assets/images/arriow.png') }}" class="edit-icon-create-join-event-recruiter-image-arrow" alt="Edit">
                     </button>

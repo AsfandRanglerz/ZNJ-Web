@@ -68,7 +68,12 @@
       <img src="{{ asset($event->cover_image) }}" alt="{{ $event->title }}" class="event-box-iamge">
       <div class="text-white px-2 pt-2 pb-5 event-box-text-div">
         <p class="title-of-event">{{ $event->title }}</p>
-        <p class="pt-0 price-of-event-ticket">Rs.{{ number_format($event->price, 0) }}</p>
+        @if($event->price == 0)
+        <p class="pt-0 price-of-event-ticket">Free</p>
+        @else
+       <p class="pt-0 price-of-event-ticket">Rs.{{ number_format($event->price, 0) }}</p>
+       @endif
+
       </div>
     </a>
   </div>

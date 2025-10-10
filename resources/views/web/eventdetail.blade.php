@@ -53,7 +53,11 @@
          <span>Joining Fee</span>
         </div>
         <div class="col-3">
-          <span>Rs.{{ number_format($event->price, 0) }}</span>
+                  @if($event->price == 0)
+        <span>Free</span>
+        @else
+       <span>Rs.{{ number_format($event->price, 0) }}</span>
+       @endif
         </div>
        <div class="col-2 text-end d-flex align-items-center justify-content-center btn-sign-plus-negative-div">
     <button class="btn btn-circle mx-2 plus-negative-btn decrement">-</button>
