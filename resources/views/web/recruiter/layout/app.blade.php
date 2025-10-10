@@ -36,9 +36,9 @@
     @yield('css')
 </head>
 <!--paste this code under the head tag-->
-<div id="pgLoader">
+<!-- <div id="pgLoader">
     <span id="pgLoaderGif"></span>
-</div>
+</div> -->
 <!--paste this code under the head tag-->
 
 <body>

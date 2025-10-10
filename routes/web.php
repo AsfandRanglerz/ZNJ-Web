@@ -201,9 +201,9 @@ Route::post('/logout', [WebAuthController::class, 'logout'])->name('recruiter.lo
 //////////////Events////////
 // Route::get('/event', [EventController::class, 'searchEvent'])->name('web.event');
 Route::get('/events', [EventController::class, 'searchEvent'])->name('web.events');
+Route::get('/event/{id}', [EventController::class, 'eventDetail'])->name('event.detail');
 Route::middleware(['checkauth'])->group(function () {
 
-    Route::get('/event/{id}', [EventController::class, 'eventDetail'])->name('event.detail');
     Route::post('/event/{id}/generate-ticket', [EventController::class, 'createTicket'])->name('generate.ticket');
     Route::get('/event/{id}/generate-ticket', [EventController::class, 'generateTicket'])->name('event.generateTicket');
     Route::get('/mytickets', [WebRecruiterController::class, 'ticket'])->name('web.recruiter.myticket');
