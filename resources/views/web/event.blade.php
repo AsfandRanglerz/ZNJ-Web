@@ -185,5 +185,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
+$(document).ready(function () {
+    console.log("Flatpickr initializing...");
+    flatpickr("input[name='date']", {
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        allowInput: true,
+        disableMobile: true,
+    });
+});
 </script>
+
 @endsection

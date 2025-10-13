@@ -109,44 +109,32 @@
 </div>
 
         <!-- Entertainer, Venue, Event Type -->
- 
 
-  
-@php
-    // Group entertainers by their user_id (unique entertainer)
-    $groupedEntertainers = $entertainers->groupBy('user_id');
-@endphp
+        <div class="row mb-3">
+    {{-- Category Dropdown --}}
+    <div class="col-md-6 mb-lg-0 mb-3">
+        <label class="form-label">Select Category <span class="text-warning">*</span></label>
+        <select id="categoryDropdown" class="form-control form-control-lg bg-white select2" multiple>
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}">{{ $category->category }}</option>
+            @endforeach
+        </select>
+    </div>
 
-<div class="row mb-3">
-  <div class="col-lg-4 mb-lg-0 mb-3">
-    <label class="form-label">Select Entertainers <span class="text-warning">*</span></label>
-    <select name="entertainer_id[]" class="form-control form-control-lg bg-white select2" multiple>
-        @foreach($groupedEntertainers as $userId => $group)
-            @php
-                $entertainer = $group->first();
-                $name = $entertainer->user->name ?? 'Unnamed Entertainer';
-                // collect all professions for this entertainer
-                $professions = $group->map(fn($e) => $e->talentCategory->category ?? 'N/A')->unique()->implode(', ');
-            @endphp
-            <option value="{{ $entertainer->id }}" 
-                @if(collect(old('entertainer_id'))->contains($entertainer->id)) selected @endif>
-                {{ $name }} - {{ $professions }}
-            </option>
-        @endforeach
-    </select>
-    @error('entertainer_id')
-      <div class="text-warning">{{ $message }}</div>
-    @enderror
-  </div>
+    {{-- Entertainer Dropdown --}}
+    <div class="col-md-6 mb-lg-0 mb-3">
+        <label class="form-label">Select Entertainers <span class="text-warning">*</span></label>
+        <select name="entertainer_id[]" id="entertainerDropdown" class="form-control form-control-lg bg-white select2" multiple>
+            <option value="">Select category first</option>
+        </select>
+        @error('entertainer_id')
+            <div class="text-warning">{{ $message }}</div>
+        @enderror
+    </div>
+</div>
 
-
-
-
-
-
-
-
-            <div class="col-lg-4 mb-lg-0 mb-3">
+         <div class="row mb-3">
+         <div class="col-md-6 mb-lg-0 mb-3">
               <label class="form-label">Select Venue <span class="text-warning">*</span></label>
               <select name="venue_id" class="form-control form-control-lg bg-white">
                   <option value="" disabled {{ old('venue_id') ? '' : 'selected' }} selected hidden >Choose Venue</option>
@@ -161,7 +149,7 @@
                 @enderror
           </div>
 
-            <div class="col-lg-4">
+            <div class="col-md-6">
             <label class="form-label">Event Type <span class="text-warning">*</span></label>
             <select name="event_type" class="form-control form-control-lg bg-white">
                 <option value="" disabled {{ old('event_type') ? '' : 'selected' }} selected hidden>Choose event type</option>
@@ -172,9 +160,10 @@
                 <div class="text-warning">{{ $message }}</div>
                 @enderror
             </div>
+        </div>
 
         <!-- Description -->
-        <div class="container-fluid mt-3 mb-4">
+        <div class="row mt-3 mb-4">
         <div class="col-12">
             <label class="form-label">Description <span class="text-warning">*</span></label>
             <textarea name="description" class="form-control bg-white" rows="6" placeholder="Enter event description">{{ old('description') }}</textarea>
@@ -224,4 +213,39 @@
 >>>>>>> b0c7b094061932d21beb1003c159d2603f111ae7
     });
 </script>
+<script>
+$(document).ready(function() {
+    $('#categoryDropdown').on('change', function() {
+        let categoryIds = $(this).val(); // Multiple category IDs
+
+        $('#entertainerDropdown').html('<option>Loading...</option>');
+
+        if (categoryIds.length > 0) {
+            $.ajax({
+                url: '{{ route("entertainers.byCategory") }}',
+                type: 'GET',
+                data: { category_ids: categoryIds },
+                success: function(response) {
+                    $('#entertainerDropdown').empty();
+                    if (response.length > 0) {
+                        $.each(response, function(index, entertainer) {
+                            $('#entertainerDropdown').append(
+                                `<option value="${entertainer.id}">${entertainer.name}</option>`
+                            );
+                        });
+                    } else {
+                        $('#entertainerDropdown').append('<option>No entertainers found</option>');
+                    }
+                },
+                error: function() {
+                    $('#entertainerDropdown').html('<option>Error loading entertainers</option>');
+                }
+            });
+        } else {
+            $('#entertainerDropdown').html('<option>Select category first</option>');
+        }
+    });
+});
+</script>
+
 @endsection

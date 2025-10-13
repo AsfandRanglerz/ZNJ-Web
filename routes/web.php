@@ -209,6 +209,8 @@ Route::middleware(['checkauth'])->group(function () {
     Route::get('/mytickets', [WebRecruiterController::class, 'ticket'])->name('web.recruiter.myticket');
     // Show create event form
     Route::get('/eventcreate', [WebRecruiterController::class, 'create'])->name('event.create');
+    Route::get('/entertainers-by-category', [WebRecruiterController::class, 'getEntertainersByCategory'])->name('entertainers.byCategory');
+
 
      // Handle form submit
      Route::post('/eventcreate', [WebRecruiterController::class, 'store'])->name('events.store');

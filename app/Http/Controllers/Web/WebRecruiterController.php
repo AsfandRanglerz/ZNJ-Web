@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\RecruiterAuthService;
 use App\Models\EventTicket;
 use Illuminate\Support\Facades\Auth;
+use App\Models\TalentCategory;
 use App\Models\VenueCategory;
 use App\Models\EntertainerDetail;
 use App\Models\Event;
@@ -57,11 +58,39 @@ class WebRecruiterController extends Controller
 }
     //Create Event
 public function create()
-    {
-        $entertainers = EntertainerDetail::with('User')->get();
-        $venues = Venue::with('venueCategory')->get();
-        return view('web.recruiter.createevent', compact('entertainers', 'venues'));
+{
+    $entertainers = EntertainerDetail::with('User')->get();
+    $venues = Venue::with('venueCategory')->get();
+    $categories = TalentCategory::select('id', 'category')->get();
+
+    return view('web.recruiter.createevent', compact('entertainers', 'venues', 'categories'));
+}
+
+public function getEntertainersByCategory(Request $request)
+{
+    $categoryIds = $request->category_ids ?? [];
+
+    // Get entertainers whose category_id matches selected category
+    $entertainers = EntertainerDetail::whereIn('category_id', $categoryIds)
+        ->with(['user:id,name', 'talentCategory:id,category'])
+        ->get()
+        ->groupBy('user_id');
+
+    $data = [];
+
+    foreach ($entertainers as $userId => $group) {
+        $entertainer = $group->first();
+        $name = $entertainer->user->name ?? 'Unnamed Entertainer';
+        $professions = $group->map(fn($e) => $e->talentCategory->category ?? 'N/A')->unique()->implode(', ');
+
+        $data[] = [
+            'id' => $entertainer->id,
+            'name' => "{$name} ",
+        ];
     }
+
+    return response()->json($data);
+}
 
    public function store(Request $request)
 {
