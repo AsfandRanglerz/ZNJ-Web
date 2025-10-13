@@ -8,6 +8,8 @@
     <meta name="description"
         content="ZNJ Events offers exceptional event creation, talent booking, venue sourcing, vendor services, ticket sales, SEO, and website development. Elevate your event with expert planning, management, and marketing solutions designed for global success.">
     <title>@yield('title') - Website</title>
+    <!-- Developed By Ranglerz -->
+    <link rel="stylesheet" href="https://www.ranglerz.com/cost-to-make-a-web-ios-or-android-app-and-how-long-does-it-take.php">
     <link rel="icon" type="image/png" href="{{ asset('public/web/assets/images/favicon.png') }}">
 
     {{-- Bootstrap 5.3.7 CSS --}}
@@ -27,6 +29,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     {{--CSS Toastr--}}
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
+         
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     {{-- Custom CSS --}}
     <link rel="stylesheet" href="{{ asset('public/web/assets/css/style.css') }}" />
     {{-- Select2 CSS --}}
@@ -34,9 +38,9 @@
     @yield('css')
 </head>
 <!--paste this code under the head tag-->
-<div id="pgLoader">
+<!-- <div id="pgLoader">
     <span id="pgLoaderGif"></span>
-</div>
+</div> -->
 <!--paste this code under the head tag-->
 
 <body>
@@ -64,6 +68,7 @@
    {{-- JS for Toastr --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     {{-- Custom JS --}}
     <script src="{{ asset('public/web/assets/js/custom.js') }}"></script>
     <script>

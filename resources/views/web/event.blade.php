@@ -24,7 +24,7 @@
       <!-- Search Button -->
       <div class="col-md-2 col-4">
         <button class="btn rounded w-100 search-city-date-btn" id="search-btn-in-event" type="submit">
-          Search
+          <span class="fa fa-search me-1"></span>Search
         </button>
       </div>
 
@@ -43,12 +43,12 @@
       <!-- Select Date -->
       <div class="col-md-2 col-4">
         <div class="input-group">
-          <input type="text" name="date" value="{{ request('date') }}" 
+          <input type="date" name="date" value="{{ request('date') }}" 
                  class="form-control search-city-date-btn" 
                  placeholder="Select date"
                  onfocus="(this.type='date')" 
-                 onblur="if(!this.value)this.type='text'">
-          <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                 onblur="if(!this.value)this.type='date'">
+        
         </div>
       </div>
 
@@ -68,7 +68,12 @@
       <img src="{{ asset($event->cover_image) }}" alt="{{ $event->title }}" class="event-box-iamge">
       <div class="text-white px-2 pt-2 pb-5 event-box-text-div">
         <p class="title-of-event">{{ $event->title }}</p>
-        <p class="pt-0 price-of-event-ticket">Rs.{{ number_format($event->price, 0) }}</p>
+        @if($event->price == 0)
+        <p class="pt-0 price-of-event-ticket">Free</p>
+        @else
+       <p class="pt-0 price-of-event-ticket">Rs.{{ number_format($event->price, 0) }}</p>
+       @endif
+
       </div>
     </a>
   </div>
@@ -180,5 +185,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
+$(document).ready(function () {
+    console.log("Flatpickr initializing...");
+    flatpickr("input[name='date']", {
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        allowInput: true,
+        disableMobile: true,
+    });
+});
 </script>
+
 @endsection

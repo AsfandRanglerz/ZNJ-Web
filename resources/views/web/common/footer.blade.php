@@ -42,7 +42,7 @@
                         <li><a href="https://znjevents.com/our-portfolio/" class="text-decoration-none">Our Portfolio</a></li>
                         <li><a href="https://znjevents.com/blog/" class="text-decoration-none">Blogs</a></li>
                         <li><a href="https://znjevents.com/contact-us/" class="text-decoration-none">Contact Us</a></li>
-                        <li><a href="href="/privacy-policy/" class="text-decoration-none">Privacy Policy</a></li>
+                        <li><a href="https://znjevents.com/privacy-policy/" class="text-decoration-none">Privacy Policy</a></li>
                         <li><a href="https://znjevents.com/faqs/" class="text-decoration-none">FAQ's</a></li>
                         <li><a href="https://znjevents.com/terms-and-conditions/" class="text-decoration-none">Terms and Conditions</a></li>
                     </ul>

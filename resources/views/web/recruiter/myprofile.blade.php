@@ -37,7 +37,7 @@
         <div class="row mb-3">
           <div class="col-md-6">
             <label class="form-label">Name <span class="text-warning">*</span></label>
-            <input type="text" name="name" class="form-control bg-white"
+            <input type="text" name="name" class="form-control bg-white" placeholder="Enter your name"
                    value="{{ old('name', $user->name) }}">
             @error('name')
               <span class="text-warning validation-error">{{ $message }}</span>
@@ -45,7 +45,7 @@
           </div>
           <div class="col-md-6">
             <label class="form-label">Email <span class="text-warning">*</span></label>
-            <input type="email" name="email" class="form-control bg-white"
+            <input type="email" name="email" class="form-control bg-white" placeholder="Enter your email"
                    value="{{ old('email', $user->email) }}" >
             @error('email')
               <span class="text-warning validation-error">{{ $message }}</span>
@@ -57,7 +57,7 @@
         <div class="row mb-3">
           <div class="col-md-6">
             <label class="form-label">Phone <span class="text-warning">*</span></label>
-            <input type="text" name="phone" class="form-control bg-white"
+            <input type="text" name="phone" class="form-control bg-white" placeholder="Enter your phone"
                    value="{{ old('phone', $user->phone) }}">
             @error('phone')
               <span class="text-warning validation-error">{{ $message }}</span>

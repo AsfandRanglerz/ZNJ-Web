@@ -184,8 +184,11 @@ form div input:focus {
     outline: none !important ;
 }
 #search-btn-in-event {
-    background-color: white;
+    background-color: #e5c530;
     color: black;
+}
+#search-btn-in-event:hover {
+background-color: #b1961e;
 }
 #search-btn-in-event:focus,
 .search-city-date-btn:focus {

@@ -63,7 +63,8 @@ class WebAuthController extends Controller
                     return $query->where('role', 'recruiter');
                 }),
             ],
-            'password' => 'required|confirmed|min:8',
+            'password' => 'required|min:8',
+            'password_confirmation' => 'same:password',
         ]);
          
         // save data to users table with default recruiter role
@@ -81,27 +82,41 @@ class WebAuthController extends Controller
         return view('web.login'); 
     }
     //Login
-    public function login(Request $request)
+   public function login(Request $request)
 {
+    // Step 1: Validation
     $request->validate([
         'email'    => 'required|email',
         'password' => 'required|min:8',
     ]);
 
+    // Step 2: Check if email exists
+    $user = \App\Models\User::where('email', $request->email)
+        ->where('role', 'recruiter') // sirf recruiter allow
+        ->first();
+
+    if (!$user) {
+        return back()->withErrors([
+            'email' => 'This email is not registered.',
+        ])->onlyInput('email');
+    }
+
+    // Step 3: Try login
     if (Auth::attempt([
         'email' => $request->email,
         'password' => $request->password,
-        'role' => 'recruiter' // sirf recruiter ko login allow
+        'role' => 'recruiter'
     ], $request->remember)) {
         $request->session()->regenerate();
         return redirect('/dashboard')->with('success', 'Logged In Successfully');
     }
 
+    // Step 4: Wrong password
     return back()->withErrors([
-        'email' => 'Invalid email or password',
-        'password' => 'Invalid email or password',
+        'password' => 'Incorrect Password',
     ])->onlyInput('email');
 }
+
 
 //Send OTP
 public function sendOtp(Request $request)
@@ -186,7 +201,8 @@ public function resendOtp(Request $request)
       public function setPassword(Request $request)
 {
     $request->validate([
-        'password' => 'required|min:8|confirmed',
+                    'password' => 'required|min:8',
+            'password_confirmation' => 'same:password',
     ]);
 
     $email = session('reset_email'); 

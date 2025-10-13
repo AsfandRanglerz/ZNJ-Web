@@ -21,7 +21,7 @@ class CreateEventsTable extends Migration
             $table->string('location')->nullable();
             $table->text('about_event')->nullable();
             $table->enum('event_type',['Private','Public'])->default('Private');
-            $table->string('date')->nullable();
+            $table->date('date')->nullable();
             $table->string('from')->nullable();
             $table->string('to')->nullable();
             $table->enum('joining_type',['Paid','Free'])->default('Paid');

@@ -116,11 +116,12 @@
             toastr.error("{{ session('error') }}");
         @endif
 
-        @if($errors->any())
-        @foreach($errors->all() as $error)
-            toastr.error("{{ $error }}");
-        @endforeach
-        @endif
+      @if($errors->any())
+    @foreach($errors->all() as $error)
+        toastr.error("{{ $error }}");
+    @endforeach
+@endif
+
 
         // Password Toggle with "Hide / Show"
         $(".toggle-password").click(function() {

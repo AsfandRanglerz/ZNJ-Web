@@ -53,7 +53,11 @@
          <span>Joining Fee</span>
         </div>
         <div class="col-3">
-          <span>Rs.{{ number_format($event->price, 0) }}</span>
+                  @if($event->price == 0)
+        <span>Free</span>
+        @else
+       <span>Rs.{{ number_format($event->price, 0) }}</span>
+       @endif
         </div>
        <div class="col-2 text-end d-flex align-items-center justify-content-center btn-sign-plus-negative-div">
     <button class="btn btn-circle mx-2 plus-negative-btn decrement">-</button>
@@ -178,7 +182,11 @@
           <img src="{{ asset($ev->cover_image) }}" alt="{{ $ev->title }}" class="event-box-iamge">
           <div class="text-white px-2 pt-2 pb-5 event-box-text-div">
             <p class="title-of-event">{{ $ev->title }}</p>
-            <p class="pt-0 price-of-event-ticket">Rs.{{ number_format($ev->price, 0) }}</p>
+            @if($event->price == 0)
+              <p class="pt-0 price-of-event-ticket">Free</p>
+              @else
+            <p class="pt-0 price-of-event-ticket">Rs.{{ number_format($event->price, 0) }}</p>
+            @endif
           </div>
         </a>
       </div>

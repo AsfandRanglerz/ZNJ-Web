@@ -63,7 +63,7 @@ Route::post('/authenticate-payer', [BankAlfalahPaymentController::class, 'authen
 Route::post('/check-auth-status', [BankAlfalahPaymentController::class, 'checkAuthStatus']);
 
 Route::prefix('admin')->middleware('admin')->group(function () {
-    Route::get('dashboard', [AdminController::class, 'getdashboard'])->name('web.recruiter.dashboard');
+    Route::get('dashboard', [AdminController::class, 'getdashboard']);
     Route::get('profile', [AdminController::class, 'getProfile']);
     Route::post('update-profile', [AdminController::class, 'update_profile']);
     Route::post('update-password', [AdminController::class, 'profile_change_password'])->name('profile.change-password');
@@ -201,14 +201,16 @@ Route::post('/logout', [WebAuthController::class, 'logout'])->name('recruiter.lo
 //////////////Events////////
 // Route::get('/event', [EventController::class, 'searchEvent'])->name('web.event');
 Route::get('/events', [EventController::class, 'searchEvent'])->name('web.events');
+Route::get('/event/{id}', [EventController::class, 'eventDetail'])->name('event.detail');
 Route::middleware(['checkauth'])->group(function () {
 
-    Route::get('/event/{id}', [EventController::class, 'eventDetail'])->name('event.detail');
     Route::post('/event/{id}/generate-ticket', [EventController::class, 'createTicket'])->name('generate.ticket');
     Route::get('/event/{id}/generate-ticket', [EventController::class, 'generateTicket'])->name('event.generateTicket');
     Route::get('/mytickets', [WebRecruiterController::class, 'ticket'])->name('web.recruiter.myticket');
     // Show create event form
     Route::get('/eventcreate', [WebRecruiterController::class, 'create'])->name('event.create');
+    Route::get('/entertainers-by-category', [WebRecruiterController::class, 'getEntertainersByCategory'])->name('entertainers.byCategory');
+
 
      // Handle form submit
      Route::post('/eventcreate', [WebRecruiterController::class, 'store'])->name('events.store');
@@ -217,7 +219,7 @@ Route::middleware(['checkauth'])->group(function () {
      Route::post('/profile-update/{id}', [WebRecruiterController::class, 'update'])->name('profile.update');
     
      // Dashboard
-    Route::get('/dashboard', [WebRecruiterController::class, 'dashboard']);
+    Route::get('/dashboard', [WebRecruiterController::class, 'dashboard'])->name('web.recruiter.dashboard');
 });
 
 // Google OAuth
