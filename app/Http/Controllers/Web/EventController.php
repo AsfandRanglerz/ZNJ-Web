@@ -156,4 +156,6 @@ class EventController extends Controller
             'amount'   => $totalAmount,
         ])->with('success', "Ticket(s) generated successfully. Please complete payment.");
     }
+
+    
 }

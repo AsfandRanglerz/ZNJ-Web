@@ -198,19 +198,11 @@
             toastr.error("{{ session('error') }}");
         @endif
 
-<<<<<<< HEAD
-        // Display validation errors (if any)
-        @if ($errors->any())
-            toastr.error("{!! implode('<br>', $errors->all()) !!}");
-        @endif
-
-=======
       @if($errors->any())
     @foreach($errors->all() as $error)
         toastr.error("{{ $error }}");
     @endforeach
     @endif
->>>>>>> b0c7b094061932d21beb1003c159d2603f111ae7
     });
 </script>
 <script>
