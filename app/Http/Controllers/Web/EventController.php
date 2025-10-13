@@ -68,27 +68,19 @@ class EventController extends Controller
 
     public function createTicket(Request $request, $id)
     {
-        $request->validate(
-            [
-                'name'    => 'nullable|string',
-                'surname' => 'nullable|string',
-                'age'     => 'required|integer',
-                'phone'   => 'required',
-                'email'   => 'required|email|max:100',
-                'photo'   => 'required|image|mimes:jpeg,png,jpg,gif,svg',
-            ],
-            [
-                'age.required'     => 'The age field is required.',
-                'phone.required'   => 'The phone number field is required.',
-                // 'phone.integer'    => 'The phone number must be an  integer.',
-                'email.required'   => 'The email field is required.',
-                'photo.required'   => 'The id field is required.',
-                'photo.mimes'      => 'The id must be a file of type: jpeg, png, jpg, gif, svg.',
-            ]
-        );
+        $request->validate([
+            'name'    => 'nullable|string',
+            'surname' => 'nullable|string',
+            'age'     => 'required|integer',
+            'phone'   => 'required',
+            'email'   => 'required|email|max:100',
+            'photo'   => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+        ]);
+
         $event = Event::findOrFail($id);
         $quantity = (int) $request->input('quantity', 1);
 
+        // Check seat availability
         $bookedTickets = EventTicket::where('event_id', $event->id)->count();
         $availableSeats = $event->seats - $bookedTickets;
         if ($quantity > $availableSeats) {
@@ -111,51 +103,26 @@ class EventController extends Controller
         $ticketPrice = $event->price;
         $totalAmount = $ticketPrice * $quantity;
 
-        $quantity = $request->input('quantity', 1);
-        $qrPath = public_path('qrcodes/');
-        if (!file_exists($qrPath)) {
-            mkdir($qrPath, 0777, true);
-        }
+        // ✅ Step 1: Store data in session, not DB
+        session([
+            'ticket_pre_data' => [
+                'event_id' => $event->id,
+                'quantity' => $quantity,
+                'price'    => $ticketPrice,
+                'name'     => $request->name,
+                'surname'  => $request->surname,
+                'age'      => $request->age,
+                'phone'    => $request->phone,
+                'email'    => $request->email,
+                'photo'    => $image,
+                'gender'   => $request->gender,
+            ]
+        ]);
 
-        for ($i = 0; $i < $quantity; $i++) {
-            $serialno = mt_rand(1000, 9999);
-
-            $ticket = EventTicket::create([
-                'user_id'   => Auth::id(),
-                'event_id'  => $event->id,
-                'name'      => $request->name,
-                'surname'   => $request->surname,
-                'age'       => $request->age,
-                'phone'     => $request->phone,
-                'email'     => $request->email,
-                'photo'     => $image,
-                'gender'    => $request->gender,
-                'serial_no' => $serialno,
-                'price'     => $ticketPrice,
-
-            ]);
-            $ticketUrl = url('/ticket/' . $ticket->id);
-            $qrImageName = 'qr_' . $ticket->id . '.png';
-
-            Builder::create()
-                ->data($ticketUrl)
-                ->size(500)
-                ->margin(10)
-                ->backgroundColor(new Color(255, 255, 255)) // white
-                ->foregroundColor(new Color(0, 0, 0))       // black
-                ->build()
-                ->saveToFile(public_path('qrcodes/' . $qrImageName));
-
-            $ticket->update([
-                'qr_code' => 'qrcodes/' . $qrImageName
-            ]);
-        }
-
+        // ✅ Step 2: Redirect to checkout
         return redirect()->route('web.checkout', [
             'event_id' => $event->id,
             'amount'   => $totalAmount,
-        ])->with('success', "Ticket(s) generated successfully. Please complete payment.");
+        ])->with('success', "Proceed to payment to confirm your ticket(s).");
     }
-
-    
 }

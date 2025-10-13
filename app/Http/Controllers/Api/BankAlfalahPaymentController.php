@@ -157,7 +157,7 @@ class BankAlfalahPaymentController extends Controller
                     "id" => $sessionId
                 ],
                 "authentication" => [
-                "redirectResponseUrl" => route('payment.callback')
+                    "redirectResponseUrl" => route('payment.callback')
                 ],
                 "device" => [
                     "browserDetails" => [
@@ -259,13 +259,49 @@ class BankAlfalahPaymentController extends Controller
      */
     public function paymentCallback(Request $request)
     {
-        Log::info('PAY STEP AMOUNT:', ['amount' => $request->amount]);
         Log::info('Payment Callback Data:', $request->all());
 
-        // Optional: You can handle success/failure check here if callback provides status
-        // Example: $status = $request->input('result') ?? 'UNKNOWN';
+        $ticketData = session('ticket_pre_data');
 
-        // Redirect to thank you page
+        if ($ticketData) {
+            $event = \App\Models\Event::findOrFail($ticketData['event_id']);
+            $quantity = $ticketData['quantity'];
+            $qrPath = public_path('qrcodes/');
+            if (!file_exists($qrPath)) mkdir($qrPath, 0777, true);
+
+            for ($i = 0; $i < $quantity; $i++) {
+                $serialno = mt_rand(1000, 9999);
+
+                $ticket = \App\Models\EventTicket::create([
+                    'user_id'   => Auth()->id(),
+                    'event_id'  => $event->id,
+                    'name'      => $ticketData['name'],
+                    'surname'   => $ticketData['surname'],
+                    'age'       => $ticketData['age'],
+                    'phone'     => $ticketData['phone'],
+                    'email'     => $ticketData['email'],
+                    'photo'     => $ticketData['photo'],
+                    'gender'    => $ticketData['gender'],
+                    'serial_no' => $serialno,
+                    'price'     => $ticketData['price'],
+                ]);
+
+                $ticketUrl = url('/ticket/' . $ticket->id);
+                $qrImageName = 'qr_' . $ticket->id . '.png';
+
+                \Endroid\QrCode\Builder\Builder::create()
+                    ->data($ticketUrl)
+                    ->size(500)
+                    ->margin(10)
+                    ->build()
+                    ->saveToFile($qrPath . $qrImageName);
+
+                $ticket->update(['qr_code' => 'qrcodes/' . $qrImageName]);
+            }
+
+            session()->forget('ticket_pre_data');
+        }
+
         return redirect()->route('web.thankyou')->with([
             'payment_status' => 'success',
             'callback_data'  => $request->all(),
