@@ -3,6 +3,12 @@
 @section('title', 'Event')
 
 @section('content')
+<style>
+  .input-group input.form-control.search-city-date-btn {
+    border-radius: 5px !important;
+    border: 1px solid #ccc !important;
+  }
+</style>
 
 <div class="container-fluid event-page-search-city-date-div">
   <h1 class="mb-2 text-white">Events</h1>
@@ -43,11 +49,11 @@
       <!-- Select Date -->
       <div class="col-md-2 col-4">
         <div class="input-group">
-          <input type="date" name="date" value="{{ request('date') }}" 
-                 class="form-control search-city-date-btn" 
-                 placeholder="Select date"
-                 onfocus="(this.type='date')" 
-                 onblur="if(!this.value)this.type='date'">
+          <input type="text" name="date" 
+           value="{{ request('date') }}" 
+            class="form-control search-city-date-btn"
+       placeholder="Select date">
+
         
         </div>
       </div>
@@ -68,11 +74,13 @@
       <img src="{{ asset($event->cover_image) }}" alt="{{ $event->title }}" class="event-box-iamge">
       <div class="text-white px-2 pt-2 pb-5 event-box-text-div">
         <p class="title-of-event">{{ $event->title }}</p>
-        @if($event->price == 0)
-        <p class="pt-0 price-of-event-ticket">Free</p>
-        @else
-       <p class="pt-0 price-of-event-ticket">Rs.{{ number_format($event->price, 0) }}</p>
-       @endif
+         {{-- {{ var_dump($event->price) }} --}}
+        @if(empty($event->price) || (float)$event->price == 0)
+    <p class="pt-0 price-of-event-ticket">Free</p>
+@else
+    <p class="pt-0 price-of-event-ticket">Rs.{{ number_format((float)$event->price, 0) }}</p>
+@endif
+
 
       </div>
     </a>
@@ -191,7 +199,10 @@ $(document).ready(function () {
         dateFormat: "Y-m-d",
         minDate: "today",
         allowInput: true,
-        disableMobile: true,
+        disableMobile: true, // this disables the phone's native picker
+        altInput: true, // for nice UI
+        altFormat: "d M Y",
+        appendTo: document.body, // ensures correct positioning on mobile
     });
 });
 </script>

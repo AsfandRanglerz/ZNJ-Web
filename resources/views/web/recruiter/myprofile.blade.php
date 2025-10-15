@@ -15,27 +15,34 @@
         <!-- Heading -->
         <h2 class="mb-4 text-white">My Profile</h2>
 
-        <!-- Profile Image -->
-        <div class="d-flex justify-content-center pt-4 pb-4 mb-4">
-          <div class="position-relative d-inline-block">
-            <img src="{{ $user->image ? asset($user->image) : asset('public/web/assets/images/avatar.png') }}" 
-                 class="rounded-circle myprofile-image" 
-                 alt="Profile Image">
+      <!-- Profile Image -->
+<div class="d-flex justify-content-center pt-4 pb-4 mb-4">
+  <div class="d-inline-block text-center">
+    <div class="position-relative d-inline-block">
+      <img 
+        src="{{ $user->image ? asset($user->image) : asset('public/web/assets/images/avatar.png') }}" 
+        id="profilePreview"
+        class="rounded-circle myprofile-image" 
+        alt="Profile Image">
 
-            <!-- Edit Icon -->
-            <label class="position-absolute mb-4 bottom-0 end-0 bg-warning rounded-circle d-flex align-items-center justify-content-center text-white profile-edit-icon">
-              <i class="bi bi-pencil-square fs-5"></i>
-              <input type="file" name="image" hidden>
-            </label>
-            @error('image')
-              <span class="text-warning validation-error">{{ $message }}</span>
-            @enderror
-          </div>
-        </div>
+      <!-- Edit Icon -->
+      <label class="position-absolute mb-4 bottom-0 end-0 bg-warning rounded-circle d-flex align-items-center justify-content-center text-white profile-edit-icon">
+        <i class="bi bi-pencil-square fs-5"></i>
+        <input type="file" name="image" id="profileImageInput" hidden accept="image/*">
+      </label>
+    </div>
+
+    <!-- Validation Error (below image, not overlapping) -->
+    @error('image')
+      <div class="text-warning validation-error mt-2">{{ $message }}</div>
+    @enderror
+  </div>
+</div>
+
 
         <!-- Row 1: Name & Email -->
         <div class="row mb-3">
-          <div class="col-md-6">
+          <div class="col-md-6 mb-md-0 mb-3">
             <label class="form-label">Name <span class="text-warning">*</span></label>
             <input type="text" name="name" class="form-control bg-white" placeholder="Enter your name"
                    value="{{ old('name', $user->name) }}">
@@ -55,7 +62,7 @@
 
         <!-- Row 2: Phone & Designation -->
         <div class="row mb-3">
-          <div class="col-md-6">
+          <div class="col-md-6 mb-md-0 mb-3">
             <label class="form-label">Phone <span class="text-warning">*</span></label>
             <input type="text" name="phone" class="form-control bg-white" placeholder="Enter your phone"
                    value="{{ old('phone', $user->phone) }}">
@@ -75,7 +82,7 @@
 
         <!-- Row 3: Password & Confirm Password -->
         <div class="row mb-4">
-          <div class="col-md-6">
+          <div class="col-md-6 mb-md-0 mb-3">
             <label class="form-label d-flex justify-content-between align-items-center">
               <span>Password</span>
               <span>
@@ -120,41 +127,57 @@
 
 @section('scripts')
 <script>
-    $(document).ready(function() {
-  // Toastr Messages
-        @if(session('success'))
-            toastr.success("{{ session('success') }}");
-        @endif
+$(document).ready(function() {
+    // Toastr Messages
+    @if(session('success'))
+        toastr.success("{{ session('success') }}");
+    @endif
 
-        @if(session('error'))
-            toastr.error("{{ session('error') }}");
-        @endif
+    @if(session('error'))
+        toastr.error("{{ session('error') }}");
+    @endif
 
-        @if($errors->any())
-        @foreach($errors->all() as $error)
-            toastr.error("{{ $error }}");
-        @endforeach
-        @endif
+    @if($errors->any())
+    @foreach($errors->all() as $error)
+        toastr.error("{{ $error }}");
+    @endforeach
+    @endif
 
+    // Toggle password visibility
+    $(".toggle-password").click(function() {
+        let input = $($(this).attr("toggle"));
+        let labelSpan = $(this).closest("span");
+
+        if (input.attr("type") === "password") {
+            input.attr("type", "text");
+            $(this).removeClass("fa-eye-slash").addClass("fa-eye");
+            labelSpan.find("small").text("Show");
+        } else {
+            input.attr("type", "password");
+            $(this).removeClass("fa-eye").addClass("fa-eye-slash");
+            labelSpan.find("small").text("Hide");
+        }
     });
-            $(".toggle-password").click(function() {
-            let input = $($(this).attr("toggle"));
-            let labelSpan = $(this).closest("span"); // 👈 parent span jisme icon + small dono hain
-
-            if (input.attr("type") === "password") {
-                input.attr("type", "text");
-                $(this).removeClass("fa-eye-slash").addClass("fa-eye");
-                labelSpan.find("small").text("Show");
-            } else {
-                input.attr("type", "password");
-                $(this).removeClass("fa-eye").addClass("fa-eye-slash");
-                labelSpan.find("small").text("Hide");
-            }
-        });
 
     // Validation error auto remove on click anywhere
     document.addEventListener("click", function() {
         document.querySelectorAll(".validation-error").forEach(el => el.remove());
     });
+
+    // ✅ Image Preview
+    document.getElementById('profileImageInput').addEventListener('change', function(event) {
+        const input = event.target;
+        const file = input.files[0];
+        const preview = document.getElementById('profilePreview');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+});
 </script>
 @endsection

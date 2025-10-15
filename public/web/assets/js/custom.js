@@ -87,27 +87,8 @@ document.addEventListener("DOMContentLoaded", function () {
         disableMobile: true, // 🚀 Ensures Flatpickr also works on mobile
     });
 
-    // ✅ Toggle Ticket Price Function
-    function toggleTicketPrice() {
-        let type = $('#joining_type').val();
-        let priceField = $('#ticket_price');
+ 
 
-        if (type === 'Free') {
-            priceField.val(0); // set default 0
-            priceField.prop('readonly', true); // readonly instead of disabled
-        } else if (type === 'Paid') {
-            priceField.prop('readonly', false); // allow editing
-            if (priceField.val() == 0 || priceField.val() === '') {
-                priceField.val(''); // clear when switching to paid
-            }
-        }
-    }
-
-    // ✅ Run once on load (for old value or initial state)
-    toggleTicketPrice();
-
-    // ✅ Run every time dropdown changes
-    $('#joining_type').on('change', toggleTicketPrice);
 });
 
 });

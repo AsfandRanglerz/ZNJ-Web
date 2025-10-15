@@ -92,11 +92,10 @@ public function getEntertainersByCategory(Request $request)
     return response()->json($data);
 }
 
-   public function store(Request $request)
+public function store(Request $request)
 {
-    $request->validate([
+    $rules = [
         'title' => 'required|string',
-        'venue_id' => 'required',
         'about_event' => 'required',
         'event_type' => 'required|string',
         'date' => 'required|date|after_or_equal:today',
@@ -104,13 +103,27 @@ public function getEntertainersByCategory(Request $request)
         'from' => 'required',
         'to' => 'required',
         'joining_type' => 'required',
-        'price' => 'required',
         'seats' => 'required|integer',
         'description' => 'required|string',
         'cover_image' => 'required|image|mimes:jpg,jpeg,png',
-        'entertainer_id' => 'required',
-    ],
-    [
+    ];
+
+    // Conditional rules
+    if ($request->joining_type === 'Paid') {
+        $rules['price'] = 'required|numeric|min:1';
+    } else {
+        $rules['price'] = 'nullable|numeric|min:0';
+    }
+
+    if ($request->event_type === 'Public') {
+        $rules['venue_id'] = 'required';
+        $rules['entertainer_id'] = 'required';
+    } else {
+        $rules['venue_id'] = 'nullable';
+        $rules['entertainer_id'] = 'nullable';
+    }
+
+    $messages = [
         'date.required' => 'The start date is required.',
         'date.after_or_equal' => 'The start date must be a date after or equal to today.',
         'end_date.required' => 'The end date is required.',
@@ -123,8 +136,11 @@ public function getEntertainersByCategory(Request $request)
         'entertainer_id.required' => 'Please select at least one entertainer.',
         'about_event.required' => 'The event information field is required.',
         'venue_id.required' => 'The venue field is required.',
-    ]);
+    ];
 
+    $request->validate($rules, $messages);
+
+    // Handle cover image
     if ($request->hasFile('cover_image')) {
         $file = $request->file('cover_image');
         $extension = $file->getClientOriginalExtension();
@@ -135,7 +151,7 @@ public function getEntertainersByCategory(Request $request)
         $image = 'public/avator.png';
     }
 
-    // Save event into a variable
+    // Save event
     $event = Event::create([
         'user_id' => Auth::id(),
         'title' => $request->title,
@@ -147,19 +163,20 @@ public function getEntertainersByCategory(Request $request)
         'from' => $request->from,
         'to' => $request->to,
         'joining_type' => $request->joining_type,
-        'price' => $request->price,
+        'price' => $request->price ?? 0,
         'seats' => $request->seats,
         'description' => $request->description,
         'cover_image' => $image,
     ]);
 
-    // Attach entertainers if selected
+    // Attach entertainers if provided
     if ($request->filled('entertainer_id')) {
         $event->entertainers()->attach($request->entertainer_id);
     }
 
     return redirect()->route('web.recruiter.myevents')->with('success', 'Event created successfully');
 }
+
 
     // For User Ticket
         public function ticket()
@@ -182,15 +199,22 @@ public function getEntertainersByCategory(Request $request)
 {
     $user = User::findOrFail($id);
  
-    $request->validate([
-        'name'        => 'required|string|max:255',
-        'email'       => 'required|email|unique:users,email,' . $user->id,
-        'phone'       => 'required|string|max:20',
-        'designation' => 'nullable|string|max:255',
-                    'password' => 'required|min:8',
-            'password_confirmation' => 'same:password',  
-        'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-    ]);
+$request->validate([
+    'name'        => 'required|string|max:255',
+    'email'       => 'required|email|unique:users,email,' . $user->id,
+    'phone'       => 'required|string|max:20',
+    'designation' => 'nullable|string|max:255',
+    'password'    => 'required|min:8',
+    'password_confirmation' => 'same:password',  
+    'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+], [
+    
+    'image.max'   => 'The image size must not exceed 2 MB.',
+    'image.mimes' => 'The image must be a file of type: JPG, JPEG, or PNG',
+    'password.min' => 'The password must be at least 8 characters',
+    'password_confirmation.same' => 'The confirm password must match the password',
+]);
+
 
     // Handle image upload
     if ($request->hasFile('image')) {
