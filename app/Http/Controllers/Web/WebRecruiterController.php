@@ -11,6 +11,7 @@ use App\Models\TalentCategory;
 use App\Models\VenueCategory;
 use App\Models\EntertainerDetail;
 use App\Models\Event;
+use App\Models\EventVenue;
 use App\Models\User;
 use App\Models\Venue;
 use Illuminate\Support\Facades\File;
@@ -173,6 +174,12 @@ public function store(Request $request)
     if ($request->filled('entertainer_id')) {
         $event->entertainers()->attach($request->entertainer_id);
     }
+    if (isset($request->venue_id)) {
+            $event_venue = new EventVenue;
+            $event_venue->event_id = $event->id;
+            $event_venue->venues_id = $request->venue_id;
+            $event_venue->save();
+        }
 
     return redirect()->route('web.recruiter.myevents')->with('success', 'Event created successfully');
 }
