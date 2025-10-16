@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Color\Color;
+use Illuminate\Support\Str;
 
 class BankAlfalahPaymentController extends Controller
 {
@@ -73,15 +77,74 @@ class BankAlfalahPaymentController extends Controller
     {
         $event = \App\Models\Event::findOrFail($event_id);
 
-        $amount = floatval($request->amount ?? $event->price ?? 100.00);
+        if (isset($event->joining_type) && strtolower($event->joining_type) === 'free') {
+            $ticketData = session('ticket_pre_data');
 
+            if ($ticketData) {
+                $quantity = $ticketData['quantity'];
+                $qrPath = public_path('qrcodes/');
+                if (!file_exists($qrPath)) mkdir($qrPath, 0777, true);
+
+                $writer = new PngWriter();
+                $qrPath = public_path('qrcodes/');
+                if (!file_exists($qrPath)) {
+                    mkdir($qrPath, 0777, true);
+                }
+
+                for ($i = 0; $i < $quantity; $i++) {
+                    $serialno = mt_rand(1000, 9999);
+                    $qrToken  = Str::random(32);
+
+                    $ticket = \App\Models\EventTicket::create([
+                        'user_id'   => Auth()->id(),
+                        'event_id'  => $event->id,
+                        'name'      => $ticketData['name'],
+                        'surname'   => $ticketData['surname'],
+                        'age'       => $ticketData['age'],
+                        'phone'     => $ticketData['phone'],
+                        'email'     => $ticketData['email'],
+                        'photo'     => $ticketData['photo'],
+                        'gender'    => $ticketData['gender'],
+                        'serial_no' => $serialno,
+                        'price'     => $ticketData['price'],
+                    ]);
+
+                    // Generate QR
+                    $qrImageName = 'qr_' . $ticket->id . '.png';
+                    $qrFilePath  = $qrPath . DIRECTORY_SEPARATOR . $qrImageName;
+
+                    $qrCode = new QrCode(
+                        data: $qrToken,
+                        size: 500,
+                        margin: 10,
+                        foregroundColor: new Color(0, 0, 0),
+                        backgroundColor: new Color(255, 255, 255)
+                    );
+
+                    $writer->write($qrCode)->saveToFile($qrFilePath);
+
+                    // Save relative path
+                    $ticket->update(['qr_code' => 'qrcodes/' . $qrImageName]);
+                }
+
+
+                session()->forget('ticket_pre_data');
+            }
+
+            return redirect()->route('web.thankyou')->with([
+                'payment_status' => 'success',
+                'message' => 'Free event — ticket generated successfully!',
+            ]);
+        }
+
+        // Paid event (unchanged)
+        $amount = floatval($request->amount ?? $event->price ?? 100.00);
         $sessionResponse = $this->createCheckoutSession(new Request([
             'amount' => $amount,
             'email'  => Auth()->user()->email ?? 'customer@example.com',
         ]));
 
         $sessionData = json_decode($sessionResponse->getContent(), true);
-
         if (!$sessionData['success']) {
             return "Session creation failed: " . json_encode($sessionData);
         }
@@ -94,6 +157,8 @@ class BankAlfalahPaymentController extends Controller
             'event'      => $event,
         ]);
     }
+
+
 
 
     /**
@@ -269,6 +334,8 @@ class BankAlfalahPaymentController extends Controller
             $qrPath = public_path('qrcodes/');
             if (!file_exists($qrPath)) mkdir($qrPath, 0777, true);
 
+            $writer = new PngWriter();
+
             for ($i = 0; $i < $quantity; $i++) {
                 $serialno = mt_rand(1000, 9999);
 
@@ -289,12 +356,13 @@ class BankAlfalahPaymentController extends Controller
                 $ticketUrl = url('/ticket/' . $ticket->id);
                 $qrImageName = 'qr_' . $ticket->id . '.png';
 
-                \Endroid\QrCode\Builder\Builder::create()
-                    ->data($ticketUrl)
-                    ->size(500)
-                    ->margin(10)
-                    ->build()
-                    ->saveToFile($qrPath . $qrImageName);
+                $qrCode = new QrCode($ticketUrl);
+                $qrCode->setSize(500);
+                $qrCode->setMargin(10);
+                $qrCode->setForegroundColor(new Color(0, 0, 0));
+                $qrCode->setBackgroundColor(new Color(255, 255, 255));
+
+                $writer->write($qrCode)->saveToFile($qrPath . $qrImageName);
 
                 $ticket->update(['qr_code' => 'qrcodes/' . $qrImageName]);
             }
