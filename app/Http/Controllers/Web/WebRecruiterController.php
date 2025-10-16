@@ -63,9 +63,16 @@ public function create()
     $entertainers = EntertainerDetail::with('User')->get();
     $venues = Venue::with('venueCategory')->get();
     $categories = TalentCategory::select('id', 'category')->get();
-
-    return view('web.recruiter.createevent', compact('entertainers', 'venues', 'categories'));
+    $venueCategories = VenueCategory::select('id', 'category')->get();
+    return view('web.recruiter.createevent', compact('entertainers', 'venues', 'categories', 'venueCategories'));
 }
+
+public function getByCategory($categoryId)
+{
+    $venues = Venue::where('category_id', $categoryId)->get(['id', 'title']);
+    return response()->json($venues);
+}
+
 
 public function getEntertainersByCategory(Request $request)
 {
