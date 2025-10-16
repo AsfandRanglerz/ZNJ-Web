@@ -351,14 +351,18 @@ class RecruiterController extends Controller
     }
     }
     public function eventEntertainersIndex($user_id,$event_id){
-       $data['event_entertainers']= Event::find($event_id)->entertainerDetails;
-       $data['user_id']= $user_id;
-    //   dd($data['event_entertainers']);
+        //$data['event_entertainers']= Event::find($event_id)->entertainerDetails;
+        $event = Event::with('entertainers.talentCategory','entertainers.user')->find($event_id);
+        $data['event_entertainers'] = $event->entertainers;
+        $data['user_id']= $user_id;
+        // return $data;
         return view('admin.recruiter.event.event_entertainers',compact('data'));
     }
     public function eventVenuesIndex($user_id,$event_id){
-        $data['event_venues']= Event::find($event_id)->eventVenues;
-        $data['user_id']= $user_id;
+        // $data['event_venues']= Event::find($event_id)->eventVenues;
+        $data['event_venues']= Event::with('eventVenues.venue.venueCategory')->find($event_id);
+        $data['user_id']= $user_id; 
+        // return $data;
          return view('admin.recruiter.event.event_venues',compact('data'));
      }
      //feacture ads
