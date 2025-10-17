@@ -47,20 +47,23 @@ Route::post('/admin-reset-password', [AdminController::class, 'ResetPassword']);
 
 
    
-Route::get('/checkout/{event_id}', [BankAlfalahPaymentController::class, 'showCheckoutPage'])->name('web.checkout');
-Route::post('/process-payment', [BankAlfalahPaymentController::class, 'processPayment']);
-// Route::any('/ZNJ-Web/payment/callback', [BankAlfalahPaymentController::class, 'paymentCallback'])
-//      ->name('payment.callback')
-//      ->withoutMiddleware(['verifyCsrfToken']);
-// --- Payment callback routes (no session / CSRF) ---
+// Route::get('/checkout/{event_id}', [BankAlfalahPaymentController::class, 'showCheckoutPage'])->name('web.checkout');
+// Route::post('/process-payment', [BankAlfalahPaymentController::class, 'processPayment']);
+Route::middleware(['web'])->group(function () {
+    Route::get('/checkout/{event_id}', [BankAlfalahPaymentController::class, 'showCheckoutPage'])->name('web.checkout');
+    Route::post('/process-payment', [BankAlfalahPaymentController::class, 'processPayment']);
+    Route::post('/initiate-auth', [BankAlfalahPaymentController::class, 'initiateAuthentication']);
+    Route::post('/authenticate-payer', [BankAlfalahPaymentController::class, 'authenticatePayer']);
+    Route::post('/check-auth-status', [BankAlfalahPaymentController::class, 'checkAuthStatus']);
+});
 Route::withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class, 'web'])->group(function () {
     Route::any('/payment/callback', [\App\Http\Controllers\Api\BankAlfalahPaymentController::class, 'paymentCallback'])->name('payment.callback');
     Route::any('/ZNJ-Web/payment/callback', [\App\Http\Controllers\Api\BankAlfalahPaymentController::class, 'paymentCallback'])->name('payment.callback.znj');
 });
 
-Route::post('/initiate-auth', [BankAlfalahPaymentController::class, 'initiateAuthentication']);
-Route::post('/authenticate-payer', [BankAlfalahPaymentController::class, 'authenticatePayer']);
-Route::post('/check-auth-status', [BankAlfalahPaymentController::class, 'checkAuthStatus']);
+// Route::post('/initiate-auth', [BankAlfalahPaymentController::class, 'initiateAuthentication']);
+// Route::post('/authenticate-payer', [BankAlfalahPaymentController::class, 'authenticatePayer']);
+// Route::post('/check-auth-status', [BankAlfalahPaymentController::class, 'checkAuthStatus']);
 
 Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('dashboard', [AdminController::class, 'getdashboard']);
