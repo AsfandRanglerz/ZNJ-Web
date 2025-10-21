@@ -109,17 +109,17 @@
         <!-- Event Type, Category, Entertainer -->
          <div class="row mb-3">
   <!-- Event Type -->
-  <div class="col-md-6 mb-lg-0 mb-3">
-    <label class="form-label">Event Type <span class="text-warning">*</span></label>
-    <select name="event_type" id="event_type" class="form-control form-control-lg bg-white">
-      <option value="" disabled {{ old('event_type') ? '' : 'selected' }} hidden>Choose event type</option>
-      <option value="Private" {{ old('event_type') == 'Private' ? 'selected' : '' }}>Private</option>
-      <option value="Public" {{ old('event_type') == 'Public' ? 'selected' : '' }}>Public</option>
-    </select>
-    @error('event_type')
+<div class="col-md-6 mb-lg-0 mb-3">
+  <label class="form-label">Event Type <span class="text-warning">*</span></label>
+  <select name="event_type" id="event_type" class="form-select form-select-lg bg-white select2">
+    <option value="" disabled {{ old('event_type') ? '' : 'selected' }} hidden>Choose event type</option>
+    <option value="Private" {{ old('event_type') == 'Private' ? 'selected' : '' }}>Private</option>
+    <option value="Public" {{ old('event_type') == 'Public' ? 'selected' : '' }}>Public</option>
+  </select>
+  @error('event_type')
     <div class="text-warning">{{ $message }}</div>
-    @enderror
-  </div>
+  @enderror
+</div>
 
   <!-- Category -->
   <div class="col-md-6 mb-lg-0 mb-3">
@@ -295,4 +295,16 @@ flatpickr("input[name='end_date']", {
 
 });
 </script>
+
 @endsection
+@push('scripts')
+<script>
+  $(document).ready(function() {
+    $('#event_type').select2({
+      placeholder: "Choose event type",
+      allowClear: true,
+      width: '100%'
+    });
+  });
+</script>
+@endpush
