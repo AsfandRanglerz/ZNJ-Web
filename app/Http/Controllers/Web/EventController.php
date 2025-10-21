@@ -123,6 +123,7 @@ class EventController extends Controller
         return redirect()->route('web.checkout', [
             'event_id' => $event->id,
             'amount'   => $totalAmount,
+            'quantity' => $quantity,
         ])->with('success', "Proceed to payment to confirm your ticket(s).");
     }
 }

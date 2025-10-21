@@ -106,9 +106,9 @@
                 </li>
 
 
-            <li class="dropdown {{ (request()->is('')) ? 'active' : '' }}">
+            {{-- <li class="dropdown {{ (request()->is('')) ? 'active' : '' }}">
                 <a  href="{{url('#')}}" class="nav-link"> <i class="fas fa-hand-holding-usd"></i><span>Finance Management</span></a>
-            </li>
+            </li> --}}
             <li class="dropdown {{ (request()->is('admin/account-deletion-request*')) ? 'active' : '' }}">
                 <a href="{{url('admin/account-deletion-request')}}" class="nav-link"> <i
                         class="fas fa-hand-holding-usd"></i><span>Account Deletion
