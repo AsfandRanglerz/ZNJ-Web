@@ -25,11 +25,16 @@ class WebAuthController extends Controller
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
             $user = User::where('email', $googleUser->getEmail())->first();
-
+    
             if ($user) {
                 if (empty($user->google_id)) {
                 $user->update([
                     'google_id' => $googleUser->getId(),
+                ]);
+            }
+             if ($user->is_verify == 0) {
+                return redirect()->route('web.login')->withErrors([
+                    'error' => 'Your account is de-activated.',
                 ]);
             }
                 Auth::login($user);
@@ -99,6 +104,11 @@ class WebAuthController extends Controller
         return back()->withErrors([
             'email' => 'This email is not registered.',
         ])->onlyInput('email');
+    }
+    if ($user->is_verify == 0) {
+        return back()->withErrors([
+            'error' => 'Your account is de-activated.',
+        ]);
     }
 
     // Step 3: Try login

@@ -144,20 +144,32 @@
     @enderror
   </div>
 
+  
+
   <div class="col-md-6 mb-lg-0 mb-3">
-    <label class="form-label">Select Venue <span id="venue_required" class="text-warning">*</span></label>
-    <select name="venue_id" id="venue" class="form-control form-control-lg bg-white">
+    <label class="form-label">Select Venue Category <span class="text-warning">*</span></label>
+    <select id="venueCategory" class="form-control form-control-lg bg-white" required >
+        <option value="" disabled selected hidden>Choose Venue Category</option>
+        @foreach($venueCategories as $category)
+            <option value="{{ $category->id }}">{{ $category->category }}</option>
+        @endforeach
+    </select>
+     @error('venueCategory')
+    <div class="text-warning">{{ $message }}</div>
+    @enderror
+  </div>
+
+  <div class="col-md-6 mb-lg-0 mb-3 mt-3">
+    <label class="form-label">Select Venue Location<span id="venue_required" class="text-warning">*</span></label>
+    <select name="venue_id" id="venue" class="form-control form-control-lg bg-white" required>
       <option value="" disabled {{ old('venue_id') ? '' : 'selected' }} hidden>Choose Venue</option>
-      @foreach($venues as $venue)
-        <option value="{{ $venue->id }}" {{ old('venue_id') == $venue->id ? 'selected' : '' }}>
-          {{ $venue->venueCategory->category ?? 'No Category' }}
-        </option>
-      @endforeach
     </select>
     @error('venue_id')
     <div class="text-warning">{{ $message }}</div>
     @enderror
   </div>
+
+  
 </div>
 
 
@@ -228,6 +240,40 @@ $(document).ready(function() {
         }
     });
 
+    // Venue Category → Venues dynamic loading
+    $('#venueCategory').on('change', function() {
+        let categoryId = $(this).val();
+        let $venue = $('#venue');
+        // Clear and disable venue dropdown
+        $venue.html('<option value="" disabled selected hidden>Loading...</option>');
+        $venue.prop('disabled', true);
+        // Build dynamic route URL
+        let url = "{{ route('venues.byCategory', ':categoryId') }}";
+        url = url.replace(':categoryId', categoryId);
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $venue.html('<option value="" disabled selected hidden>Choose Venue</option>');
+                
+                if (data.length > 0) {
+                    $.each(data, function(key, venue) {
+                        $venue.append('<option value="' + venue.id + '">' + venue.title + '</option>');
+                    });
+                    $venue.prop('disabled', false);
+                } else {
+                    $venue.html('<option value="" disabled selected>No Venues Found</option>');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+                $venue.html('<option value="" disabled selected>Error Loading Venues</option>');
+            }
+        });
+    });
+
+
     // ✅ Handle Joining Type (Free → hide ticket price)
     function handleJoiningType() {
         const joiningType = $('#joining_type').val();
@@ -245,15 +291,15 @@ $(document).ready(function() {
         const eventType = $('#event_type').val();
         if (eventType === 'Private') {
             $('#entertainerDropdown').removeAttr('required');
-            $('#venue').removeAttr('required');
+            
             $('#entertainer_required').hide();
-            $('#venue_required').hide();
+           
             $('#category_required').hide();
         } else if (eventType === 'Public') {
             $('#entertainerDropdown').attr('required', 'required');
-            $('#venue').attr('required', 'required');
+            
             $('#entertainer_required').show();
-            $('#venue_required').show();
+            
             $('#category_required').show();
         }
     }

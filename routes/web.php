@@ -213,6 +213,8 @@ Route::middleware(['checkauth'])->group(function () {
     // Show create event form
     Route::get('/eventcreate', [WebRecruiterController::class, 'create'])->name('event.create');
     Route::get('/entertainers-by-category', [WebRecruiterController::class, 'getEntertainersByCategory'])->name('entertainers.byCategory');
+    Route::get('/venues-by-category/{categoryId}', [WebRecruiterController::class, 'getByCategory'])->name('venues.byCategory');
+
 
 
      // Handle form submit

@@ -350,7 +350,7 @@ class RecruiterController extends Controller
 
     }
     }
-    public function eventEntertainersIndex($user_id,$event_id){
+     public function eventEntertainersIndex($user_id,$event_id){
         //$data['event_entertainers']= Event::find($event_id)->entertainerDetails;
         $event = Event::with('entertainers.talentCategory','entertainers.user')->find($event_id);
         $data['event_entertainers'] = $event->entertainers;

@@ -49,6 +49,7 @@
 
         <li class="nav-item"><a class="nav-link my-nav-link-header" href="https://znjevents.com/blog/">Blog</a></li>
         <li class="nav-item"><a class="nav-link my-nav-link-header" href="https://znjevents.com/contact-us/">Contact Us</a></li>
+        <li class="nav-item"><a class="nav-link my-nav-link-header" href="{{route("web.events")}}">All Events</a></li>
         <li class="nav-item"><a class="nav-link my-nav-link-header" href="https://znjevents.com/faqs/">FAQ's</a></li>
       </ul>
 
