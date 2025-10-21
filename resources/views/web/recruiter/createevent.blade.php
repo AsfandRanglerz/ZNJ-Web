@@ -160,7 +160,7 @@
   </div>
 
   <div class="col-md-6 mb-lg-0 mb-3 mt-3">
-    <label class="form-label">Select Venue <span id="venue_required" class="text-warning">*</span></label>
+    <label class="form-label">Select Venue Location<span id="venue_required" class="text-warning">*</span></label>
     <select name="venue_id" id="venue" class="form-control form-control-lg bg-white" required>
       <option value="" disabled {{ old('venue_id') ? '' : 'selected' }} hidden>Choose Venue</option>
     </select>
