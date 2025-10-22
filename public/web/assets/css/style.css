@@ -190,6 +190,7 @@ form div input:focus {
 #search-btn-in-event:hover {
 background-color: #b1961e;
 }
+
 #search-btn-in-event:focus,
 .search-city-date-btn:focus {
     background-color: #e5c530;
@@ -200,6 +201,9 @@ background-color: #b1961e;
     height: 2.5rem !important;
     font-size: 0.9rem;
 }
+
+
+
 .input-group-text {
     height: 2.5rem !important;
 }
@@ -629,6 +633,36 @@ body.collapsed .create-event-container-div,
 .page-link.active {
     color: #e5c530;
 }
+/* Match Select2 single-select with Bootstrap's form-select-lg look */
+.select2-container--default .select2-selection--single {
+    height: calc(1.5em + 1rem + 2px) !important; /* same as form-select-lg */
+    padding: 0.5rem 0.5rem;
+    font-size: 1.25rem; /* same as .form-select-lg font size */
+    font-weight: 500;
+    line-height: 1.5;
+    border: 1px solid #ced4da;
+    border-radius: 0.3rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Ensure text is vertically aligned */
+.select2-container--default .select2-selection__rendered {
+    line-height: normal !important;
+}
+
+/* Make arrow icon aligned and clickable */
+.select2-container--default .select2-selection__arrow {
+    height: 100% !important;
+    right: 10px;
+}
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    font-size: 1rem !important;
+    margin-left: 0;   /* smaller font size */
+    padding-left: 0 !important; 
+    color: #727375 !important;       
+                
+}
 .custom-select-input,
 /* Select2 container ko Bootstrap form-control-lg jaisa banane ke liye */
 .select2-container--default .select2-selection--multiple {
@@ -780,6 +814,15 @@ select:required:invalid {
     -webkit-animation: spin 1s linear infinite;
     -moz-animation: spin 1s linear infinite;
 }
+  .validation-error-profile {
+    display: block;
+    text-align: center;
+    margin-top: 8px;
+    position: absolute;
+    width: 100%;
+    bottom: -22px;
+    left: 0;
+  }
 
 @keyframes spin {
     0% {
@@ -836,6 +879,30 @@ select:required:invalid {
     }
     .create-event-container-main-div {
         max-width: 100%;
+    }
+        .footer-links-div {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    /* Our Services 8/12 width and Working Hours 4/12 width */
+    .footer-services {
+        flex: 0 0 66.6667%;
+        max-width: 66.6667%;
+    }
+
+    .footer-working-hours {
+        flex: 0 0 33.3333%;
+        max-width: 33.3333%;
+        text-align: right;
+        padding-right: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    /* Address full width below */
+    .footer-address {
+        width: 100% !important;
+        margin-top: 20px;
     }
 }
 @media (max-width: 575px) {

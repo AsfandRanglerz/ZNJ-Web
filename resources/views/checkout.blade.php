@@ -139,7 +139,7 @@
         // STEP 3: Initiate Authentication
         function initiateAuthentication(sessionId, orderId, amount) {
             console.log("🎯 Step 3 started");
-            fetch("/ZNJ-Web/initiate-auth", {
+            fetch("/initiate-auth", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -177,7 +177,7 @@
         // STEP 4: Authenticate Payer - WITH POPUP CONTROL
         function authenticatePayer(authId, sessionId, orderId, step3Data) {
             console.log("🎯 Step 4 started");
-            fetch("/ZNJ-Web/authenticate-payer", {
+            fetch("/authenticate-payer", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -243,7 +243,7 @@
 
         // ✅ IMPROVED AUTH STATUS CHECK WITH POPUP CONTROL
         function checkAuthStatusRepeatedly(sessionId, orderId, attempt = 0) {
-            if (attempt >= 20) {
+            if (attempt >= 60) {
                 console.error("❌ Max auth check attempts reached");
                 // ✅ POPUP CLOSE KAREN FAILURE PAR
                 if (authPopup && !authPopup.closed) {
@@ -256,7 +256,7 @@
 
             console.log(`🔄 Checking auth status... Attempt: ${attempt + 1}`);
 
-            fetch("/ZNJ-Web/check-auth-status", {
+            fetch("/check-auth-status", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -312,7 +312,7 @@
             console.log("🎯 Step 5 started - Final Payment");
             console.log("🔍 Using Auth Transaction ID:", authTransactionId);
 
-            fetch("/ZNJ-Web/process-payment", {
+            fetch("/process-payment", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -338,7 +338,7 @@
                         
                         // ✅ SIRF MAIN WINDOW KO REDIRECT KAREN
                         // ✅ Popup already close ho chuka hoga
-                        window.location.href = `/ZNJ-Web/payment/callback?result=SUCCESS&session_id=${sessionId}&order_id=${orderId}&amount=${amount}&transaction_id=${authTransactionId}`;
+                        window.location.href = `/payment/callback?result=SUCCESS&session_id=${sessionId}&order_id=${orderId}&amount=${amount}&transaction_id=${authTransactionId}`;
                     } else {
                         console.error("❌ Payment Failed:", data);
                         const errorMsg = data.response?.response?.acquirerMessage ||

@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Color\Color;
+use Illuminate\Support\Str;
 
 class BankAlfalahPaymentController extends Controller
 {
@@ -19,7 +23,7 @@ class BankAlfalahPaymentController extends Controller
     public function createCheckoutSession(Request $request)
     {
         $orderId = uniqid("ORDER_");
-        $amount = floatval($request->amount ?? 100.00);
+        $amount = floatval($request->amount ?? 5.00);
 
         try {
             // Step 1: Create session
@@ -53,6 +57,21 @@ class BankAlfalahPaymentController extends Controller
                 return response()->json(['success' => false, 'error' => 'Session update failed', 'details' => $updateData], 400);
             }
 
+            // ✅ ADD THIS BLOCK HERE
+            $quantity = intval($request->quantity ?? 1);
+            if ($quantity <= 0) {
+                $quantity = 1;
+            }
+
+            \App\Models\PaymentTemp::create([
+                'order_id' => $orderId,
+                'session_id' => $sessionId,
+                'user_id' => Auth()->id(),
+                'event_id' => $request->event_id,
+                'amount' => $amount,
+                'quantity' => $quantity, // ✅ FIXED QUANTITY
+            ]);
+
             return response()->json([
                 'success'    => true,
                 'session_id' => $sessionId,
@@ -66,6 +85,7 @@ class BankAlfalahPaymentController extends Controller
         }
     }
 
+
     /**
      * Show checkout page
      */
@@ -73,15 +93,77 @@ class BankAlfalahPaymentController extends Controller
     {
         $event = \App\Models\Event::findOrFail($event_id);
 
-        $amount = floatval($request->amount ?? $event->price ?? 100.00);
+        if (isset($event->joining_type) && strtolower($event->joining_type) === 'free') {
+            $ticketData = session('ticket_pre_data');
 
+            if ($ticketData) {
+                $quantity = $ticketData['quantity'];
+                $qrPath = public_path('qrcodes/');
+                if (!file_exists($qrPath)) mkdir($qrPath, 0777, true);
+
+                $writer = new PngWriter();
+                $qrPath = public_path('qrcodes/');
+                if (!file_exists($qrPath)) {
+                    mkdir($qrPath, 0777, true);
+                }
+
+                for ($i = 0; $i < $quantity; $i++) {
+                    $serialno = mt_rand(1000, 9999);
+                    $qrToken  = Str::random(32);
+
+                    $ticket = \App\Models\EventTicket::create([
+                        'user_id'   => Auth()->id(),
+                        'event_id'  => $event->id,
+                        'name'      => $ticketData['name'],
+                        'surname'   => $ticketData['surname'],
+                        'age'       => $ticketData['age'],
+                        'phone'     => $ticketData['phone'],
+                        'email'     => $ticketData['email'],
+                        'photo'     => $ticketData['photo'],
+                        'gender'    => $ticketData['gender'],
+                        'serial_no' => $serialno,
+                        'price'     => $ticketData['price'],
+                    ]);
+
+                    // Generate QR
+                    $qrImageName = 'qr_' . $ticket->id . '.png';
+                    $qrFilePath  = $qrPath . DIRECTORY_SEPARATOR . $qrImageName;
+
+                    $qrCode = new QrCode(
+                        data: $qrToken,
+                        size: 500,
+                        margin: 10,
+                        foregroundColor: new Color(0, 0, 0),
+                        backgroundColor: new Color(255, 255, 255)
+                    );
+
+                    $writer->write($qrCode)->saveToFile($qrFilePath);
+
+                    // Save relative path
+                    $ticket->update(['qr_code' => 'qrcodes/' . $qrImageName]);
+                }
+
+
+                session()->forget('ticket_pre_data');
+            }
+
+            return redirect()->route('web.thankyou')->with([
+                'payment_status' => 'success',
+                'message' => 'Free event — ticket generated successfully!',
+            ]);
+        }
+
+        // Paid event (unchanged)
+        $amount = floatval($request->amount ?? $event->price ?? 100.00);
         $sessionResponse = $this->createCheckoutSession(new Request([
-            'amount' => $amount,
-            'email'  => Auth()->user()->email ?? 'customer@example.com',
+            'amount'   => $amount,
+            'quantity' => $request->quantity ?? 1,
+            'email'    => Auth()->user()->email ?? 'customer@example.com',
+            'event_id' => $event->id,
         ]));
 
-        $sessionData = json_decode($sessionResponse->getContent(), true);
 
+        $sessionData = json_decode($sessionResponse->getContent(), true);
         if (!$sessionData['success']) {
             return "Session creation failed: " . json_encode($sessionData);
         }
@@ -157,7 +239,7 @@ class BankAlfalahPaymentController extends Controller
                     "id" => $sessionId
                 ],
                 "authentication" => [
-                "redirectResponseUrl" => route('payment.callback')
+                    "redirectResponseUrl" => route('payment.callback')
                 ],
                 "device" => [
                     "browserDetails" => [
@@ -218,12 +300,12 @@ class BankAlfalahPaymentController extends Controller
         $sessionId       = $request->session_id;
         $orderId         = $request->order_id;
         $amount          = number_format((float) $request->amount, 2, '.', '');
-        $authTransactionId = $request->auth_transaction_id; // ✅ AUTH TRANSACTION ID
+        $authTransactionId = $request->auth_transaction_id;
 
         $payload = [
             "apiOperation" => "PAY",
             "authentication" => [
-                "transactionId" => $authTransactionId // ✅ AUTH REFERENCE ADD KAREIN
+                "transactionId" => $authTransactionId
             ],
             "order" => [
                 "amount"   => $amount,
@@ -255,20 +337,134 @@ class BankAlfalahPaymentController extends Controller
     }
 
     /**
-     * Callback
+     * Callback - DEBUG VERSION
      */
     public function paymentCallback(Request $request)
     {
-        Log::info('PAY STEP AMOUNT:', ['amount' => $request->amount]);
-        Log::info('Payment Callback Data:', $request->all());
+        Log::info('🔴 PAYMENT CALLBACK STARTED', $request->all());
 
-        // Optional: You can handle success/failure check here if callback provides status
-        // Example: $status = $request->input('result') ?? 'UNKNOWN';
+        $result        = $request->get('result');
+        $sessionId     = $request->get('session_id');
+        $orderId       = $request->get('order_id');
+        $transactionId = $request->get('transaction_id');
 
-        // Redirect to thank you page
-        return redirect()->route('web.thankyou')->with([
-            'payment_status' => 'success',
-            'callback_data'  => $request->all(),
-        ]);
+        if (strtoupper($result) !== 'SUCCESS') {
+            return redirect()->route('web.thankyou')->with([
+                'payment_status' => 'failed',
+                'message'        => 'Payment failed or cancelled.',
+            ]);
+        }
+
+        try {
+            // ✅ Fetch payment session
+            $paymentSession = \App\Models\PaymentTemp::where('order_id', $orderId)->first();
+
+            if (!$paymentSession) {
+                throw new \Exception('Payment session not found for order: ' . $orderId);
+            }
+
+            $user     = \App\Models\User::find($paymentSession->user_id);
+            $event    = \App\Models\Event::find($paymentSession->event_id);
+            $quantity = intval($paymentSession->quantity ?? 1);
+            $amount   = floatval($paymentSession->amount); // ✅ AMOUNT PAYMENT_TEMP SE LEIN
+
+            // ✅ DEBUG LOG
+            Log::info('🎯 Payment Callback Debug:', [
+                'order_id' => $orderId,
+                'amount_from_temp' => $amount,
+                'quantity' => $quantity,
+                'user_id' => $paymentSession->user_id,
+                'event_id' => $paymentSession->event_id
+            ]);
+
+            // ✅ QUANTITY 0 SE BACHEN
+            if ($quantity <= 0) {
+                $quantity = 1;
+            }
+
+            if (!$user || !$event) {
+                throw new \Exception('User or Event not found.');
+            }
+
+            // ✅ Make sure QR folder exists
+            $qrPath = public_path('qrcodes/');
+            if (!file_exists($qrPath)) {
+                mkdir($qrPath, 0777, true);
+            }
+
+            // ✅ CALCULATE INDIVIDUAL TICKET PRICE SAFELY
+            $individualPrice = $quantity > 0 ? ($amount / $quantity) : $amount;
+
+            // ✅ DEBUG INDIVIDUAL PRICE
+            Log::info('💰 Price Calculation:', [
+                'total_amount' => $amount,
+                'quantity' => $quantity,
+                'individual_price' => $individualPrice
+            ]);
+
+            // ✅ Generate multiple tickets
+            for ($i = 1; $i <= $quantity; $i++) {
+                $serialno = mt_rand(1000, 9999);
+                $qrToken  = \Illuminate\Support\Str::random(32);
+
+                // Create individual ticket
+                $ticket = \App\Models\EventTicket::create([
+                    'user_id'   => $user->id,
+                    'event_id'  => $event->id,
+                    'name'      => $user->name ?? 'Guest User',
+                    'surname'   => '',
+                    'age'       => 25,
+                    'phone'     => $user->phone ?? 'N/A',
+                    'email'     => $user->email ?? 'noemail@example.com',
+                    'photo'     => 'public/avator.png',
+                    'gender'    => 'male',
+                    'serial_no' => $serialno,
+                    'price'     => $individualPrice, // ✅ FIXED PRICE
+                    'quantity'  => 1,
+                ]);
+
+                // Generate unique QR for each
+                $qrImageName = 'qr_' . $ticket->id . '.png';
+                $qrCode = new \Endroid\QrCode\QrCode($qrToken);
+                (new \Endroid\QrCode\Writer\PngWriter())->write($qrCode)->saveToFile($qrPath . $qrImageName);
+
+                // Update ticket with QR path
+                $ticket->update(['qr_code' => 'qrcodes/' . $qrImageName]);
+
+                // Create individual payment record
+                \App\Models\Payment::create([
+                    'sender_id'      => $user->id,
+                    'event_id'       => $event->id,
+                    'ticket_id'      => $ticket->id,
+                    'payment'        => $individualPrice, // ✅ FIXED PAYMENT
+                    'transaction_id' => $transactionId ?? $orderId,
+                    'type'           => 'ticket',
+                    'status'         => '1',
+                ]);
+
+                // ✅ DEBUG TICKET CREATION
+                Log::info("🎫 Ticket #{$i} Created:", [
+                    'ticket_id' => $ticket->id,
+                    'price' => $ticket->price,
+                    'user_id' => $ticket->user_id
+                ]);
+            }
+
+            // ✅ Remove temp session
+            $paymentSession->delete();
+
+            Log::info("✅ Payment successful — {$quantity} ticket(s) created for Order {$orderId}");
+
+            return redirect()->route('web.thankyou')->with([
+                'payment_status' => 'success',
+                'message'        => "Payment successful! {$quantity} ticket(s) generated successfully.",
+            ]);
+        } catch (\Exception $e) {
+            Log::error('❌ Payment Callback Error: ' . $e->getMessage());
+            return redirect()->route('web.thankyou')->with([
+                'payment_status' => 'error',
+                'message'        => 'Payment successful but ticket creation failed. Error: ' . $e->getMessage(),
+            ]);
+        }
     }
 }

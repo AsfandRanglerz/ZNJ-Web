@@ -38,25 +38,25 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     @foreach($data['event_venues'] as $venue)
+                                      @foreach($data['event_venues']->eventVenues as $item)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $venue->title }}</td>
-                                                <td>{{ $venue->category }}</td>
-                                                <td>{{ $venue->description }}</td>
-                                                <td>{{ $venue->seats }}</td>
-                                                <td>{{ $venue->stands }}</td>
-                                                @if( explode(':',$venue->opening_time)[0]>=12)
-                                                <td>{{ $venue->opening_time }} PM</td>
+                                                <td>{{ $item->venue->title }}</td>
+                                                <td>{{ $item->venue->venueCategory->category }}</td>
+                                                <td>{{ $item->venue->description }}</td>
+                                                <td>{{ $item->venue->seats }}</td>
+                                                <td>{{ $item->venue->stands }}</td>
+                                                @if( explode(':',$item->venue->opening_time)[0]>=12)
+                                                <td>{{ $item->venue->opening_time }} PM</td>
                                                 @else
-                                                 <td>{{ $venue->opening_time }} AM</td>
+                                                 <td>{{ $item->venue->opening_time }} AM</td>
                                                 @endif
-                                                @if( explode(':',$venue->closing_time)[0]>=12)
-                                                <td>{{ $venue->closing_time }} PM</td>
+                                                @if( explode(':',$item->venue->closing_time)[0]>=12)
+                                                <td>{{ $item->venue->closing_time }} PM</td>
                                                 @else
-                                                 <td>{{ $venue->closing_time }} AM</td>
+                                                 <td>{{ $item->venue->closing_time }} AM</td>
                                                 @endif
-                                               <td>{{ $venue->created_at }}</td>
+                                               <td>{{ $item->venue->created_at }}</td>
                                             </tr>
                                                 {{-- <td
                                                 style="display: flex;align-items: center;justify-content: center;column-gap: 8px"> --}}

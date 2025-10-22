@@ -4,31 +4,33 @@
             <img src="{{ asset('public/web/assets/images/flogo.png') }}" alt="ZNJ Events Logo" height="30" />
             <span class="ms-2 text-white">World First</span>
         </div>
-        <div class="d-flex justify-content-between align-items-center">
-            <div class>
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <div>
                 <h1 class="text-white">ZNJ Mobile App</h1>
                 <p class="col-7">Discover our ZNJ app, which is available for Android and ISO, for the full
                     experience.</p>
             </div>
             <div>
-<a href="https://apps.apple.com/pk/app/znj/id6453476597" target="_blank" class="text-decoration-none">
-    <img src="{{ asset('public/web/assets/images/app-store.png') }}" 
-         alt="App Store"
-         class="img-fluid me-2  anchor-btn-to-download" />
-</a>
+                <a href="https://apps.apple.com/pk/app/znj/id6453476597" target="_blank" class="text-decoration-none">
+                    <img src="{{ asset('public/web/assets/images/app-store.png') }}" 
+                        alt="App Store"
+                        class="img-fluid me-2 anchor-btn-to-download" />
+                </a>
 
-<a href="https://play.google.com/store/apps/details?id=com.znj" target="_blank" class="text-decoration-none">
-    <img src="{{ asset('public/web/assets/images/google-play-store.png') }}" 
-         alt="Google Play Store" 
-         class="img-fluid  anchor-btn-to-download" />
-</a>
-
+                <a href="https://play.google.com/store/apps/details?id=com.znj" target="_blank" class="text-decoration-none">
+                    <img src="{{ asset('public/web/assets/images/google-play-store.png') }}" 
+                        alt="Google Play Store" 
+                        class="img-fluid anchor-btn-to-download" />
+                </a>
             </div>
         </div>
-        <div class="row footer-links-div">
-            <div class="col-md-5">
+
+        <div class="row footer-links-div align-items-start">
+            <!-- OUR SERVICES -->
+            <div class="col-md-5 col-8 order-1 order-md-1 footer-services">
                 <h6 class="text-white my-5">OUR SERVICES</h6>
-                <div class="d-flex justify-content-between ">
+                <div class="d-flex justify-content-between flex-wrap">
                     <ul class="list-unstyled">
                         <li><a href="https://znjevents.com/service/event-management/" class="text-decoration-none">Event Management</a></li>
                         <li><a href="https://znjevents.com/service/event-creation/" class="text-decoration-none">Event Creation</a></li>
@@ -48,24 +50,45 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-7">
-                <div class="d-flex  justify-content-around">
-                    <div>
-                        <h6 class="text-white my-5">WORKING HOURS</h6>
-                        <p class="mb-0">12:00 PM-08:00 PM</p>
-                        <p class="text-white">MONDAY-FRIDAY</p>
-                    </div>
-                    <div>
-                        <h6 class="text-white my-5">ADDRESS</h6>
-                        <ul class="list-unstyled">
-                            <li><a href="#" class="text-decoration-none"><img src="{{ asset('public/web/assets/images/navigator.png') }}" alt="navigator" class="img-fluid me-3" />IG6 2UG, 7 crest Andrew drive, London UK <p class="px-4 mx-2 adress-link-highlight">#London</p></a></li>
-                            <li class="my-2"><a href="#" class="text-decoration-none"><img src="{{ asset('public/web/assets/images/navigator.png') }}" alt="navigator" class="img-fluid me-3" />Hotel Downtown, Dubai, UAE <p class="px-4 mx-2 adress-link-highlight">#UAE</p></a></li>
-                            <li><a href="#" class="text-decoration-none"><img src="{{ asset('public/web/assets/images/navigator.png') }}" alt="navigator" class="img-fluid me-3" />Villa 293 E, Sector E Phase 5 D.H.A, <span class="no-bold adress-last-link-highlight">Lahore</span>, Punjab 54910</a></li>
-                        </ul>
-                    </div>
-                </div>
+
+            <!-- WORKING HOURS -->
+            <div class="col-md-3 col-4 order-2 order-md-2 footer-working-hours">
+                <h6 class="text-white my-5">WORKING HOURS</h6>
+                <p class="mb-0">12:00 PM - 08:00 PM</p>
+                <p class="text-white">MONDAY - FRIDAY</p>
+            </div>
+
+            <!-- ADDRESS -->
+            <div class="col-md-4 col-12 order-3 order-md-3 footer-address">
+                <h6 class="text-white my-5">ADDRESS</h6>
+                <ul class="list-unstyled">
+                    <li>
+                        <a href="#" class="text-decoration-none">
+                            <img src="{{ asset('public/web/assets/images/navigator.png') }}" alt="navigator" class="img-fluid me-3" />
+                            IG6 2UG, 7 crest Andrew drive, London UK 
+                            <p class="px-4 mx-2 adress-link-highlight">#London</p>
+                        </a>
+                    </li>
+                    <li class="my-2">
+                        <a href="#" class="text-decoration-none">
+                            <img src="{{ asset('public/web/assets/images/navigator.png') }}" alt="navigator" class="img-fluid me-3" />
+                            Hotel Downtown, Dubai, UAE 
+                            <p class="px-4 mx-2 adress-link-highlight">#UAE</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-decoration-none">
+                            <img src="{{ asset('public/web/assets/images/navigator.png') }}" alt="navigator" class="img-fluid me-3" />
+                            Villa 293 E, Sector E Phase 5 D.H.A, 
+                            <span class="no-bold adress-last-link-highlight">Lahore</span>, Punjab 54910
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
+
         <p class="text-center mt-5 text-white" id="znjCopyRight"></p>
     </div>
 </footer>
+
+
