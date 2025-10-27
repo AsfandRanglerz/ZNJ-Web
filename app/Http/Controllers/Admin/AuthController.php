@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Venue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,6 +17,8 @@ class AuthController extends Controller
     public function Login(Request $request)
     {
 
+        $data = Venue::with('venuecategory')->get();
+        return  $data;
         $request->validate([
             'email' => 'required',
             'password' => 'required',
