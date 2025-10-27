@@ -209,26 +209,24 @@ public function store(Request $request)
         $user = User::find($id);
         return view('web.recruiter.myprofile', compact('user'));
     }
-    public function update(Request $request, $id)
+   public function update(Request $request, $id)
 {
     $user = User::findOrFail($id);
- 
-$request->validate([
-    'name'        => 'required|string|max:255',
-    'email'       => 'required|email|unique:users,email,' . $user->id,
-    'phone'       => 'required|string|max:20',
-    'designation' => 'nullable|string|max:255',
-    'password'    => 'required|min:8',
-    'password_confirmation' => 'same:password',  
-    'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-], [
-    
-    'image.max'   => 'The image size must not exceed 2 MB.',
-    'image.mimes' => 'The image must be a file of type: JPG, JPEG, or PNG',
-    'password.min' => 'The password must be at least 8 characters',
-    'password_confirmation.same' => 'The confirm password must match the password',
-]);
 
+    $request->validate([
+        'name'        => 'required|string|max:255',
+        'email'       => 'required|email|unique:users,email,' . $user->id,
+        'phone'       => 'required|string|max:20',
+        'designation' => 'nullable|string|max:255',
+        'password'    => 'nullable|min:8',
+        'password_confirmation' => 'same:password',
+        'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ], [
+        'image.max'   => 'The image size must not exceed 2 MB.',
+        'image.mimes' => 'The image must be a file of type: JPG, JPEG, or PNG.',
+        'password.min' => 'The password must be at least 8 characters.',
+        'password_confirmation.same' => 'The confirm password must match the password.',
+    ]);
 
     // Handle image upload
     if ($request->hasFile('image')) {
@@ -256,7 +254,9 @@ $request->validate([
         'image'       => $image,
     ]);
 
-    return redirect()->route('profile.show', $user->id)->with('success', 'Profile Updated Successfully');
+    return redirect()->route('profile.show', $user->id)
+                     ->with('success', 'Profile Updated Successfully');
 }
+
 
 }

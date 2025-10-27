@@ -633,6 +633,36 @@ body.collapsed .create-event-container-div,
 .page-link.active {
     color: #e5c530;
 }
+/* Match Select2 single-select with Bootstrap's form-select-lg look */
+.select2-container--default .select2-selection--single {
+    height: calc(1.5em + 1rem + 2px) !important; /* same as form-select-lg */
+    padding: 0.5rem 0.5rem;
+    font-size: 1.25rem; /* same as .form-select-lg font size */
+    font-weight: 500;
+    line-height: 1.5;
+    border: 1px solid #ced4da;
+    border-radius: 0.3rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Ensure text is vertically aligned */
+.select2-container--default .select2-selection__rendered {
+    line-height: normal !important;
+}
+
+/* Make arrow icon aligned and clickable */
+.select2-container--default .select2-selection__arrow {
+    height: 100% !important;
+    right: 10px;
+}
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    font-size: 1rem !important;
+    margin-left: 0;   /* smaller font size */
+    padding-left: 0 !important; 
+    color: #727375 !important;       
+                
+}
 .custom-select-input,
 /* Select2 container ko Bootstrap form-control-lg jaisa banane ke liye */
 .select2-container--default .select2-selection--multiple {

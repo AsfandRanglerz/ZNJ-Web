@@ -76,7 +76,7 @@ class AuthController extends Controller
             // $entertainer_data['password'] = Hash::make($request->password);
             $user = User::create($entertainer_data);
             $user['token'] = $user->createToken('znjToken')->plainTextToken;
-            Mail::to($request->email)->send(new Registration($user));
+            Mail::to($request->email)->send(new UserCredentials($user->name, $user->email, $user->phone));
             return $this->sendSuccess('Entertainer Register Successfully', $user);
         } elseif ($request->role === 'venue_provider') {
             $validator = Validator::make($request->all(), [
@@ -93,7 +93,7 @@ class AuthController extends Controller
             $venue_data['password'] = Hash::make($request->password);
             $user = User::create($venue_data);
             $user['token'] = $user->createToken('znjToken')->plainTextToken;
-            Mail::to($request->email)->send(new Registration($user));
+            Mail::to($request->email)->send(new UserCredentials($user->name, $user->email, $user->phone));
             return $this->sendSuccess('Venue Register Successfully', $user);
         } else {
             return $this->sendError('Role Is Invalid');

@@ -49,16 +49,19 @@
   <!-- Tickets Tab -->
   <div class="tab-pane fade show active join-fee-main-div" id="ticket-pill" role="tabpanel" aria-labelledby="ticket-pill-tab">
     <div class="container text-white d-flex py-3 join-fee ">
-        <div class="col-7">
-         <span>Joining Fee</span>
-        </div>
-        <div class="col-3">
-                  @if($event->price == 0)
-        <span>Free</span>
-        @else
-       <span>Rs.{{ number_format($event->price, 0) }}</span>
-       @endif
-        </div>
+<div class="col-7">
+    <span>
+        {{ $event->price == 0 ? 'Free' : 'Joining Fee' }}
+    </span>
+</div>
+<div class="col-3">
+    @if($event->price == 0)
+        <span></span>
+    @else
+        <span>Rs.{{ number_format($event->price, 0) }}</span>
+    @endif
+</div>
+
        <div class="col-2 text-end d-flex align-items-center justify-content-center btn-sign-plus-negative-div">
     <button class="btn btn-circle mx-2 plus-negative-btn decrement">-</button>
     <span class="mx-2 counter-value">1</span>
