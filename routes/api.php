@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\AndroidPaymentController;
 use App\Http\Controllers\Api\BankAlfalahPaymentController;
 
 /*
@@ -18,8 +19,24 @@ use App\Http\Controllers\Api\BankAlfalahPaymentController;
 |
 */
 
-
-
+Route::prefix('gateway')->group(function () {
+    Route::get('/test', [AndroidPaymentController::class, 'testApi']);
+    Route::post('/create-hosted-checkout', [AndroidPaymentController::class, 'createHostedCheckout']);
+    Route::post('/check-payment-status', [AndroidPaymentController::class, 'checkPaymentStatus']);
+    Route::post('/payment-callback', [AndroidPaymentController::class, 'paymentCallback']);
+    Route::get('/pay/{orderId}', function ($orderId, Request $request) {
+    $sessionId = $request->query('session_id');
+    $order = \App\Models\PaymentTemp::where('order_id', $orderId)->first();
+    if (!$order) {
+        return "❌ Invalid or expired order.";
+    }
+    return view('mobile_checkout', [
+        'sessionId' => $sessionId,
+        'amount' => $order->amount,
+        'orderId' => $orderId
+    ]);
+});
+});
 Route::post('/scan-qr', [TicketController::class, 'scanQr']);
 Route::group(['namespace' => 'Api'], function () {
 
@@ -137,7 +154,6 @@ Route::group(['namespace' => 'Api'], function () {
         Route::post('/payment/make-payment', [BankAlfalahPaymentController::class, 'makePayment']);
         Route::get('/bankalfalah/retrieve-order/{orderId}', [BankAlfalahPaymentController::class, 'retrieveOrder']);
 
-        
         
     });
 });

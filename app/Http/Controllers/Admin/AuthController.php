@@ -18,7 +18,7 @@ class AuthController extends Controller
     {
 
         $data = Venue::with('venuecategory')->get();
-        return  $data;
+        
         $request->validate([
             'email' => 'required',
             'password' => 'required',

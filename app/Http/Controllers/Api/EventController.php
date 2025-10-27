@@ -210,10 +210,15 @@ class EventController extends Controller
                 )
                 ->orderBy('distance', 'ASC')
                 ->limit(10)->get();
-        } else {
-            $event = Event::with('User', 'entertainerDetails', 'eventVenues')->get();
-        }
-        return $this->sendSuccess('Events', compact('venue_event'));
+                return $this->sendSuccess('Events', compact('venue_event'));
+
+                } else {
+                    $event = Event::with('User', 'entertainerDetails', 'eventVenues')
+                        ->where('date', '>=', now()->format('Y-m-d'))
+                        ->get();
+
+                    return $this->sendSuccess('Events', compact('event'));
+                }
     }
     // Get user events
     public function userEvents()

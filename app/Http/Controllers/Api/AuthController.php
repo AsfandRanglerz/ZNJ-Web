@@ -2,27 +2,35 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Mail\DeleteAccount;
-use App\Mail\Registration;
-use App\Mail\ResetPasswordUser;
-use App\Models\Admin;
-use App\Models\Venue;
-use App\Models\Event;
-use App\Models\EntertainerDetail;
-use App\Models\Notification;
 use App\Models\User;
+use App\Models\Admin;
+use App\Models\Event;
+use App\Models\Venue;
+use App\Mail\Registration;
+use App\Mail\DeleteAccount;
+use Illuminate\Support\Str;
+use App\Models\Notification;
 use Illuminate\Http\Request;
+use App\Mail\UserCredentials;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
+use App\Mail\ResetPasswordUser;
+use App\Models\EntertainerDetail;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
+    public function test()
+    {
+        return response()->json([
+            'status' => 'ok',
+            'message' => 'No auth endpoint working (GET).'
+        ], 200);
+    }
     // Register user
     public function register(Request $request)
     {
@@ -41,8 +49,8 @@ class AuthController extends Controller
             $recruter_data['password'] = Hash::make($request->password);
             $user = User::create($recruter_data);
             $user['token'] = $user->createToken('znjToken')->plainTextToken;
-            Mail::to($request->email)->send(new Registration($user));
-            return $this->sendSuccess('Recruter Register Successfully', $user);
+            Mail::to($request->email)->send(new Registration($user->name, $user->email, $user->phone));
+            return $this->sendSuccess('Recruiter Register Successfully', $user);
         } elseif ($request->role === 'entertainer') {
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
@@ -98,6 +106,7 @@ class AuthController extends Controller
         } else {
             return $this->sendError('Role Is Invalid');
         }
+        
     }
     // Login Users
     public function login(Request $request)

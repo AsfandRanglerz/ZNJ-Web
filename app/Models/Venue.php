@@ -20,7 +20,7 @@ class Venue extends Model
     }
     public function events()
     {
-        return $this->belongsToMany('App\Models\Event', 'event_venues', 'venues_id', 'event_id')->withPivot('status');
+        return $this->belongsToMany(Event::class, 'event_venues', 'venues_id', 'event_id')->withPivot('status');
     }
     public function  venueCategory()
     {
