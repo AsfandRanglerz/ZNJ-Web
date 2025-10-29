@@ -475,68 +475,68 @@ class EventController extends Controller
                 $ticket = EventTicket::where('user_id', Auth::id())->where('event_id', $request->event_id)->first();
                 if (isset($ticket)) {
                     return $this->sendError('You already have purchased ticket for this event');
-                } else {
-                    try {
-                        Stripe::setApiKey(env('STRIPE_SECRET'));
-                        // get sender data
-                        $sender = User::find(Auth::id());
+                // } else {
+                //     try {
+                //         Stripe::setApiKey(env('STRIPE_SECRET'));
+                //         // get sender data
+                //         $sender = User::find(Auth::id());
 
-                        // Apply check on sender (customer or not)
-                        if ($sender->customer_id != Null) {
-                            Charge::create([
-                                "amount" => 100 * $event->price,
-                                "currency" => "usd",
-                                "customer" => $sender->customer_id,
-                                "description" => "Test payment from" . ' ' . $sender->name,
-                                "shipping" => [
-                                    "name" => $sender->name,
-                                    "address" => [
-                                        "line1" => $sender->city,
-                                        "postal_code" => "98140",
-                                        "city" => $sender->city,
-                                        "state" => "PUNJAB",
-                                        "country" => $sender->country,
-                                    ],
-                                ],
-                            ]);
-                        } else {
-                            $customer = Customer::create([
-                                "address" => [
-                                    "line1" => $sender->city,
-                                    "postal_code" => "360001",
-                                    "city" => $sender->city,
-                                    "state" => "PUNJAB",
-                                    "country" => $sender->country,
-                                ],
-                                "email" => $sender->email,
-                                "name" => $sender->name,
-                                "source" => $request->token,
-                            ]);
-                            Charge::create([
-                                "amount" => 100 * $event->price,
-                                "currency" => "usd",
-                                "customer" => $customer->id,
-                                "description" => "Test payment from" . ' ' . $sender->name,
-                                "shipping" => [
-                                    "name" => $sender->name,
-                                    "address" => [
-                                        "line1" => "510 Townsend St",
-                                        "postal_code" => "98140",
-                                        "city" => $sender->city,
-                                        "state" => "PUNJAB",
-                                        "country" => $sender->country,
-                                    ],
-                                ],
-                            ]);
-                            // update customer id in sender record
-                            // dd($customer->id);
-                            User::find($request->sender_id)->update(['customer_id' => $customer->id]);
-                        }
-                        Session::flash('success', 'Payment successful!');
-                    } catch (ApiErrorException $e) {
-                        Session::flash('error', 'Payment failed: ' . $e->getMessage());
-                        return $this->sendError($e->getMessage());
-                    }
+                //         // Apply check on sender (customer or not)
+                //         if ($sender->customer_id != Null) {
+                //             Charge::create([
+                //                 "amount" => 100 * $event->price,
+                //                 "currency" => "usd",
+                //                 "customer" => $sender->customer_id,
+                //                 "description" => "Test payment from" . ' ' . $sender->name,
+                //                 "shipping" => [
+                //                     "name" => $sender->name,
+                //                     "address" => [
+                //                         "line1" => $sender->city,
+                //                         "postal_code" => "98140",
+                //                         "city" => $sender->city,
+                //                         "state" => "PUNJAB",
+                //                         "country" => $sender->country,
+                //                     ],
+                //                 ],
+                //             ]);
+                //         } else {
+                //             $customer = Customer::create([
+                //                 "address" => [
+                //                     "line1" => $sender->city,
+                //                     "postal_code" => "360001",
+                //                     "city" => $sender->city,
+                //                     "state" => "PUNJAB",
+                //                     "country" => $sender->country,
+                //                 ],
+                //                 "email" => $sender->email,
+                //                 "name" => $sender->name,
+                //                 "source" => $request->token,
+                //             ]);
+                //             Charge::create([
+                //                 "amount" => 100 * $event->price,
+                //                 "currency" => "usd",
+                //                 "customer" => $customer->id,
+                //                 "description" => "Test payment from" . ' ' . $sender->name,
+                //                 "shipping" => [
+                //                     "name" => $sender->name,
+                //                     "address" => [
+                //                         "line1" => "510 Townsend St",
+                //                         "postal_code" => "98140",
+                //                         "city" => $sender->city,
+                //                         "state" => "PUNJAB",
+                //                         "country" => $sender->country,
+                //                     ],
+                //                 ],
+                //             ]);
+                //             // update customer id in sender record
+                //             // dd($customer->id);
+                //             User::find($request->sender_id)->update(['customer_id' => $customer->id]);
+                //         }
+                //         Session::flash('success', 'Payment successful!');
+                //     } catch (ApiErrorException $e) {
+                //         Session::flash('error', 'Payment failed: ' . $e->getMessage());
+                //         return $this->sendError($e->getMessage());
+                //     }
                     $data = $request->only(['name', 'surname', 'age', 'ticket_type', 'gender', 'phone', 'email']);
                     $data['user_id'] = auth()->id();
                     $data['event_id'] = $request->event_id;

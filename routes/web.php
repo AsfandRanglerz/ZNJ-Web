@@ -32,6 +32,10 @@ use App\Http\Controllers\Web\WebRecruiterController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+//web view link
+Route::get('/contactUs', function () {
+    return view('Contact.contact');
+});
 
 Route::get('get-privacy-policy', [SecurityController::class, 'getPrivacyPolicy']);
 Route::get('get-about-us', [SecurityController::class, 'getAboutUs']);
