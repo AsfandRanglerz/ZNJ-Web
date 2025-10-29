@@ -151,12 +151,25 @@ class Event extends Model
 
     // Pivot: event_venues (event_id → venues_id)
 
+    // public function eventVenues()
+
+    // {
+
+    //     return $this->hasMany(EventVenue::class, 'event_id', 'id');
+
+    // }
+
+    
     public function eventVenues()
 
     {
 
-        return $this->hasMany(EventVenue::class, 'event_id', 'id');
-
+          return $this->belongsToMany(
+        Venue::class,      // Related model
+        'event_venues',    // Pivot table
+        'event_id',        // Foreign key on pivot table for this model
+        'venues_id'        // Foreign key on pivot table for related model
+    );
     }
 
 
@@ -210,10 +223,11 @@ class Event extends Model
 
 
     public function entertainerdetails(){
+ 
+        // return $this->belongsTo(EntertainerDetail::class,'entertainer_id','id');
+          return $this->belongsToMany('App\Models\EntertainerDetail','event_entertainers','event_id','entertainer_details_id')->withPivot('status');
 
-        return $this->belongsTo(EntertainerDetail::class,'entertainer_id','id');
-
-    }
+    }  
 
 
 

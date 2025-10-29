@@ -26,7 +26,7 @@ class EventVenue extends Model
     public function venue()
     {
         return $this->belongsTo(Venue::class, 'venues_id', 'id');
-    }
+    } 
 
     public function event()
     {
