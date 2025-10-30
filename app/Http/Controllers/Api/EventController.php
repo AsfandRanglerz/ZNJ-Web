@@ -12,14 +12,17 @@ use App\Models\Venue;
 use App\Mail\JoinEvent;
 use App\Models\Payment;
 use App\Models\EventVenue;
+use Endroid\QrCode\QrCode;
 use App\Models\EventTicket;
 use Illuminate\Support\Str;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Endroid\QrCode\Color\Color;
 use App\Models\EntertainerDetail;
 use App\Models\EventEntertainers;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Models\EventFeatureAdsPackage;
@@ -704,7 +707,7 @@ class EventController extends Controller
     } while (EventTicket::where('event_id', $request->event_id)->where('serial_no', $serialno)->exists());
 
     $data['serial_no'] = $serialno;
-    $data['qr_code'] = Str::random(30);
+    
 
     if ($request->hasFile('photo')) {
         $file = $request->file('photo');
@@ -715,6 +718,28 @@ class EventController extends Controller
 
     // Create Event Ticket
     $ticket = EventTicket::create($data);
+
+    $qrPath = public_path('qrcodes/');
+    if (!file_exists($qrPath)) mkdir($qrPath, 0777, true);
+
+    $qrToken = Str::random(32); // token to embed in QR
+    $qrImageName = 'qr_' . $ticket->id . '.png';
+    $qrFilePath = $qrPath . DIRECTORY_SEPARATOR . $qrImageName;
+
+    $writer = new PngWriter();
+    $qrCode = new QrCode(
+        data: $qrToken,
+        size: 500,
+        margin: 10,
+        foregroundColor: new Color(0, 0, 0),
+        backgroundColor: new Color(255, 255, 255)
+    );
+
+    // Save QR as image
+    $writer->write($qrCode)->saveToFile($qrFilePath);
+
+    // Save relative path in DB
+    $ticket->update(['qr_code' => 'qrcodes/' . $qrImageName]);
 
     // Send Email
     Mail::to($ticket->User->email)->send(new JoinEvent($ticket));
@@ -732,6 +757,7 @@ class EventController extends Controller
     return $this->sendSuccess('Event Ticket created successfully', [
         'ticket' => $ticket,
         'payment' => $payment,
+        'qr_token' => $qrToken,
     ]);
 }
     // My Booking Event

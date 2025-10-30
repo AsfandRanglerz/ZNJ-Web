@@ -122,12 +122,15 @@ class AuthController extends Controller
         if (!auth()->attempt(['email' => $request->email, 'password' => $request->password, 'role' => $request->role])) {
             return $this->sendError('Invalid email or password');
         }
+        $user = User::find(auth()->id());
+        if ($user->role === 'recruiter' && $user->is_verify == 0) {
+            return $this->sendError('Your account is deactivated.');
+        }
         if (isset($request->fcm_token)) {
             User::find(auth()->id())->update([
                 'fcm_token' => $request->fcm_token,
             ]);
         }
-        $user = User::find(auth()->id());
         $user['token'] = $user->createToken('znjToken')->plainTextToken;
         return $this->sendSuccess('Login Successfully', $user);
     }
