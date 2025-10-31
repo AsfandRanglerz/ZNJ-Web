@@ -739,7 +739,10 @@ class EventController extends Controller
     $writer->write($qrCode)->saveToFile($qrFilePath);
 
     // Save relative path in DB
-    $ticket->update(['qr_code' => 'qrcodes/' . $qrImageName]);
+    $ticket->update([
+        'qr_code' => 'qrcodes/' . $qrImageName,
+        'qr_token' => $qrToken,
+    ]);
 
     // Send Email
     Mail::to($ticket->User->email)->send(new JoinEvent($ticket));
@@ -757,7 +760,6 @@ class EventController extends Controller
     return $this->sendSuccess('Event Ticket created successfully', [
         'ticket' => $ticket,
         'payment' => $payment,
-        'qr_token' => $qrToken,
     ]);
 }
     // My Booking Event

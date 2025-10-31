@@ -71,6 +71,14 @@
             @enderror
           </div>
           <div class="col-md-6">
+            <label class="form-label">Company</label>
+            <input type="text" name="company" class="form-control bg-white" placeholder="Company"
+                   value="{{ old('company', $user->company) }}">
+            @error('company')
+              <span class="text-warning validation-error">{{ $message }}</span>
+            @enderror
+          </div>
+          <div class="col-md-13 mt-3">
             <label class="form-label">Designation</label>
             <input type="text" name="designation" class="form-control bg-white" placeholder="Designation"
                    value="{{ old('designation', $user->designation) }}">

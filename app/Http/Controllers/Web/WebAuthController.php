@@ -1,9 +1,10 @@
 <?php
 namespace App\Http\Controllers\Web;
 
-use Socialite;
 use Exception;
+use Socialite;
 use App\Models\User; 
+use App\Mail\Registration;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -11,6 +12,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller; 
 
 class WebAuthController extends Controller
@@ -80,6 +82,7 @@ class WebAuthController extends Controller
             'password' => Hash::make($request->password),
             'role'     => 'recruiter', 
         ]);
+        Mail::to($request->email)->send(new Registration($user->name, $user->email, $user->phone));
         return redirect()->route('web.login')->with('success', 'Registered Successfully');
     }
         public function showLoginForm()

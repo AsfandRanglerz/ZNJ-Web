@@ -35,8 +35,8 @@
                 <ul class="list-unstyled text-end ">
                   <li>{{ $ticket->event->title ?? 'N/A' }}</li>
                   <li>{{ $ticket->serial_no ?? 'N/A' }}</li>
-                  <li>{{ \Carbon\Carbon::parse($ticket->created_at)->format('d-m-Y') }}</li>
-                  <li>{{ \Carbon\Carbon::parse($ticket->created_at)->format('h:i A') }}</li>
+                  <li>{{ \Carbon\Carbon::parse($ticket->event->date)->format('d-m-Y') }}</li>
+                  <li>{{ \Carbon\Carbon::parse($ticket->event->from)->format('h:i A') }}</li>
                 </ul>
               </div>
 

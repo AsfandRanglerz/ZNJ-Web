@@ -14,7 +14,7 @@ class AddQrTokenColumnInEventTicketsTable extends Migration
     public function up()
     {
         Schema::table('event_tickets', function (Blueprint $table) {
-            //
+            $table->string('qr_token')->nullable()->after('qr_code');
         });
     }
 
@@ -26,7 +26,7 @@ class AddQrTokenColumnInEventTicketsTable extends Migration
     public function down()
     {
         Schema::table('event_tickets', function (Blueprint $table) {
-            //
+            $table->dropColumn('qr_token');
         });
     }
 }
