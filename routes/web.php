@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\EntertainerController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\FeatureAdsPackagesController;
 use App\Http\Controllers\Api\BankAlfalahPaymentController;
+use Illuminate\Http\Request;
+use App\Models\PaymentTemp;
 // Web Auth Front End 
 
 use App\Http\Controllers\Web\WebAuthController;
@@ -45,7 +47,20 @@ Route::post('/admin-reset-password-link', [AdminController::class, 'adminResetPa
 Route::get('/change_password/{id}', [AdminController::class, 'change_password']);
 Route::post('/admin-reset-password', [AdminController::class, 'ResetPassword']);
 
+Route::get('/gateway/pay/{orderId}', function ($orderId, Request $request) {
+    $sessionId = $request->query('session_id');
+    $order = PaymentTemp::where('order_id', $orderId)->first();
 
+    if (!$order) {
+        return "❌ Invalid or expired order ID.";
+    }
+
+    return view('mobile_checkout', [
+        'sessionId' => $sessionId,
+        'amount' => $order->amount,
+        'orderId' => $orderId,
+    ]);
+});
    
 // Route::get('/checkout/{event_id}', [BankAlfalahPaymentController::class, 'showCheckoutPage'])->name('web.checkout');
 // Route::post('/process-payment', [BankAlfalahPaymentController::class, 'processPayment']);
