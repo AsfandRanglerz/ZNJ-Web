@@ -44,12 +44,12 @@ class EventController extends Controller
         $event = Event::with([
             'organizer',
             'entertainers',
-            'venue.venuecategory',
             'entertainers.talentCategory',
+            'eventVenues.venueCategory',
             // 'eventVenues.venue',             
             'reviews.user',
         ])->findOrFail($id);
-
+        
         $allEvents = Event::where('title', $event->title)
             ->where('id', '!=', $event->id)
             ->paginate(8);

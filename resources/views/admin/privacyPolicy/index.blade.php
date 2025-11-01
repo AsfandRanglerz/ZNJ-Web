@@ -29,7 +29,7 @@
                                                     -webkit-box-orient: vertical;
                                                     overflow: hidden;
                                                     text-overflow: ellipsis;
-                                                    max-height: 4.5em;
+                                                    max-height: 5.5em;
                                                 ">
                                                     {!! $data->description !!}
                                                 </div>

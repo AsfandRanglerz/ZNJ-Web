@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\AndroidPaymentController;
 use App\Http\Controllers\Api\BankAlfalahPaymentController;
@@ -107,7 +108,7 @@ Route::group(['namespace' => 'Api'], function () {
         Route::get('my-ticket', 'EventController@myTicket');
         Route::get('history-ticket', 'EventController@myHistory');
         Route::get('upcoming-event', 'EventController@upComingEvent');
-        Route::post('scan-qr', 'EventController@scanQr');
+        // Route::post('scan-qr', 'EventController@scanQr');
         Route::post('check-ticket', 'EventController@checkTicket');
         Route::get('notification-watched/{id}', 'EventController@notification');
 
@@ -183,5 +184,7 @@ Route::group(['namespace' => 'Api'], function () {
         Route::post('/bankalfalah/create-checkout-session', [BankAlfalahPaymentController::class, 'createCheckoutSession']);
         Route::post('/payment/make-payment', [BankAlfalahPaymentController::class, 'makePayment']);
         Route::get('/bankalfalah/retrieve-order/{orderId}', [BankAlfalahPaymentController::class, 'retrieveOrder']);
+
+        
     });
 });

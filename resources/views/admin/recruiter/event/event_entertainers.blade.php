@@ -38,8 +38,8 @@
                                      @foreach($data['event_entertainers'] as $entertainer)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $entertainer->title }}</td>
-                                                <td>{{ $entertainer->category }}</td>
+                                                <td>{{ $entertainer->user->name }}</td>
+                                                <td>{{ $entertainer->talentCategory->category }}</td>
                                                 <td>${{ $entertainer->price }}</td>
                                                 <td>{{ $entertainer->created_at }}</td>
                                             </tr>

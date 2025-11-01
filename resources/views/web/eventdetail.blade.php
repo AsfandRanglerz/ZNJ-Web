@@ -49,24 +49,31 @@
   <!-- Tickets Tab -->
   <div class="tab-pane fade show active join-fee-main-div" id="ticket-pill" role="tabpanel" aria-labelledby="ticket-pill-tab">
     <div class="container text-white d-flex py-3 join-fee ">
-        <div class="col-7">
-         <span>Joining Fee</span>
-        </div>
-        <div class="col-3">
-                  @if($event->price == 0)
-        <span>Free</span>
-        @else
-       <span>Rs.{{ number_format($event->price, 0) }}</span>
-       @endif
-        </div>
+<div class="col-7">
+    <span>
+        {{ $event->price == 0 ? 'Free' : 'Joining Fee' }}
+    </span>
+</div>
+<div class="col-3">
+    @if($event->price == 0)
+        <span></span>
+    @else
+        <span>Rs.{{ number_format($event->price, 0) }}</span>
+    @endif
+</div>
+
        <div class="col-2 text-end d-flex align-items-center justify-content-center btn-sign-plus-negative-div">
+        @if(Auth::check() && Auth::id() !== $event->user_id)
     <button class="btn btn-circle mx-2 plus-negative-btn decrement">-</button>
     <span class="mx-2 counter-value">1</span>
     <button class="btn btn-circle mx-2 plus-negative-btn increment">+</button>
+    @endif
     </div>
     </div>
     <div class="col-12 d-flex p-5 justify-content-center align-items-center">
+      @if(Auth::check() && Auth::id() !== $event->user_id)
         <a href="javascript:void(0)" id="joinEventBtn" class="btn join-event-btn">Join Event</a>
+      @endif
     </div>
     <form id="ticketForm" action="{{ route('generate.ticket', $event->id) }}" method="POST" style="display: none;">
     @csrf
@@ -149,25 +156,24 @@
         <h3>Venue</h3>
     </div>
 
-@if($event->venue)
+@php $venue = $event->eventVenues->first(); @endphp
+
+@if($venue)
     <div class="mt-5">
-        <img src="{{ $event->venue->image ?? asset('public/web/assets/images/venue.jpg') }}" 
-             alt="" class="venue-image">
+        <img src="{{ $venue->image ? asset('public/images/'.$venue->image) : asset('public/web/assets/images/venue.jpg') }}" 
+             alt="Venue Image" class="venue-image">
     </div>
+
     <div class="p-4 mt-5">
-        <span>
-            <h4>
-                <img src="{{asset('public/web/assets/images/venue-location.png')}}" 
-                     alt="" class="mx-2">
-                {{ $event->venue->address ?? '' }}
-            </h4>
-        </span>
-        <div class="mt-3">
-            <h2>{{ $event->venue->venueCategory->category ?? 'No Category' }}</h2>
-            <p>{{ $event->venue->about_venue ?? '' }}</p>
-        </div>
+        <h4>
+            <img src="{{ asset('public/web/assets/images/venue-location.png') }}" 
+                 alt="" class="mx-2">
+            {{ $venue->address ?? 'Address not available' }}
+        </h4>
+        <h2>{{ $venue->venueCategory->category ?? 'No Category' }}</h2>
+        <p>{{ $venue->about_venue ?? 'No description available' }}</p>
     </div>
-    @endif
+@endif 
 
   </div>
 </div>

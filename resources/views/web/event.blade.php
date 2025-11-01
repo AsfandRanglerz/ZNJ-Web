@@ -1,6 +1,6 @@
 @extends('web.layout.app')
 
-@section('title', 'Event')
+@section('title', 'ZNJ Events')
 
 @section('content')
 <style>

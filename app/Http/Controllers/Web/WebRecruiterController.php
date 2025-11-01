@@ -11,6 +11,7 @@ use App\Models\TalentCategory;
 use App\Models\VenueCategory;
 use App\Models\EntertainerDetail;
 use App\Models\Event;
+use App\Models\EventVenue;
 use App\Models\User;
 use App\Models\Venue;
 use Illuminate\Support\Facades\File;
@@ -62,9 +63,17 @@ public function create()
     $entertainers = EntertainerDetail::with('User')->get();
     $venues = Venue::with('venueCategory')->get();
     $categories = TalentCategory::select('id', 'category')->get();
-
-    return view('web.recruiter.createevent', compact('entertainers', 'venues', 'categories'));
+    $venueCategories = VenueCategory::select('id', 'category')->get();
+    return view('web.recruiter.createevent', compact('entertainers', 'venues', 'categories', 'venueCategories'));
 }
+
+public function getByCategory($categoryId)
+{
+    return 
+    $venues = Venue::where('category_id', $categoryId)->get(['id', 'title']);
+    return response()->json($venues);
+}
+
 
 public function getEntertainersByCategory(Request $request)
 {
@@ -160,8 +169,8 @@ public function store(Request $request)
         'event_type' => $request->event_type,
         'date' => $request->date,
         'end_date' => $request->end_date,
-        'from' => $request->from,
-        'to' => $request->to,
+        'from' => date("g:i A", strtotime($request->from)),
+        'to' => date("g:i A", strtotime($request->to)),
         'joining_type' => $request->joining_type,
         'price' => $request->price ?? 0,
         'seats' => $request->seats,
@@ -173,6 +182,12 @@ public function store(Request $request)
     if ($request->filled('entertainer_id')) {
         $event->entertainers()->attach($request->entertainer_id);
     }
+    if (isset($request->venue_id)) {
+            $event_venue = new EventVenue;
+            $event_venue->event_id = $event->id;
+            $event_venue->venues_id = $request->venue_id;
+            $event_venue->save();
+        }
 
     return redirect()->route('web.recruiter.myevents')->with('success', 'Event created successfully');
 }
@@ -204,7 +219,8 @@ $request->validate([
     'email'       => 'required|email|unique:users,email,' . $user->id,
     'phone'       => 'required|string|max:20',
     'designation' => 'nullable|string|max:255',
-    'password'    => 'required|min:8',
+    'company'     => 'nullable|string|max:255',
+    'password'    => 'nullable|min:8',
     'password_confirmation' => 'same:password',  
     'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
 ], [
@@ -237,6 +253,7 @@ $request->validate([
         'name'        => $request->name,
         'email'       => $request->email,
         'phone'       => $request->phone,
+        'company'     => $request->company,
         'designation' => $request->designation,
         'password'    => $request->filled('password') ? Hash::make($request->password) : $user->password,
         'image'       => $image,

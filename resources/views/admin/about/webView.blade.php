@@ -12,7 +12,7 @@
     }
 
     .banner {
-        background-color:#A68322;
+        background-color:#dda614;
         padding:60px 0;
         display: flex;
         justify-content:center;

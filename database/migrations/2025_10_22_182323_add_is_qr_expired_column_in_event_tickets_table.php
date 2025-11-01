@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddQrTokenColumnInEventTicketsTable extends Migration
+class AddIsQrExpiredColumnInEventTicketsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddQrTokenColumnInEventTicketsTable extends Migration
     public function up()
     {
         Schema::table('event_tickets', function (Blueprint $table) {
-            $table->string('qr_token')->nullable()->after('qr_code');
+            $table->boolean('is_qr_expired')->default(false)->after('qr_code')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddQrTokenColumnInEventTicketsTable extends Migration
     public function down()
     {
         Schema::table('event_tickets', function (Blueprint $table) {
-            $table->dropColumn('qr_token');
+            $table->dropColumn('is_qr_expired');
         });
     }
 }

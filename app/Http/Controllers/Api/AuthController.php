@@ -2,27 +2,35 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Mail\DeleteAccount;
-use App\Mail\Registration;
-use App\Mail\ResetPasswordUser;
-use App\Models\Admin;
-use App\Models\Venue;
-use App\Models\Event;
-use App\Models\EntertainerDetail;
-use App\Models\Notification;
 use App\Models\User;
+use App\Models\Admin;
+use App\Models\Event;
+use App\Models\Venue;
+use App\Mail\Registration;
+use App\Mail\DeleteAccount;
+use Illuminate\Support\Str;
+use App\Models\Notification;
 use Illuminate\Http\Request;
+use App\Mail\UserCredentials;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
+use App\Mail\ResetPasswordUser;
+use App\Models\EntertainerDetail;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
+    public function test()
+    {
+        return response()->json([
+            'status' => 'ok',
+            'message' => 'No auth endpoint working (GET).'
+        ], 200);
+    }
     // Register user
     public function register(Request $request)
     {
@@ -41,8 +49,8 @@ class AuthController extends Controller
             $recruter_data['password'] = Hash::make($request->password);
             $user = User::create($recruter_data);
             $user['token'] = $user->createToken('znjToken')->plainTextToken;
-            Mail::to($request->email)->send(new Registration($user));
-            return $this->sendSuccess('Recruter Register Successfully', $user);
+            Mail::to($request->email)->send(new Registration($user->name, $user->email, $user->phone));
+            return $this->sendSuccess('Recruiter Register Successfully', $user);
         } elseif ($request->role === 'entertainer') {
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
@@ -76,7 +84,7 @@ class AuthController extends Controller
             // $entertainer_data['password'] = Hash::make($request->password);
             $user = User::create($entertainer_data);
             $user['token'] = $user->createToken('znjToken')->plainTextToken;
-            Mail::to($request->email)->send(new Registration($user));
+            Mail::to($request->email)->send(new UserCredentials($user->name, $user->email, $user->phone));
             return $this->sendSuccess('Entertainer Register Successfully', $user);
         } elseif ($request->role === 'venue_provider') {
             $validator = Validator::make($request->all(), [
@@ -93,11 +101,12 @@ class AuthController extends Controller
             $venue_data['password'] = Hash::make($request->password);
             $user = User::create($venue_data);
             $user['token'] = $user->createToken('znjToken')->plainTextToken;
-            Mail::to($request->email)->send(new Registration($user));
+            Mail::to($request->email)->send(new UserCredentials($user->name, $user->email, $user->phone));
             return $this->sendSuccess('Venue Register Successfully', $user);
         } else {
             return $this->sendError('Role Is Invalid');
         }
+        
     }
     // Login Users
     public function login(Request $request)
@@ -113,12 +122,15 @@ class AuthController extends Controller
         if (!auth()->attempt(['email' => $request->email, 'password' => $request->password, 'role' => $request->role])) {
             return $this->sendError('Invalid email or password');
         }
+        $user = User::find(auth()->id());
+        if ($user->role === 'recruiter' && $user->is_verify == 0) {
+            return $this->sendError('Your account is deactivated.');
+        }
         if (isset($request->fcm_token)) {
             User::find(auth()->id())->update([
                 'fcm_token' => $request->fcm_token,
             ]);
         }
-        $user = User::find(auth()->id());
         $user['token'] = $user->createToken('znjToken')->plainTextToken;
         return $this->sendSuccess('Login Successfully', $user);
     }

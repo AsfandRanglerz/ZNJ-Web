@@ -12,14 +12,17 @@ use App\Models\Venue;
 use App\Mail\JoinEvent;
 use App\Models\Payment;
 use App\Models\EventVenue;
+use Endroid\QrCode\QrCode;
 use App\Models\EventTicket;
 use Illuminate\Support\Str;
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Endroid\QrCode\Color\Color;
 use App\Models\EntertainerDetail;
 use App\Models\EventEntertainers;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Models\EventFeatureAdsPackage;
@@ -210,10 +213,15 @@ class EventController extends Controller
                 )
                 ->orderBy('distance', 'ASC')
                 ->limit(10)->get();
-        } else {
-            $event = Event::with('User', 'entertainerDetails', 'eventVenues')->get();
-        }
-        return $this->sendSuccess('Events', compact('venue_event'));
+                return $this->sendSuccess('Events', compact('venue_event'));
+
+                } else {
+                    $event = Event::with('User', 'entertainerDetails', 'eventVenues')
+                        ->where('date', '>=', now()->format('Y-m-d'))
+                        ->get();
+
+                    return $this->sendSuccess('Events', compact('event'));
+                }
     }
     // Get user events
     public function userEvents()
@@ -455,211 +463,305 @@ class EventController extends Controller
         return $this->sendSuccess('Event Featured Request Successfully', compact('data'));
     }
     // join Event
+    // public function joinEvent(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'name' => 'required',
+    //         'surname' => 'required',
+    //     ]);
+    //     if ($validator->fails()) {
+    //         return $this->sendError($validator->errors()->first());
+    //     }
+    //     $event = Event::find($request->event_id);
+    //     $eventTickets = EventTicket::where('event_id', $request->event_id)->count();
+    //     if ($event->seats <= $eventTickets) {
+    //         return $this->sendError('Enough Tickets');
+    //     } else {
+
+    //         $last_record = EventTicket::orderby('id', 'DESC')->limit(1)->first();
+    //         if (isset($last_record)) {
+    //             $ticket = EventTicket::where('user_id', Auth::id())->where('event_id', $request->event_id)->first();
+    //             if (isset($ticket)) {
+    //                 return $this->sendError('You already have purchased ticket for this event');
+    //             // } else {
+    //             //     try {
+    //             //         Stripe::setApiKey(env('STRIPE_SECRET'));
+    //             //         // get sender data
+    //             //         $sender = User::find(Auth::id());
+
+    //             //         // Apply check on sender (customer or not)
+    //             //         if ($sender->customer_id != Null) {
+    //             //             Charge::create([
+    //             //                 "amount" => 100 * $event->price,
+    //             //                 "currency" => "usd",
+    //             //                 "customer" => $sender->customer_id,
+    //             //                 "description" => "Test payment from" . ' ' . $sender->name,
+    //             //                 "shipping" => [
+    //             //                     "name" => $sender->name,
+    //             //                     "address" => [
+    //             //                         "line1" => $sender->city,
+    //             //                         "postal_code" => "98140",
+    //             //                         "city" => $sender->city,
+    //             //                         "state" => "PUNJAB",
+    //             //                         "country" => $sender->country,
+    //             //                     ],
+    //             //                 ],
+    //             //             ]);
+    //             //         } else {
+    //             //             $customer = Customer::create([
+    //             //                 "address" => [
+    //             //                     "line1" => $sender->city,
+    //             //                     "postal_code" => "360001",
+    //             //                     "city" => $sender->city,
+    //             //                     "state" => "PUNJAB",
+    //             //                     "country" => $sender->country,
+    //             //                 ],
+    //             //                 "email" => $sender->email,
+    //             //                 "name" => $sender->name,
+    //             //                 "source" => $request->token,
+    //             //             ]);
+    //             //             Charge::create([
+    //             //                 "amount" => 100 * $event->price,
+    //             //                 "currency" => "usd",
+    //             //                 "customer" => $customer->id,
+    //             //                 "description" => "Test payment from" . ' ' . $sender->name,
+    //             //                 "shipping" => [
+    //             //                     "name" => $sender->name,
+    //             //                     "address" => [
+    //             //                         "line1" => "510 Townsend St",
+    //             //                         "postal_code" => "98140",
+    //             //                         "city" => $sender->city,
+    //             //                         "state" => "PUNJAB",
+    //             //                         "country" => $sender->country,
+    //             //                     ],
+    //             //                 ],
+    //             //             ]);
+    //             //             // update customer id in sender record
+    //             //             // dd($customer->id);
+    //             //             User::find($request->sender_id)->update(['customer_id' => $customer->id]);
+    //             //         }
+    //             //         Session::flash('success', 'Payment successful!');
+    //             //     } catch (ApiErrorException $e) {
+    //             //         Session::flash('error', 'Payment failed: ' . $e->getMessage());
+    //             //         return $this->sendError($e->getMessage());
+    //             //     }
+    //                 $data = $request->only(['name', 'surname', 'age', 'ticket_type', 'gender', 'phone', 'email']);
+    //                 $data['user_id'] = auth()->id();
+    //                 $data['event_id'] = $request->event_id;
+    //                 do {
+    //                 $serialno = mt_rand(1000, 9999);
+    //                 } while (EventTicket::where('event_id', $request->event_id)->where('serial_no', $serialno)->exists());
+    //                 $data['serial_no'] = $serialno;
+    //                 $data['qr_code'] = Str::random(30);
+    //                 if ($request->hasfile('photo')) {
+    //                     $file = $request->file('photo');
+    //                     $extension = $file->getClientOriginalExtension(); // getting image extension
+    //                     $filename = time() . '.' . $extension;
+    //                     $file->move(public_path('images'), $filename);
+    //                     $data['photo'] = 'public/images/' . $filename;
+    //                 }
+    //                 $dataa = EventTicket::create($data);
+    //                 Mail::to($dataa->User->email)->send(new JoinEvent($dataa));
+    //                 $payment = new Payment();
+    //                 $payment->sender_id = Auth::id();
+    //                 $payment->event_id = $request->event_id;
+    //                 $payment->ticket_id = $dataa->id;
+    //                 $payment->type = $request->type;
+    //                 $payment->save();
+    //                 $data = EventTicket::find($dataa->id);
+    //                 return $this->sendSuccess('Event Ticket created Successfully', compact('data'));
+    //             }
+    //         } else {
+    //             $ticket = EventTicket::where('user_id', Auth::id())->where('event_id', $request->event_id)->first();
+    //             if (isset($ticket)) {
+    //                 return $this->sendError('You already have purchased ticket for this event');
+    //             } else {
+
+
+    //                 try {
+    //                     Stripe::setApiKey(env('STRIPE_SECRET'));
+    //                     // get sender data
+    //                     $sender = User::find(Auth::id());
+
+    //                     // Apply check on sender (customer or not)
+    //                     if ($sender->customer_id != Null) {
+    //                         Charge::create([
+    //                             "amount" => 100 * $event->price,
+    //                             "currency" => "usd",
+    //                             "customer" => $sender->customer_id,
+    //                             "description" => "Test payment from" . ' ' . $sender->name,
+    //                             "shipping" => [
+    //                                 "name" => $sender->name,
+    //                                 "address" => [
+    //                                     "line1" => $sender->city,
+    //                                     "postal_code" => "98140",
+    //                                     "city" => $sender->city,
+    //                                     "state" => "PUNJAB",
+    //                                     "country" => $sender->country,
+    //                                 ],
+    //                             ],
+    //                         ]);
+    //                     } else {
+    //                         $customer = Customer::create([
+    //                             "address" => [
+    //                                 "line1" => $sender->city,
+    //                                 "postal_code" => "360001",
+    //                                 "city" => $sender->city,
+    //                                 "state" => "PUNJAB",
+    //                                 "country" => $sender->country,
+    //                             ],
+    //                             "email" => $sender->email,
+    //                             "name" => $sender->name,
+    //                             "source" => $request->token,
+    //                         ]);
+    //                         Charge::create([
+    //                             "amount" => 100 * $event->price,
+    //                             "currency" => "usd",
+    //                             "customer" => $customer->id,
+    //                             "description" => "Test payment from" . ' ' . $sender->name,
+    //                             "shipping" => [
+    //                                 "name" => $sender->name,
+    //                                 "address" => [
+    //                                     "line1" => "510 Townsend St",
+    //                                     "postal_code" => "98140",
+    //                                     "city" => $sender->city,
+    //                                     "state" => "PUNJAB",
+    //                                     "country" => $sender->country,
+    //                                 ],
+    //                             ],
+    //                         ]);
+    //                         // update customer id in sender record
+    //                         User::find($request->sender_id)->update(['customer_id' => $customer->id]);
+    //                     }
+    //                     Session::flash('success', 'Payment successful!');
+    //                 } catch (ApiErrorException $e) {
+    //                     Session::flash('error', 'Payment failed: ' . $e->getMessage());
+    //                     return $this->sendError($e->getMessage());
+    //                 }
+    //                 $data = $request->only(['name', 'surname', 'age', 'ticket_type', 'gender', 'phone', 'email']);
+    //                 $data['user_id'] = auth()->id();
+    //                 $data['event_id'] = $request->event_id;
+    //                 do {
+    //                 $serialno = mt_rand(1000, 9999);
+    //                 } while (EventTicket::where('event_id', $request->event_id)->where('serial_no', $serialno)->exists());
+    //                 $data['serial_no'] = $serialno;
+    //                 $data['qr_code'] = Str::random(30);
+    //                 if ($request->hasfile('photo')) {
+    //                     $file = $request->file('photo');
+    //                     $extension = $file->getClientOriginalExtension(); // getting image extension
+    //                     $filename = time() . '.' . $extension;
+    //                     $file->move(public_path('images'), $filename);
+    //                     $data['photo'] = 'public/images/' . $filename;
+    //                 }
+    //                 $dataa = EventTicket::create($data);
+    //                 Mail::to($dataa->User->email)->send(new JoinEvent($dataa));
+    //                 $payment = new Payment();
+    //                 $payment->sender_id = Auth::id();
+    //                 $payment->event_id = $request->event_id;
+    //                 $payment->ticket_id = $dataa->id;
+    //                 $payment->type = $request->type;
+    //                 $payment->payment = $event->price;
+    //                 $payment->save();
+    //                 $data = EventTicket::find($dataa->id);
+    //                 return $this->sendSuccess('Event Ticket created Successfully', compact('data'));
+    //             }
+    //         }
+    //     }
+    // }
     public function joinEvent(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'surname' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return $this->sendError($validator->errors()->first());
-        }
-        $event = Event::find($request->event_id);
-        $eventTickets = EventTicket::where('event_id', $request->event_id)->count();
-        if ($event->seats <= $eventTickets) {
-            return $this->sendError('Enough Tickets');
-        } else {
+{
+    $validator = Validator::make($request->all(), [
+        'name' => 'required',
+        'surname' => 'required',
+    ]);
 
-            $last_record = EventTicket::orderby('id', 'DESC')->limit(1)->first();
-            if (isset($last_record)) {
-                $ticket = EventTicket::where('user_id', Auth::id())->where('event_id', $request->event_id)->first();
-                if (isset($ticket)) {
-                    return $this->sendError('You already have purchased ticket for this event');
-                } else {
-                    try {
-                        Stripe::setApiKey(env('STRIPE_SECRET'));
-                        // get sender data
-                        $sender = User::find(Auth::id());
-
-                        // Apply check on sender (customer or not)
-                        if ($sender->customer_id != Null) {
-                            Charge::create([
-                                "amount" => 100 * $event->price,
-                                "currency" => "usd",
-                                "customer" => $sender->customer_id,
-                                "description" => "Test payment from" . ' ' . $sender->name,
-                                "shipping" => [
-                                    "name" => $sender->name,
-                                    "address" => [
-                                        "line1" => $sender->city,
-                                        "postal_code" => "98140",
-                                        "city" => $sender->city,
-                                        "state" => "PUNJAB",
-                                        "country" => $sender->country,
-                                    ],
-                                ],
-                            ]);
-                        } else {
-                            $customer = Customer::create([
-                                "address" => [
-                                    "line1" => $sender->city,
-                                    "postal_code" => "360001",
-                                    "city" => $sender->city,
-                                    "state" => "PUNJAB",
-                                    "country" => $sender->country,
-                                ],
-                                "email" => $sender->email,
-                                "name" => $sender->name,
-                                "source" => $request->token,
-                            ]);
-                            Charge::create([
-                                "amount" => 100 * $event->price,
-                                "currency" => "usd",
-                                "customer" => $customer->id,
-                                "description" => "Test payment from" . ' ' . $sender->name,
-                                "shipping" => [
-                                    "name" => $sender->name,
-                                    "address" => [
-                                        "line1" => "510 Townsend St",
-                                        "postal_code" => "98140",
-                                        "city" => $sender->city,
-                                        "state" => "PUNJAB",
-                                        "country" => $sender->country,
-                                    ],
-                                ],
-                            ]);
-                            // update customer id in sender record
-                            // dd($customer->id);
-                            User::find($request->sender_id)->update(['customer_id' => $customer->id]);
-                        }
-                        Session::flash('success', 'Payment successful!');
-                    } catch (ApiErrorException $e) {
-                        Session::flash('error', 'Payment failed: ' . $e->getMessage());
-                        return $this->sendError($e->getMessage());
-                    }
-                    $data = $request->only(['name', 'surname', 'age', 'ticket_type', 'gender', 'phone', 'email']);
-                    $data['user_id'] = auth()->id();
-                    $data['event_id'] = $request->event_id;
-                    do {
-                    $serialno = mt_rand(1000, 9999);
-                    } while (EventTicket::where('event_id', $request->event_id)->where('serial_no', $serialno)->exists());
-                    $data['serial_no'] = $serialno;
-                    $data['qr_code'] = Str::random(30);
-                    if ($request->hasfile('photo')) {
-                        $file = $request->file('photo');
-                        $extension = $file->getClientOriginalExtension(); // getting image extension
-                        $filename = time() . '.' . $extension;
-                        $file->move(public_path('images'), $filename);
-                        $data['photo'] = 'public/images/' . $filename;
-                    }
-                    $dataa = EventTicket::create($data);
-                    Mail::to($dataa->User->email)->send(new JoinEvent($dataa));
-                    $payment = new Payment();
-                    $payment->sender_id = Auth::id();
-                    $payment->event_id = $request->event_id;
-                    $payment->ticket_id = $dataa->id;
-                    $payment->type = $request->type;
-                    $payment->save();
-                    $data = EventTicket::find($dataa->id);
-                    return $this->sendSuccess('Event Ticket created Successfully', compact('data'));
-                }
-            } else {
-                $ticket = EventTicket::where('user_id', Auth::id())->where('event_id', $request->event_id)->first();
-                if (isset($ticket)) {
-                    return $this->sendError('You already have purchased ticket for this event');
-                } else {
-
-
-                    try {
-                        Stripe::setApiKey(env('STRIPE_SECRET'));
-                        // get sender data
-                        $sender = User::find(Auth::id());
-
-                        // Apply check on sender (customer or not)
-                        if ($sender->customer_id != Null) {
-                            Charge::create([
-                                "amount" => 100 * $event->price,
-                                "currency" => "usd",
-                                "customer" => $sender->customer_id,
-                                "description" => "Test payment from" . ' ' . $sender->name,
-                                "shipping" => [
-                                    "name" => $sender->name,
-                                    "address" => [
-                                        "line1" => $sender->city,
-                                        "postal_code" => "98140",
-                                        "city" => $sender->city,
-                                        "state" => "PUNJAB",
-                                        "country" => $sender->country,
-                                    ],
-                                ],
-                            ]);
-                        } else {
-                            $customer = Customer::create([
-                                "address" => [
-                                    "line1" => $sender->city,
-                                    "postal_code" => "360001",
-                                    "city" => $sender->city,
-                                    "state" => "PUNJAB",
-                                    "country" => $sender->country,
-                                ],
-                                "email" => $sender->email,
-                                "name" => $sender->name,
-                                "source" => $request->token,
-                            ]);
-                            Charge::create([
-                                "amount" => 100 * $event->price,
-                                "currency" => "usd",
-                                "customer" => $customer->id,
-                                "description" => "Test payment from" . ' ' . $sender->name,
-                                "shipping" => [
-                                    "name" => $sender->name,
-                                    "address" => [
-                                        "line1" => "510 Townsend St",
-                                        "postal_code" => "98140",
-                                        "city" => $sender->city,
-                                        "state" => "PUNJAB",
-                                        "country" => $sender->country,
-                                    ],
-                                ],
-                            ]);
-                            // update customer id in sender record
-                            User::find($request->sender_id)->update(['customer_id' => $customer->id]);
-                        }
-                        Session::flash('success', 'Payment successful!');
-                    } catch (ApiErrorException $e) {
-                        Session::flash('error', 'Payment failed: ' . $e->getMessage());
-                        return $this->sendError($e->getMessage());
-                    }
-                    $data = $request->only(['name', 'surname', 'age', 'ticket_type', 'gender', 'phone', 'email']);
-                    $data['user_id'] = auth()->id();
-                    $data['event_id'] = $request->event_id;
-                    do {
-                    $serialno = mt_rand(1000, 9999);
-                    } while (EventTicket::where('event_id', $request->event_id)->where('serial_no', $serialno)->exists());
-                    $data['serial_no'] = $serialno;
-                    $data['qr_code'] = Str::random(30);
-                    if ($request->hasfile('photo')) {
-                        $file = $request->file('photo');
-                        $extension = $file->getClientOriginalExtension(); // getting image extension
-                        $filename = time() . '.' . $extension;
-                        $file->move(public_path('images'), $filename);
-                        $data['photo'] = 'public/images/' . $filename;
-                    }
-                    $dataa = EventTicket::create($data);
-                    Mail::to($dataa->User->email)->send(new JoinEvent($dataa));
-                    $payment = new Payment();
-                    $payment->sender_id = Auth::id();
-                    $payment->event_id = $request->event_id;
-                    $payment->ticket_id = $dataa->id;
-                    $payment->type = $request->type;
-                    $payment->payment = $event->price;
-                    $payment->save();
-                    $data = EventTicket::find($dataa->id);
-                    return $this->sendSuccess('Event Ticket created Successfully', compact('data'));
-                }
-            }
-        }
+    if ($validator->fails()) {
+        return $this->sendError($validator->errors()->first());
     }
+
+    $event = Event::find($request->event_id);
+    if (!$event) {
+        return $this->sendError('Event not found');
+    }
+
+    $eventTickets = EventTicket::where('event_id', $request->event_id)->count();
+    if ($event->seats <= $eventTickets) {
+        return $this->sendError('No more tickets available for this event');
+    }
+
+    $existingTicket = EventTicket::where('user_id', Auth::id())
+        ->where('event_id', $request->event_id)
+        ->first();
+
+    if ($existingTicket) {
+        return $this->sendError('You already have a ticket for this event');
+    }
+
+    // ✅ Continue ticket creation
+    $data = $request->only(['name', 'surname', 'age', 'ticket_type', 'gender', 'phone', 'email']);
+    $data['user_id'] = Auth::id();
+    $data['event_id'] = $request->event_id;
+
+    do {
+        $serialno = mt_rand(1000, 9999);
+    } while (EventTicket::where('event_id', $request->event_id)->where('serial_no', $serialno)->exists());
+
+    $data['serial_no'] = $serialno;
+    
+
+    if ($request->hasFile('photo')) {
+        $file = $request->file('photo');
+        $filename = time() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('images'), $filename);
+        $data['photo'] = 'public/images/' . $filename;
+    }
+
+    // Create Event Ticket
+    $ticket = EventTicket::create($data);
+
+    $qrPath = public_path('qrcodes/');
+    if (!file_exists($qrPath)) mkdir($qrPath, 0777, true);
+
+    $qrToken = Str::random(32); // token to embed in QR
+    $qrImageName = 'qr_' . $ticket->id . '.png';
+    $qrFilePath = $qrPath . DIRECTORY_SEPARATOR . $qrImageName;
+
+    $writer = new PngWriter();
+    $qrCode = new QrCode(
+        data: $qrToken,
+        size: 500,
+        margin: 10,
+        foregroundColor: new Color(0, 0, 0),
+        backgroundColor: new Color(255, 255, 255)
+    );
+
+    // Save QR as image
+    $writer->write($qrCode)->saveToFile($qrFilePath);
+
+    // Save relative path in DB
+    $ticket->update([
+        'qr_code' => 'qrcodes/' . $qrImageName,
+        'qr_token' => $qrToken,
+    ]);
+
+    // Send Email
+    Mail::to($ticket->User->email)->send(new JoinEvent($ticket));
+
+    // Create Payment Record (even if no Stripe)
+    $payment = new Payment();
+    $payment->sender_id = Auth::id();
+    $payment->event_id = $request->event_id;
+    $payment->ticket_id = $ticket->id;
+    $payment->type = $request->type ?? 'free'; // or 'paid'
+    $payment->payment = $event->price ?? 0;
+    $payment->save();
+
+    // ✅ Return Data Properly
+    return $this->sendSuccess('Event Ticket created successfully', [
+        'ticket' => $ticket,
+        'payment' => $payment,
+    ]);
+}
     // My Booking Event
     public function myBookingEvent()
     {

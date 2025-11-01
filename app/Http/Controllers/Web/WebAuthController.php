@@ -1,9 +1,10 @@
 <?php
 namespace App\Http\Controllers\Web;
 
-use Socialite;
 use Exception;
+use Socialite;
 use App\Models\User; 
+use App\Mail\Registration;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -11,6 +12,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller; 
 
 class WebAuthController extends Controller
@@ -25,11 +27,16 @@ class WebAuthController extends Controller
         try {
             $googleUser = Socialite::driver('google')->stateless()->user();
             $user = User::where('email', $googleUser->getEmail())->first();
-
+    
             if ($user) {
                 if (empty($user->google_id)) {
                 $user->update([
                     'google_id' => $googleUser->getId(),
+                ]);
+            }
+             if ($user->is_verify == 0) {
+                return redirect()->route('web.login')->withErrors([
+                    'error' => 'Your account is de-activated.',
                 ]);
             }
                 Auth::login($user);
@@ -75,6 +82,7 @@ class WebAuthController extends Controller
             'password' => Hash::make($request->password),
             'role'     => 'recruiter', 
         ]);
+        Mail::to($request->email)->send(new Registration($user->name, $user->email, $user->phone));
         return redirect()->route('web.login')->with('success', 'Registered Successfully');
     }
         public function showLoginForm()
@@ -99,6 +107,11 @@ class WebAuthController extends Controller
         return back()->withErrors([
             'email' => 'This email is not registered.',
         ])->onlyInput('email');
+    }
+    if ($user->is_verify == 0) {
+        return back()->withErrors([
+            'error' => 'Your account is de-activated.',
+        ]);
     }
 
     // Step 3: Try login

@@ -1,4 +1,3 @@
-@component('mail::message')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,22 +21,24 @@
         .email-header {
             text-align: center;
             background-color: #fff;
+            padding: 20px;
         }
         .email-header img {
             max-height: 100px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
         .email-body {
+            padding: 25px;
             color: #333333;
         }
         .email-body h1 {
-            font-size: 24px;
-            margin-bottom: 18px;
+            font-size: 22px;
+            margin-bottom: 15px;
             color: #2d3748;
         }
         .email-body p {
-            line-height: 1.7;
-            margin-bottom: 18px;
+            line-height: 1.6;
+            margin-bottom: 15px;
         }
         .email-footer {
             text-align: center;
@@ -64,7 +65,8 @@
             <img src="{{ asset('public/admin/assets/img/logo.png') }}" alt="{{ config('app.name') }} Logo">
         </div>
         <div class="email-body">
-            <h1>Hello, {{$message['name']}}</h1>
+            <h1>Hello, {{ $message['name'] }}</h1>
+
             @if($message['is_verify'] == '0')
                 <p style="color:#e53e3e;"><strong>Your account has been Un-verified.</strong></p>
                 <p>If you believe this is a mistake or have questions, please contact our support team.</p>
@@ -72,12 +74,11 @@
                 <p style="color:#38a169;"><strong>Congratulations! Your account has been verified.</strong></p>
                 <p>You now have full access to our platform. If you have any questions, feel free to reach out to us.</p>
             @endif
-            {{-- <p>Thank you,<br>{{ config('app.name') }}</p> --}}
         </div>
+
         <div class="email-footer">
             &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
         </div>
     </div>
 </body>
 </html>
-@endcomponent
