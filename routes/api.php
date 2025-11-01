@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\AndroidPaymentController;
 use App\Http\Controllers\Api\BankAlfalahPaymentController;
+use App\Http\Controllers\Api\FeatureAdsPaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,25 +20,56 @@ use App\Http\Controllers\Api\BankAlfalahPaymentController;
 |
 */
 
+
+Route::prefix('feature')->group(function () {
+    Route::get('/test', [FeatureAdsPaymentController::class, 'testApi']);
+    Route::post('/create-hosted-checkout', [FeatureAdsPaymentController::class, 'createHostedCheckout']);
+    Route::post('/check-payment-status', [FeatureAdsPaymentController::class, 'checkPaymentStatus']);
+    Route::get('/feature/payment/success', [FeatureAdsPaymentController::class, 'paymentCallback'])->name('feature.payment.success');
+    Route::get('/feature/payment/cancel', function () {
+        return response()->json(['success' => false, 'message' => 'Payment cancelled by user']);
+    })->name('feature.payment.cancel');
+
+    // Webview page (payment UI)
+    Route::get('/pay/{orderId}', function ($orderId, Request $request) {
+        $sessionId = $request->query('session_id');
+        $order = \App\Models\FeatureAdsPayment::where('order_id', $orderId)->first();
+
+        if (!$order) {
+            return "❌ Invalid or expired order.";
+        }
+
+        return view('feature_checkout', [
+            'sessionId' => $sessionId,
+            'amount' => $order->amount,
+            'orderId' => $orderId
+        ]);
+    });
+});
+
+
 Route::prefix('gateway')->group(function () {
     Route::get('/test', [AndroidPaymentController::class, 'testApi']);
     Route::post('/create-hosted-checkout', [AndroidPaymentController::class, 'createHostedCheckout']);
     Route::post('/check-payment-status', [AndroidPaymentController::class, 'checkPaymentStatus']);
     Route::post('/payment-callback', [AndroidPaymentController::class, 'paymentCallback']);
     Route::get('/pay/{orderId}', function ($orderId, Request $request) {
-    $sessionId = $request->query('session_id');
-    $order = \App\Models\PaymentTemp::where('order_id', $orderId)->first();
-    if (!$order) {
-        return "❌ Invalid or expired order.";
-    }
-    return view('mobile_checkout', [
-        'sessionId' => $sessionId,
-        'amount' => $order->amount,
-        'orderId' => $orderId
-    ]);
+        $sessionId = $request->query('session_id');
+        $order = \App\Models\PaymentTemp::where('order_id', $orderId)->first();
+
+        if (!$order) {
+            return "❌ Invalid or expired order.";
+        }
+
+        return view('mobile_checkout', [
+            'sessionId' => $sessionId,
+            'amount' => $order->amount,
+            'orderId' => $orderId
+        ]);
+    });
+
 });
-});
-Route::post('/scan-qr', [TicketController::class, 'scanQr']);
+
 Route::group(['namespace' => 'Api'], function () {
 
     Route::post('register', 'AuthController@register');
@@ -46,7 +78,6 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('forget-password', 'AuthController@forgetPassword');
     Route::post('confirm-token', 'AuthController@confirmToken');
     Route::post('submit-reset-password', 'AuthController@submitResetPassword');
-
 
     Route::post('/create-session', [BankAlfalahPaymentController::class, 'createCheckoutSession']);
 
