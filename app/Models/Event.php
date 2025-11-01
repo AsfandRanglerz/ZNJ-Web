@@ -71,7 +71,8 @@ class Event extends Model
         'seats',
         'description',
         'cover_image',
-        'entertainer_id' // Add this line if you want to mass assign entertainer_id
+        'entertainer_id', // Add this line if you want to mass assign entertainer_id
+        'qr_token'
     ];
         public function getCoverImageAttribute($path)
     
@@ -160,7 +161,7 @@ class Event extends Model
     // }
 
     
-    public function eventVenues()
+    public function eventVenues()//
 
     {
 
