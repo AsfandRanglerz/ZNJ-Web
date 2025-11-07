@@ -24,13 +24,6 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    public function test()
-    {
-        return response()->json([
-            'status' => 'ok',
-            'message' => 'No auth endpoint working (GET).'
-        ], 200);
-    }
     // Register user
     public function register(Request $request)
     {
@@ -123,8 +116,8 @@ class AuthController extends Controller
             return $this->sendError('Invalid email or password');
         }
         $user = User::find(auth()->id());
-        if ($user->role === 'recruiter' && $user->is_verify == 0) {
-            return $this->sendError('Your account is deactivated.');
+        if ($user->is_verify == 0) {
+        return $this->sendError('Your account is deactivated.');
         }
         if (isset($request->fcm_token)) {
             User::find(auth()->id())->update([
