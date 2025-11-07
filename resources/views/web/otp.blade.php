@@ -21,6 +21,10 @@
               id="otp" 
               name="otp"
               placeholder="Enter your 4 digit OTP" 
+              maxlength="4"
+              pattern="\d{4}"
+              inputmode="numeric"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 4);"
               >
 
           <!-- Resend Button -->

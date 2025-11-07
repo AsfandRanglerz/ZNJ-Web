@@ -31,12 +31,24 @@
                   <li>Serial No:</li>
                   <li>Date:</li>
                   <li>Time:</li>
+                  <li>QR Code:</li>
                 </ul>
                 <ul class="list-unstyled text-end ">
                   <li>{{ $ticket->event->title ?? 'N/A' }}</li>
                   <li>{{ $ticket->serial_no ?? 'N/A' }}</li>
                   <li>{{ \Carbon\Carbon::parse($ticket->event->date)->format('d-m-Y') }}</li>
                   <li>{{ \Carbon\Carbon::parse($ticket->event->from)->format('h:i A') }}</li>
+                  <li>
+                    @if($ticket->is_qr_expired == 0)
+                    <b class="text-success">
+                      Active
+                    </b>
+                    @else
+                    <b class="text-danger">
+                      Expired
+                    </b>
+                    @endif  
+                  </li>
                 </ul>
               </div>
 

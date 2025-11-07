@@ -199,7 +199,8 @@ class EventController extends Controller
         $lat = Auth::user()->latitude;
         if ($lat) {
             $venue_event = Venue::with(['events' => function ($query) {
-                $query->where('date', '>=', now()->format('Y-m-d'));
+                $query->where('date', '>=', now()->format('Y-m-d'))
+                ->where('delete_request',null);
                 $query->with('User');
             }])
                 ->select(
@@ -212,7 +213,8 @@ class EventController extends Controller
                        * sin(radians(venues.latitude))) AS distance")
                 )
                 ->orderBy('distance', 'ASC')
-                ->limit(10)->get();
+                ->limit(10)
+                ->get();
                 return $this->sendSuccess('Events', compact('venue_event'));
 
                 } else {
@@ -744,8 +746,7 @@ class EventController extends Controller
         'qr_token' => $qrToken,
     ]);
 
-    // Send Email
-    Mail::to($ticket->User->email)->send(new JoinEvent($ticket));
+    
 
     // Create Payment Record (even if no Stripe)
     $payment = new Payment();
