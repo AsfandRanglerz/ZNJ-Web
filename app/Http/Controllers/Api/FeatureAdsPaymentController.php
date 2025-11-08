@@ -25,18 +25,16 @@ class FeatureAdsPaymentController extends Controller
             $request->validate([
                 'amount' => 'required|numeric',
                 'user_id' => 'required|integer',
-                'type' => 'required|in:event,venue,entertainer', // identify ad type
-                'entity_id' => 'required|integer',               // event_id, venue_id, entertainer_detail_id
+                'type' => 'required|in:event,venue,entertainer',
+                'entity_id' => 'required|integer',
                 'package_id' => 'required|integer'
             ]);
 
             $orderId = uniqid("ADS_");
             $amount = number_format((float) $request->amount, 2, '.', '');
-            $userId = $request->user_id;
 
             Log::info("🎯 Creating Feature Ad Checkout", $request->all());
 
-            // Step 1: Create checkout session on Bank Alfalah Gateway
             $response = Http::withOptions(['verify' => false])
                 ->withBasicAuth("merchant." . $this->merchantId, $this->apiPassword)
                 ->post($this->apiUrl . "/merchant/" . $this->merchantId . "/session", [
@@ -47,12 +45,9 @@ class FeatureAdsPaymentController extends Controller
                         "cancelUrl" => route('feature.payment.cancel'),
                         "merchant" => [
                             "name" => "ZNJ Events",
-                            "address" => [
-                                "line1" => "Pakistan"
-                            ]
+                            "address" => ["line1" => "Pakistan"]
                         ]
                     ],
-
                     "order" => [
                         "id" => $orderId,
                         "amount" => $amount,
@@ -62,6 +57,7 @@ class FeatureAdsPaymentController extends Controller
                 ]);
 
             $sessionData = $response->json();
+            Log::info("💳 Bank Alfalah Session Response", $sessionData);
 
             if (!isset($sessionData['session']['id'])) {
                 Log::error("❌ INITIATE_CHECKOUT failed", $sessionData);
@@ -72,15 +68,17 @@ class FeatureAdsPaymentController extends Controller
             }
 
             $sessionId = $sessionData['session']['id'];
+            $resultIndicator = $sessionData['successIndicator'] ?? null;
 
-            // Step 2: Store record
+            // ✅ Save in feature_ads_payments
             $payment = new FeatureAdsPayment();
-            $payment->order_id = $orderId;
             $payment->session_id = $sessionId;
+            $payment->result_indicator = $resultIndicator;
+            $payment->order_id = $orderId;
             $payment->amount = $amount;
             $payment->status = 'pending';
+            $payment->user_id = $request->user_id;
 
-            // Assign based on type
             switch ($request->type) {
                 case 'event':
                     $payment->event_id = $request->entity_id;
@@ -98,14 +96,14 @@ class FeatureAdsPaymentController extends Controller
 
             $payment->save();
 
-            // Step 3: Generate checkout URL
+            // ✅ Checkout URL for WebView
             $checkoutPageUrl = url('/api/feature/pay/' . $orderId . '?session_id=' . $sessionId);
 
             return response()->json([
                 'success' => true,
                 'checkout_url' => $checkoutPageUrl,
                 'session_id' => $sessionId,
-                'order_id' => $orderId,
+                'result_indicator' => $resultIndicator,
                 'amount' => $amount,
                 'currency' => 'PKR',
                 'message' => 'Use this URL in WebView for payment processing'
@@ -114,6 +112,66 @@ class FeatureAdsPaymentController extends Controller
             Log::error("❌ Feature Ads Checkout Error: " . $e->getMessage());
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
+    }
+
+    /**
+     * Handle successful callback and store final payment
+     */
+    public function paymentCallback(Request $request)
+    {
+        Log::info('🔴 FEATURE ADS PAYMENT CALLBACK', $request->all());
+
+        $resultIndicator = $request->get('resultIndicator');
+        if (!$resultIndicator) {
+            Log::warning("⚠️ Missing resultIndicator in callback");
+            return response()->json(['success' => false, 'error' => 'Missing resultIndicator']);
+        }
+
+        $payment = FeatureAdsPayment::where('result_indicator', $resultIndicator)->first();
+
+        if (!$payment) {
+            Log::warning("⚠️ No payment found for resultIndicator: {$resultIndicator}");
+            return response()->json(['success' => false, 'error' => 'Payment record not found.']);
+        }
+
+        // ✅ Verify payment from Bank Alfalah
+        $verifyResponse = Http::withOptions(['verify' => false])
+            ->withBasicAuth("merchant." . $this->merchantId, $this->apiPassword)
+            ->get($this->apiUrl . "/merchant/" . $this->merchantId . "/order/" . $payment->order_id);
+
+        $data = $verifyResponse->json();
+
+        if (isset($data['result']) && $data['result'] === 'SUCCESS') {
+            $payment->update(['status' => 'success']);
+
+            // ✅ Update entity feature status
+            if ($payment->event_id) {
+                DB::table('events')->where('id', $payment->event_id)->update(['feature_status' => 1]);
+            } elseif ($payment->venue_id) {
+                DB::table('venues')->where('id', $payment->venue_id)->update(['feature_status' => 1]);
+            } elseif ($payment->entertainer_detail_id) {
+                DB::table('entertainer_details')->where('id', $payment->entertainer_detail_id)->update(['feature_status' => 1]);
+            }
+
+            // ✅ Create record in payments table (like Android)
+            DB::table('payments')->insert([
+                'sender_id'      => $payment->user_id,
+                'event_id'       => $payment->event_id ?? null,
+                'payment'        => $payment->amount,
+                'transaction_id' => $payment->order_id,
+                'type'           => 'feature_ad',
+                'status'         => '1',
+                'created_at'     => now(),
+                'updated_at'     => now()
+            ]);
+
+            Log::info("✅ Feature Ad Payment stored in payments table for order {$payment->order_id}");
+
+            return redirect()->route('feature.payment.thankyou', ['order_id' => $payment->order_id]);
+        }
+
+        $payment->update(['status' => 'failed']);
+        return response()->json(['success' => false, 'error' => 'Payment verification failed']);
     }
 
     /**
@@ -150,64 +208,6 @@ class FeatureAdsPaymentController extends Controller
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
     }
-
-    public function paymentCallback(Request $request)
-    {
-        Log::info('🔴 FEATURE ADS PAYMENT CALLBACK', $request->all());
-        $orderId = $request->get('order_id');
-        $result = $request->get('result');
-
-        // 🔍 Find payment record
-        $payment = FeatureAdsPayment::where('order_id', $orderId)->first();
-
-        if (!$payment) {
-            return response()->json([
-                'success' => false,
-                'error' => 'Payment record not found.'
-            ]);
-        }
-
-        if (strtoupper($result) === 'SUCCESS') {
-            // Update payment status
-            $payment->update(['status' => 'success']);
-
-            // Update related table feature_status = 1
-            if ($payment->event_id) {
-                DB::table('events')
-                    ->where('id', $payment->event_id)
-                    ->update(['feature_status' => 1]);
-            }
-
-            if ($payment->venue_id) {
-                DB::table('venues')
-                    ->where('id', $payment->venue_id)
-                    ->update(['feature_status' => 1]);
-            }
-
-            if ($payment->entertainer_detail_id) {
-                DB::table('entertainer_details')
-                    ->where('id', $payment->entertainer_detail_id)
-                    ->update(['feature_status' => 1]);
-            }
-
-            Log::info("✅ Feature status updated for order: {$orderId}");
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Feature Ad Payment completed successfully and feature status updated.'
-            ]);
-        } else {
-            // Payment failed or canceled
-            $payment->update(['status' => 'failed']);
-
-            return response()->json([
-                'success' => false,
-                'error' => 'Payment failed or canceled.'
-            ]);
-        }
-    }
-
-
 
     public function testApi()
     {
