@@ -8,6 +8,7 @@ use App\Mail\Registration;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Mail\ResetPasswordUser;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -161,6 +162,9 @@ DB::table('password_resets')->updateOrInsert(
 );
 
       session(['reset_email' => $request->email]);
+      Mail::to($request->email)->send(new ResetPasswordUser([
+        'otp' => $otp
+        ]));
     // redirect to otp page
     return redirect()->route('web.otp')->with('success', 'OTP Sent Successfully');
 }
@@ -206,6 +210,9 @@ public function resendOtp(Request $request)
             'created_at' => now()
         ]
     );
+    Mail::to($request->email)->send(new ResetPasswordUser([
+        'otp' => $otp
+        ]));
 
     return back()->with('success', 'A new OTP has been sent to your email');
 }

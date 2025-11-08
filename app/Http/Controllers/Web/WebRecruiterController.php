@@ -46,12 +46,15 @@ class WebRecruiterController extends Controller
     $userId = Auth::id();
 
     // 1. Created Events
-    $createdEvents = Event::where('user_id', $userId)->get();
+    $createdEvents = Event::where('user_id', $userId)
+    ->where('delete_request',null)
+    ->get();
 
     // 2. Joined Events
     $joinedEvents = Event::whereIn('id', function ($query) use ($userId) {
         $query->select('event_id')
             ->from('event_tickets')
+            ->where('delete_request',null)
             ->where('user_id', $userId);
     })->get();
 

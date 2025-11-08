@@ -17,7 +17,8 @@ class EventController extends Controller
 {
     public function searchEvent(Request $request)
     {
-        $query = Event::with('venue');
+        $query = Event::with('venue')->where('date', '>=', now()->format('Y-m-d'))
+        ->where('delete_request',null);
 
         if ($request->filled('search')) {
             $query->where('title', 'LIKE', '%' . $request->search . '%');

@@ -44,7 +44,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $package->title }}</td>
-                                        <td>${{ $package->price }}</td>
+                                        <td>{{ $package->price }} PKR</td>
                                         <td>{{ $package->validity }}</td>
                                         <td>{{ $package->created_at }}</td>
                                         <td
@@ -87,7 +87,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $package->title }}</td>
-                                        <td>${{ $package->price }}</td>
+                                        <td>{{ $package->price }} PKR</td>
                                         <td>{{ $package->validity }}</td>
                                         <td>{{ $package->created_at }}</td>
 
@@ -124,7 +124,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $package->title }}</td>
-                                        <td>${{ $package->price }}</td>
+                                        <td>{{ $package->price }} PKR</td>
                                         <td>{{ $package->validity }}</td>
                                         <td>{{ $package->created_at }}</td>
 
