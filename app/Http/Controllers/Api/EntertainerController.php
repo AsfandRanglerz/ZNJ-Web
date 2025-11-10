@@ -78,7 +78,18 @@ class EntertainerController extends Controller
     // get entertainer
     public  function getEntertainer()
     {
-        $data = EntertainerDetail::with('User','entertainerEventPhotos', 'entertainerPricePackage', 'talentCategory', 'reviews.user')->get();
+        // $data = EntertainerDetail::with('User','entertainerEventPhotos', 'entertainerPricePackage', 'talentCategory', 'reviews.user')->get();
+        $data = EntertainerDetail::with([
+            'User',
+            'entertainerEventPhotos',
+            'entertainerPricePackage',
+            'talentCategory',
+            'reviews.user'
+        ])
+        ->whereHas('User', function($query) {
+            $query->where('is_verify', 1);
+        })
+        ->get();
         return $this->sendSuccess('Entertainer data', compact('data'));
     }
     // get single entertainer
