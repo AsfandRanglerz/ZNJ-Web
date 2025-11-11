@@ -72,7 +72,6 @@ public function create()
 
 public function getByCategory($categoryId)
 {
-    return 
     $venues = Venue::where('category_id', $categoryId)->get(['id', 'title']);
     return response()->json($venues);
 }
@@ -83,8 +82,16 @@ public function getEntertainersByCategory(Request $request)
     $categoryIds = $request->category_ids ?? [];
 
     // Get entertainers whose category_id matches selected category
-    $entertainers = EntertainerDetail::whereIn('category_id', $categoryIds)
-        ->with(['user:id,name', 'talentCategory:id,category'])
+    // $entertainers = EntertainerDetail::whereIn('category_id', $categoryIds)
+    //     ->with(['user:id,name', 'talentCategory:id,category'])
+    //     ->get()
+    //     ->groupBy('user_id');
+
+        $entertainers = EntertainerDetail::whereIn('category_id', $categoryIds)
+        ->whereHas('user', function ($q) {
+            $q->where('is_verify', '1');
+        })
+        ->with(['user:id,name,is_verify', 'talentCategory:id,category'])
         ->get()
         ->groupBy('user_id');
 
@@ -221,8 +228,8 @@ $request->validate([
     'name'        => 'required|string|max:255',
     'email'       => 'required|email|unique:users,email,' . $user->id,
     'phone'       => 'required|string|max:20',
-    'designation' => 'nullable|string|max:255',
     'company'     => 'nullable|string|max:255',
+    'designation' => 'nullable|string|max:255',
     'password'    => 'nullable|min:8',
     'password_confirmation' => 'same:password',  
     'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',

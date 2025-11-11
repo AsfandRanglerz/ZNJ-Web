@@ -26,7 +26,7 @@
                                                <td>
                                                 @if (isset($data->video))
                                                 <video id="video" controls="controls autoplay"  width="300" height="150">
-                                                    <source id="mp4" src="{{ asset('public/storage/'.$data->video)}}">
+                                                    <source id="mp4" src="{{ asset('public/'.$data->video)}}">
                                                     </video>
                                                   </td>
                                                     </tr>

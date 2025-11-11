@@ -106,6 +106,7 @@ class EntertainerController extends Controller
         }
 
         $data['role'] = 'entertainer';
+        $data['is_verify'] = '0';
 
         $data['password'] = Hash::make($password);
 

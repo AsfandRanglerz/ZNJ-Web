@@ -48,13 +48,14 @@ class AndroidPaymentController extends Controller
                     "apiOperation" => "INITIATE_CHECKOUT",
                     "interaction" => [
                         "operation" => "PURCHASE",
+                        "returnUrl" => route('feature.payment.thankyou', ['order_id' => $orderId]),
+                        "cancelUrl" => route('feature.payment.cancel'),
                         "merchant" => [
                             "name" => "ZNJ Events",
-                            "address" => [
-                                "line1" => "Pakistan"
-                            ]
+                            "address" => ["line1" => "Pakistan"]
                         ]
                     ],
+
                     "order" => [
                         "id" => $orderId,
                         "amount" => $amount,
@@ -283,16 +284,9 @@ class AndroidPaymentController extends Controller
             $success = $this->handleSuccessfulPayment($orderId);
 
             if ($success) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Payment successful and tickets generated!',
-                    'order_id' => $orderId
-                ]);
+                return redirect()->route('feature.payment.thankyou', ['order_id' => $orderId]);
             } else {
-                return response()->json([
-                    'success' => false,
-                    'error' => 'Payment successful but ticket creation failed.'
-                ], 500);
+                return redirect()->route('feature.payment.cancel');
             }
 
         } catch (\Exception $e) {

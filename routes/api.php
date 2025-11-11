@@ -20,17 +20,24 @@ use App\Http\Controllers\Api\FeatureAdsPaymentController;
 |
 */
 
-
 Route::prefix('feature')->group(function () {
     Route::get('/test', [FeatureAdsPaymentController::class, 'testApi']);
     Route::post('/create-hosted-checkout', [FeatureAdsPaymentController::class, 'createHostedCheckout']);
     Route::post('/check-payment-status', [FeatureAdsPaymentController::class, 'checkPaymentStatus']);
-    Route::get('/feature/payment/success', [FeatureAdsPaymentController::class, 'paymentCallback'])->name('feature.payment.success');
-    Route::get('/feature/payment/cancel', function () {
+    Route::get('/payment/success', [FeatureAdsPaymentController::class, 'paymentCallback'])
+        ->name('feature.payment.success');
+
+    Route::get('/payment/thankyou/{order_id}', function ($order_id) {
+        return view('feature_thankyou', [
+            'orderId' => $order_id,
+            'errors' => session('errors')
+        ]);
+    })->name('feature.payment.thankyou');
+
+    Route::get('/payment/cancel', function () {
         return response()->json(['success' => false, 'message' => 'Payment cancelled by user']);
     })->name('feature.payment.cancel');
 
-    // Webview page (payment UI)
     Route::get('/pay/{orderId}', function ($orderId, Request $request) {
         $sessionId = $request->query('session_id');
         $order = \App\Models\FeatureAdsPayment::where('order_id', $orderId)->first();
@@ -47,12 +54,19 @@ Route::prefix('feature')->group(function () {
     });
 });
 
-
 Route::prefix('gateway')->group(function () {
     Route::get('/test', [AndroidPaymentController::class, 'testApi']);
     Route::post('/create-hosted-checkout', [AndroidPaymentController::class, 'createHostedCheckout']);
     Route::post('/check-payment-status', [AndroidPaymentController::class, 'checkPaymentStatus']);
     Route::post('/payment-callback', [AndroidPaymentController::class, 'paymentCallback']);
+
+    Route::get('/payment/thankyou/{order_id}', function ($order_id) {
+        return view('feature_thankyou', [
+            'orderId' => $order_id,
+            'errors' => session('errors')
+        ]);
+    })->name('gateway.payment.thankyou');
+
     Route::get('/pay/{orderId}', function ($orderId, Request $request) {
         $sessionId = $request->query('session_id');
         $order = \App\Models\PaymentTemp::where('order_id', $orderId)->first();
@@ -67,7 +81,6 @@ Route::prefix('gateway')->group(function () {
             'orderId' => $orderId
         ]);
     });
-
 });
 
 Route::post('/scan-qr', [TicketController::class, 'scanQr']);

@@ -191,11 +191,11 @@
                                                         @method('POST')
                                                         @if ($recruiter->is_verify == '0')
                                                             <input type="checkbox"  name="is_verify" data-toggle="toggle "
-                                                                data-on="Verified" data-off="Un-Verify" data-onstyle="success"
+                                                                data-on="Active" data-off="Deavtive" data-onstyle="success"
                                                                 data-offstyle="danger">
                                                         @else
                                                             <input type="checkbox" name="is_verify" data-toggle="toggle"
-                                                                data-on="Verified" data-off="Un-Verify" data-onstyle="success"
+                                                                data-on="Active" data-off="Deavtive" data-onstyle="success"
                                                                 data-offstyle="danger" checked>
                                                         @endif
                                                     </form>
@@ -414,12 +414,12 @@
                                                         @method('POST')
                                                         @if ($entertainer->is_verify == '0')
                                                             <input type="checkbox" name="is_verify" class="p-1"
-                                                                data-toggle="toggle" data-on="Verified" data-off="Un-Verify"
+                                                                data-toggle="toggle" data-on="Active" data-off="Deavtive"
                                                                 data-onstyle="success" data-offstyle="danger"
                                                                 >
                                                         @else
                                                             <input type="checkbox" name="is_verify" data-toggle="toggle"
-                                                                data-on="Verified" data-off="Un-Verify"
+                                                                data-on="Active" data-off="Deavtive"
                                                                 data-onstyle="success" data-offstyle="danger" checked >
                                                         @endif
                                                     </form>
@@ -580,11 +580,11 @@
                                                         @method('POST')
                                                         @if ($venue->is_verify == '0')
                                                             <input type="checkbox" name="is_verify" data-toggle="toggle"
-                                                                data-on="Verified" data-off="Un-Verify"
+                                                                data-on="Active" data-off="Deavtive"
                                                                 data-onstyle="success" data-offstyle="danger">
                                                         @else
                                                             <input type="checkbox" name="is_verify" data-toggle="toggle"
-                                                                data-on="Verified" data-off="Un-Verify"
+                                                                data-on="Active" data-off="Deavtive"
                                                                 data-onstyle="success" data-offstyle="danger" checked>
                                                         @endif
                                                     </form>
@@ -713,8 +713,8 @@
                 var checkbox = $(this); // Store a reference to the checkbox
 
                 var isChecked = checkbox.prop("checked");
-                var confirmationTitle = isChecked ? "Are you sure you want to Verify this User?" :
-                    "Are you sure you want to Un-Verify this User?";
+                var confirmationTitle = isChecked ? "Are you sure you want to Active this User?" :
+                    "Are you sure you want to Deavtive this User?";
 
                 swal({
                     title: confirmationTitle,

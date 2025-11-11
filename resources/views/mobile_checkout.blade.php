@@ -1,59 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Event Payment</title>
+@extends('web.layout.apps')
 
-  <!-- ✅ Correct JS path for version ≥ 74 -->
-  <script src="https://bankalfalah.gateway.mastercard.com/static/checkout/checkout.min.js"
-          data-error="errorCallback"
-          data-cancel="cancelCallback"></script>
+@section('title', 'Event Payment')
 
-  <script>
-    const sessionId = "{{ $sessionId }}";
+@section('content')
+<section class="d-flex justify-content-center align-items-center py-5" style="min-height:80vh; background:#0a0a0a;">
+    <div class="card shadow-lg text-center border-0 p-5" style="max-width: 480px; background:#1c1c1c; color:#fff; border-radius:20px;">
+        <h2 class="mb-4 text-gradient fw-bold">Event Payment</h2>
 
+        <div class="mb-3">
+            <p class="fs-5 mb-1 text-secondary">Amount to Pay:</p>
+            <h3 class="text-success fw-bold">PKR {{ number_format($amount, 2) }}</h3>
+        </div>
+
+        <div class="my-4">
+            <button id="payButton"
+                    class="btn btn-lg w-100 py-3 fw-bold"
+                    style="background: linear-gradient(90deg, #ff6a00, #ee0979); border:none; border-radius:10px; color:white; transition:0.3s;">
+                <i class="fas fa-credit-card me-2"></i> Proceed to Payment
+            </button>
+        </div>
+
+        <p class="text-muted small mt-3">
+            Secure payment powered by <strong>Bank Alfalah</strong> & <strong>Mastercard</strong>.
+        </p>
+    </div>
+</section>
+@endsection
+
+@section('scripts')
+<script src="https://bankalfalah.gateway.mastercard.com/static/checkout/checkout.min.js"
+        data-error="errorCallback"
+        data-cancel="cancelCallback"></script>
+
+<script>
+    // Configure Checkout
     Checkout.configure({
-      session: { id: sessionId }
+        session: { id: "{{ $sessionId }}" }
     });
 
-    function pay() {
-      Checkout.showPaymentPage();
-    }
+    // Start Payment
+    document.getElementById("payButton").onclick = function () {
+        Checkout.showPaymentPage();
+    };
 
+    // Handle errors
     function errorCallback(error) {
-      console.error("❌ Payment error:", error);
-      alert("Payment failed:\n" + JSON.stringify(error, null, 2));
+        console.error("Payment error:", error);
+        toastr.error("Payment failed. Please try again.");
     }
 
+    // Handle cancel
     function cancelCallback() {
-      alert("Payment cancelled!");
+        toastr.warning("Payment cancelled by user.");
     }
-  </script>
-
-  <style>
-    body {
-      background: #f9f9f9;
-      text-align: center;
-      font-family: Arial, sans-serif;
-      padding-top: 60px;
-    }
-    h2 { color: #333; }
-    button {
-      background: #007bff;
-      color: #fff;
-      border: none;
-      padding: 12px 28px;
-      border-radius: 8px;
-      font-size: 18px;
-      cursor: pointer;
-    }
-    button:hover { background: #0056b3; }
-  </style>
-</head>
-<body>
-  <h2>Pay for Your Event</h2>
-  <p>Amount: <strong>{{ $amount }} PKR</strong></p>
-  <button onclick="pay()">Pay Now</button>
-</body>
-</html>
+</script>
+@endsection
