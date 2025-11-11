@@ -70,6 +70,8 @@ Route::prefix('gateway')->group(function () {
 
 });
 
+Route::post('/scan-qr', [TicketController::class, 'scanQr']);
+
 Route::group(['namespace' => 'Api'], function () {
 
     Route::post('register', 'AuthController@register');
@@ -78,6 +80,8 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('forget-password', 'AuthController@forgetPassword');
     Route::post('confirm-token', 'AuthController@confirmToken');
     Route::post('submit-reset-password', 'AuthController@submitResetPassword');
+
+    Route::get('/intro-video', 'HomeController@introvideo');
 
     Route::post('/create-session', [BankAlfalahPaymentController::class, 'createCheckoutSession']);
 

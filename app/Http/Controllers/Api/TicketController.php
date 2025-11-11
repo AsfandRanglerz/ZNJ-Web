@@ -13,7 +13,7 @@ class TicketController extends Controller
         
 
         // Find the ticket with this QR code
-        $ticket = EventTicket::where('qr_code', $request->qr_token)->first();
+        $ticket = EventTicket::where('qr_token', $request->qr_token)->first();
 
         if (!$ticket) {
             return response()->json([

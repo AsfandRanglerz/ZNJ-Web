@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\Venue;
+use App\Models\Introvideo;
 use Illuminate\Http\Request;
 use App\Models\TermCondition;
 use Illuminate\Support\Carbon;
@@ -18,6 +19,16 @@ class HomeController extends Controller
     // Home Page
     public function HomePage()
     {
+        $user = Auth::user();
+         // 🧩 Step 1: Check if user is entertainer
+        if ($user->role === 'entertainer') {
+            // 🧩 Step 2: Check if this entertainer has added talent details
+            $hasTalent = \App\Models\EntertainerDetail::where('user_id', $user->id)->exists();
+
+            if (!$hasTalent) {
+                return $this->sendError('Please add your talent details to continue.', [], 403);
+            }
+        }
         $lon = Auth::user()->longitude;
         $lat = Auth::user()->latitude;
         if ($lat) {
@@ -105,5 +116,18 @@ class HomeController extends Controller
     {
         $data = TermCondition::first();
         return $this->sendSuccess('Data sent  Successfully', compact('data'));
+    }
+
+     public function introvideo()
+    {
+         $videos = Introvideo::pluck('video') // get only video column
+        ->map(function ($video) {
+            return asset('public/' . $video);
+        });
+
+        return response()->json([
+            'message' => 'Intro video fetched successfully',
+            'data' => $videos
+        ], 200);
     }
 }
