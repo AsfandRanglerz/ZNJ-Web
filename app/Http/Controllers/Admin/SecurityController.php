@@ -53,7 +53,16 @@ class SecurityController extends Controller
         ]);
 
         $data = TermCondition::first();
-        TermCondition::find($data->id)->update($request->all());
+         if (!$data) {
+            // If no record exists, create a new one
+            $data = TermCondition::create([
+                'description' => $request->description
+            ]);
+        } else {
+            // Update the existing record
+            $data->update($request->all());
+        }
+        // TermCondition::find($data->id)->update($request->all());
         return redirect('/admin/term-condition')->with(['status' => true, 'message' => 'Updated Successfully']);
     }
 
