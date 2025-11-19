@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use App\Models\Event;
+use App\Models\Introvideo;
 use App\Models\Venue;
 use Illuminate\Http\Request;
 use App\Models\TermCondition;
@@ -105,5 +106,11 @@ class HomeController extends Controller
     {
         $data = TermCondition::first();
         return $this->sendSuccess('Data sent  Successfully', compact('data'));
+    }
+
+    public function introVideo()
+    {
+        $data = Introvideo::first();
+        return $this->sendSuccess('Intro Video', compact('data'));
     }
 }

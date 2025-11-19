@@ -72,6 +72,7 @@ class AuthController extends Controller
                 'city' => $request->city,
                 'country' => $request->country,
                 'dob' => $request->dob,
+                'is_verify' => '0',
             ];
             // $entertainer_data = $request->only(['name', 'email', 'role', 'phone','nationality','gender','city','country','dob','password']);
             // $entertainer_data['password'] = Hash::make($request->password);

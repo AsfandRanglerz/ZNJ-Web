@@ -92,6 +92,7 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('forget-password', 'AuthController@forgetPassword');
     Route::post('confirm-token', 'AuthController@confirmToken');
     Route::post('submit-reset-password', 'AuthController@submitResetPassword');
+    Route::get('intro-video', 'HomeController@introVideo');
 
     Route::post('/create-session', [BankAlfalahPaymentController::class, 'createCheckoutSession']);
 
