@@ -43,9 +43,7 @@
                 <a href="{{url('/admin/Privacy-policy')}}" class="nav-link"><i data-feather="monitor"></i><span>Privacy&Policy</span></a>
             </li> --}}
 
-            {{-- <li class="dropdown {{ (request()->is('admin/term-condition')) ? 'active' : '' }}">
-                <a href="{{url('/admin/term-condition')}}" class="nav-link"><i data-feather="monitor"></i><span>Term&Condition</span></a>
-                </li> --}}
+            
                 @php
                     $isCategoryActive = request()->is('admin/entertainer/talent/categories') || 
                                         request()->is('admin/venue-providers/venue/categories');
@@ -119,6 +117,9 @@
                         class="fas fa-hand-holding-usd"></i><span>Deleted Events
                         </span><span class="badge position-absolute w-auto rounded" style="right: 16px;background: rgb(247, 83, 18); color:#fff">{{$event->count()}}</span></a>
             </li>
+            <li class="dropdown {{ (request()->is('admin/term-condition')) ? 'active' : '' }}">
+                <a href="{{url('/admin/term-condition')}}" class="nav-link"><i data-feather="monitor"></i><span>Terms & Conditions</span></a>
+                </li>
             <li class="dropdown {{ request()->is('admin/Privacy-policy') || request()->is('admin/privacy-policy-edit') ? 'active' : '' }}">
                 <a href="{{ url('/admin/Privacy-policy') }}" class="nav-link"><i class="fa fa-lock"></i><span>Privacy
                     Policy</span></a>

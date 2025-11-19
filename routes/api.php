@@ -83,6 +83,7 @@ Route::prefix('gateway')->group(function () {
     });
 });
 
+Route::post('/scan-qr', [TicketController::class, 'scanQr']);
 
 Route::group(['namespace' => 'Api'], function () {
 
@@ -93,6 +94,8 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('confirm-token', 'AuthController@confirmToken');
     Route::post('submit-reset-password', 'AuthController@submitResetPassword');
     Route::get('intro-video', 'HomeController@introVideo');
+
+    Route::get('/intro-video', 'HomeController@introvideo');
 
     Route::post('/create-session', [BankAlfalahPaymentController::class, 'createCheckoutSession']);
 

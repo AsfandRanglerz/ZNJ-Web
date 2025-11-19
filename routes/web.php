@@ -1,26 +1,27 @@
 <?php
 
+use App\Models\PaymentTemp;
+use Illuminate\Http\Request;
+use App\Models\TermCondition;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\EventController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ChatController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\VenueController;
+use App\Http\Controllers\Web\WebAuthController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\SecurityController;
 use App\Http\Controllers\Admin\RecruiterController;
 use App\Http\Controllers\Admin\IntrovideoController;
-use App\Http\Controllers\Admin\EntertainerController;
-use App\Http\Controllers\Admin\NotificationController;
-use App\Http\Controllers\Admin\FeatureAdsPackagesController;
-use App\Http\Controllers\Api\BankAlfalahPaymentController;
-use Illuminate\Http\Request;
-use App\Models\PaymentTemp;
+use App\Http\Controllers\Web\WebRecruiterController;
 // Web Auth Front End 
 
-use App\Http\Controllers\Web\WebAuthController;
-use App\Http\Controllers\Web\EventController;
-use App\Http\Controllers\Web\WebRecruiterController;
+use App\Http\Controllers\Admin\EntertainerController;
+use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Api\BankAlfalahPaymentController;
+use App\Http\Controllers\Admin\FeatureAdsPackagesController;
 
 
 
@@ -37,6 +38,11 @@ use App\Http\Controllers\Web\WebRecruiterController;
 //web view link
 Route::get('/contactUs', function () {
     return view('Contact.contact');
+});
+
+Route::get('/terms-conditions', function () {
+    $data = TermCondition::first();
+    return view('terms_and_condition.termsConditions', compact('data'));
 });
 
 Route::get('get-privacy-policy', [SecurityController::class, 'getPrivacyPolicy']);

@@ -11,12 +11,12 @@
                         <div class="col-12 col-md-12 col-lg-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4>Term&Condition</h4>
+                                    <h4>Terms & Conditions</h4>
                                 </div>
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label>Description</label>
-                                        <textarea name="description" class="form-control">{{$data->description}}</textarea>
+                                        <textarea name="description" class="form-control">{{ isset($data) ? $data->description : '' }}</textarea>
                                     </div>
                                 </div>
                                 <div class="card-footer text-right">

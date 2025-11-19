@@ -8,7 +8,7 @@
                     <div class="col-12 col-md-12 col-lg-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Term&Condition</h4>
+                                <h4>Terms & Conditions</h4>
                             </div>
                             <div class="card-body">
                                 <table class="table">
@@ -22,7 +22,13 @@
                                     <tbody>
                                     <tr>
                                         <th scope="row">1</th>
-                                        <td>{!! $data->description !!}</td>
+                                         <td>
+                                                @if ($data && $data->description)
+                                                    {!! Str::limit(strip_tags($data->description), 200, '...') !!}
+                                                @else
+                                                    <p>No description available.</p>
+                                                @endif
+                                        </td>
                                         <td><a href="{{url('/admin/term-condition-edit')}}"><i class="fas fa-edit"></i></a></td>
                                     </tr>
 
