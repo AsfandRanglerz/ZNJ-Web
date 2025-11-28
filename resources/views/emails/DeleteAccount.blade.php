@@ -67,7 +67,7 @@
             <h1>Account Deletion Request Received</h1>
             <p>Dear {{$data->name}},</p>
             <p>Your account deletion request has been received successfully. Our team will process your request as soon as possible.</p>
-            <p>If you did not make this request or have any questions, please contact our support team immediately.</p>
+            <p>If you did not make this request or have any questions, please contact our support team at <a href="mailto:eventsznj@gmail.com">eventsznj@gmail.com</a> immediately.</p>
             <p>Thank you,<br>{{ config('app.name') }}</p>
         </div>
         <div class="email-footer">

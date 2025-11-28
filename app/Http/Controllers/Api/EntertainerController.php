@@ -29,7 +29,11 @@ class EntertainerController extends Controller
             // 'title' => 'required',
             'image' => 'required',
             'bio' => 'required',
-            'category_id' => 'required',
+            //  'category_id' => [
+            //     'required',
+            //     Rule::unique('user_categories')
+            //         ->where('user_id', auth()->id())
+            // ],
             'price' => 'required',
             // 'event_photos' => 'required',
             'description' => 'required',
@@ -47,6 +51,17 @@ class EntertainerController extends Controller
             $filename = time() . '.' . $extension;
             $file->move(public_path('images'), $filename);
             $data['image'] = 'public/images/' . $filename;
+        }
+        $userId = auth()->id();
+        $categoryId = $data['category_id'];
+
+        // Check if user already has this category
+        $exists = EntertainerDetail::where('user_id', $userId)
+                    ->where('category_id', $categoryId)
+                    ->exists();
+
+        if ($exists) {
+            return $this->sendError('You have already added this talent category.');
         }
         // $data['user_id'] = auth()->id();
         $entertainer = EntertainerDetail::create($data);
@@ -125,6 +140,22 @@ class EntertainerController extends Controller
             $file->move(public_path('images'), $filename);
             $data['image'] = 'public/images/' . $filename;
         }
+
+        $userId = auth()->id();
+        $categoryId = $data['category_id'];
+        $recordId = $entertainer->id; // jo record update ho raha hai
+
+        // Check if same category exists for this user, ignoring current record
+        $exists = EntertainerDetail::where('user_id', $userId)
+                    ->where('category_id', $categoryId)
+                    ->where('id', '!=', $recordId) // ignore current record
+                    ->exists();
+
+        if ($exists) {
+            return $this->sendError('You have already added this talent category.');
+        }
+
+        
         $data['user_id'] = auth()->id();
         $entertainer = EntertainerDetail::find($id)->update($data);
 

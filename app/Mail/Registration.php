@@ -31,4 +31,4 @@ class Registration extends Mailable
     {
         return $this->markdown('emails.Registration')->with(['user'=>$this->user]);
     }
-}
+} 

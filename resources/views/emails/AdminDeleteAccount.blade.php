@@ -66,7 +66,7 @@
         <div class="email-body">
             <h1>Account Deleted Successfully</h1>
             <p>Dear {{$data->name}},</p>
-            <p>Your account has been deleted successfully. We're sorry to see you go. If you have any feedback or questions, please feel free to contact our support team.</p>
+            <p>Your account has been deleted successfully. We're sorry to see you go. If you have any feedback or questions, please feel free to contact our support team at <a href="mailto:eventsznj@gmail.com">eventsznj@gmail.com</a>.</p>
             <p>Thank you,<br>{{ config('app.name') }}</p>
         </div>
         <div class="email-footer">

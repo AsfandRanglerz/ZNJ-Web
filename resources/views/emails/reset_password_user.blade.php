@@ -85,6 +85,7 @@
             <p>If you did not request a password reset, no further action is required.</p>
             <p>Thank you,<br>{{ config('app.name') }}</p>
         </div>
+         <p>If you have any questions or need assistance, feel free to contact our support team at <a href="mailto:eventsznj@gmail.com">eventsznj@gmail.com</a> anytime.</p>
         <div class="email-footer">
             &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
         </div>

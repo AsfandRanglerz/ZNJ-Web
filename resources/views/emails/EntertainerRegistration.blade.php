@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Welcome to ZNJ</title>
-    <style>
+     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -64,39 +64,40 @@
     </style>
 </head>
 <body>
-    <div class="email-wrapper">
+ <div class="email-wrapper">
         <div class="email-header">
             <img src="{{ asset('public/admin/assets/img/logo.png') }}" alt="{{ config('app.name') }} Logo">
         </div>
-    <div style="text-align:center; margin-bottom: 20px;">
-        <h3><strong>Welcome to <span style="color: #021642;">ZNJ</span></strong></h3>
-    </div>
-
-    <p>Dear {{ $name ?? 'User' }},</p>
-
-    <p>Your account has been successfully created.</p>
-
-    <p>With your account, you’ll be able to:</p>
-    <ul>
-        <li>Create Events</li>
-        <li>Join Events</li>
-        <li>Generate Tickets</li>
-    </ul>
-
-    <h3>Your Account Details:</h3>
-    <ul>
-        <li><strong>Email:</strong> {{ $email ?? 'N/A' }}</li>
-        <li><strong>Phone:</strong> {{ $phone ?? 'N/A' }}</li>
-    </ul>
-
-    <p>Please keep this information safe and secure. Do not share your login credentials with anyone.</p>
-
-    <p>If you have any questions or need assistance, feel free to contact our support team at <a href="mailto:eventsznj@gmail.com">eventsznj@gmail.com</a> anytime.</p>
-
-     <div class="email-footer">
-            &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
+        <div style="text-align:center; margin-bottom: 20px;">
+            <h3><strong>Welcome to <span style="color: #021642;">ZNJ</span></strong></h3>
         </div>
-    </div>
 
+        <p>Dear {{ $name ?? 'User' }},</p>
+
+        <p>Your account has been successfully created our team is currently reviewing your details.</p>
+        <p>You’ll receive another email once your account has been approved and activated.</p>
+
+            <div style="background-color:#f3f6ff; border-left:4px solid #021642; padding:12px 15px; margin:20px 0; border-radius:6px;">
+                <p style="margin:0; font-size:14px; color:#333;">
+                    Please keep an eye on your inbox for updates from the ZNJ team.
+                </p>
+            </div>
+
+            <p>We appreciate your patience and look forward to partnering with you.</p>
+        <h3>Your Account Details:</h3>
+        <ul>
+            <li><strong>Email:</strong> {{ $email ?? 'N/A' }}</li>
+            <li><strong>Phone:</strong> {{ $phone ?? 'N/A' }}</li>
+            <li><strong>Password:</strong> {{ $password ?? 'N/A' }}</li>
+        </ul>
+
+    
+        <p>Please keep this information safe and secure. Do not share your login credentials with anyone.</p>
+
+        <p>If you have any questions or need assistance, feel free to contact our support team at <a href="mailto:eventsznj@gmail.com">eventsznj@gmail.com</a> anytime.</p>
+            <div class="email-footer">
+                &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
+            </div>
+    </div>
 </body>
 </html>

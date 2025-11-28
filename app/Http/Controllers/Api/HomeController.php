@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\Event;
 use App\Models\Introvideo;
 use App\Models\Venue;
-use App\Models\Introvideo;
 use Illuminate\Http\Request;
 use App\Models\TermCondition;
 use Illuminate\Support\Carbon;

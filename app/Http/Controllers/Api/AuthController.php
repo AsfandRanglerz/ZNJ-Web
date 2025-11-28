@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Mail\UserCredentials;
+use App\Mail\EntertainerRegistration;
 use Illuminate\Support\Carbon;
 use App\Mail\ResetPasswordUser;
 use App\Models\EntertainerDetail;
@@ -78,7 +79,7 @@ class AuthController extends Controller
             // $entertainer_data['password'] = Hash::make($request->password);
             $user = User::create($entertainer_data);
             $user['token'] = $user->createToken('znjToken')->plainTextToken;
-            Mail::to($request->email)->send(new UserCredentials($user->name, $user->email, $user->phone));
+            Mail::to($request->email)->send(new EntertainerRegistration($user->name, $user->email, $user->phone,$request->password)); 
             return $this->sendSuccess('Entertainer Register Successfully', $user);
         } elseif ($request->role === 'venue_provider') {
             $validator = Validator::make($request->all(), [
@@ -117,12 +118,16 @@ class AuthController extends Controller
             return $this->sendError('Invalid email or password');
         }
         $user = User::find(auth()->id());
+        if ($user->is_verify == 0 && $request->role == 'entertainer' && $user->is_login == 0) {
+            return $this->sendError('Your account under consideration you will be notified once your account is activated via email.');
+        }
         if ($user->is_verify == 0) {
         return $this->sendError('Your account is deactivated.');
         }
         if (isset($request->fcm_token)) {
             User::find(auth()->id())->update([
                 'fcm_token' => $request->fcm_token,
+                'is_login' => 1,
             ]);
         }
         $user['token'] = $user->createToken('znjToken')->plainTextToken;

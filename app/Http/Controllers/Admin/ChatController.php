@@ -216,7 +216,7 @@ class ChatController extends Controller
            $data['chatId']= $user->id;
            $data['message']=$message;
            array_push($unread,$data);
-        }
+        } 
 
 
          return response()->json([

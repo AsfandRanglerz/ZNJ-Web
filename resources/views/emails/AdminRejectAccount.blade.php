@@ -66,7 +66,7 @@
         <div class="email-body">
             <h1>Account Deletion Request Rejected</h1>
             <p>Dear {{$data->name}},</p>
-            <p>We regret to inform you that your account deletion request could not be processed at this time. If you have any questions or need further assistance, please contact our support team.</p>
+            <p>We regret to inform you that your account deletion request could not be processed at this time. If you have any questions or need further assistance, please contact our support team at <a href="mailto:eventsznj@gmail.com">eventsznj@gmail.com</a>.</p>
             <p>Thank you,<br>{{ config('app.name') }}</p>
         </div>
         <div class="email-footer">

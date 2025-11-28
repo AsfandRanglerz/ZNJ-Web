@@ -11,7 +11,7 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-        }
+        } 
         .email-wrapper {
             max-width: 600px;
             margin: 40px auto;
@@ -22,34 +22,24 @@
         .email-header {
             text-align: center;
             background-color: #fff;
+            padding: 20px;
         }
         .email-header img {
             max-height: 100px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
         .email-body {
+            padding: 25px;
             color: #333333;
         }
         .email-body h1 {
-            font-size: 26px;
-            margin-bottom: 18px;
+            font-size: 22px;
+            margin-bottom: 15px;
             color: #2d3748;
         }
         .email-body p {
-            line-height: 1.7;
-            margin-bottom: 18px;
-        }
-        .credentials-table {
-            width: 100%;
-            margin: 20px 0;
-            border-collapse: collapse;
-        }
-        .credentials-table td {
-            padding: 10px 0;
-            font-size: 16px;
-        }
-        .credentials-table strong {
-            color: #2d3748;
+            line-height: 1.6;
+            margin-bottom: 15px;
         }
         .email-footer {
             text-align: center;
@@ -67,6 +57,12 @@
             .email-body {
                 padding: 20px 10px;
             }
+        }  
+        h3 {
+            font-weight: 600;
+        }
+        ul {
+            padding-left: 18px;
         }
     </style>
 </head>
@@ -75,26 +71,36 @@
         <div class="email-header">
             <img src="{{ asset('public/admin/assets/img/logo.png') }}" alt="{{ config('app.name') }} Logo">
         </div>
-        <div class="email-body">
-            <h1>Welcome to {{ config('app.name') }}!</h1>
-            <p>Thank you for joining our platform. Below are your login details. Please keep them safe and secure.</p>
-            <table class="credentials-table" role="presentation">
-                <tr>
-                    <td><strong>Email:</strong></td>
-                    <td>{{ $message['email'] }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Password:</strong></td>
-                    <td>{{ $message['password'] }}</td>
-                </tr>
-            </table>
-            <p>You can log in anytime using the credentials above. If you have any questions, feel free to reach out to our support team.</p>
-            <p>We're glad to have you with us!</p>
-        </div>
-        <div class="email-footer">
+    <div style="text-align:center; margin-bottom: 20px;">
+        <h3><strong>Welcome to <span style="color: #021642;">ZNJ</span></strong></h3>
+    </div>
+
+    <p>Dear {{ $name ?? 'User' }},</p>
+
+    <p>Your account has been successfully created.</p>
+
+    <p>With your account, you’ll be able to:</p>
+    <ul>
+        <li>Create Events</li>
+        <li>Join Events</li>
+        <li>Generate Tickets</li>
+    </ul>
+
+    <h3>Your Account Details:</h3>
+    <ul>
+        <li><strong>Email:</strong> {{ $email ?? 'N/A' }}</li>
+        <li><strong>Phone:</strong> {{ $phone ?? 'N/A' }}</li>
+    </ul>
+
+    <p>Please keep this information safe and secure. Do not share your login credentials with anyone.</p>
+
+    <p>If you have any questions or need assistance, feel free to contact our support team at <a href="mailto:eventsznj@gmail.com">eventsznj@gmail.com</a> anytime.</p>
+
+     <div class="email-footer">
             &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
         </div>
     </div>
+
 </body>
 </html>
 @endcomponent

@@ -69,7 +69,7 @@
             @component('mail::button', ['url' => $detail['url']])
             Reset Password
             @endcomponent
-            <p>If you did not request a password reset, please ignore this email or contact our support team if you have concerns.</p>
+            <p>If you did not request a password reset, please ignore this email or contact our support team at <a href="mailto:eventsznj@gmail.com">eventsznj@gmail.com</a> if you have concerns.</p>
             <p>Thank you,<br>{{ config('app.name') }}</p>
         </div>
         <div class="email-footer">

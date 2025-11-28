@@ -10,7 +10,7 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-        }
+        } 
         .email-wrapper {
             max-width: 600px;
             margin: 40px auto;
@@ -67,15 +67,16 @@
         <div class="email-body">
             <h1>Hello, {{ $message['name'] }}</h1>
 
-            @if($message['is_verify'] == '0')
-                <p style="color:#e53e3e;"><strong>Your account has been Un-verified.</strong></p>
-                <p>If you believe this is a mistake or have questions, please contact our support team.</p>
+          @if($message['is_verify'] == '0')
+                <p style="color:#e53e3e;"><strong>Your account has been deactivated.</strong></p>
+                <p>You cannot log in to the platform until your account is activated. If you believe this is a mistake or have any questions, please contact our support team at <a href="mailto:eventsznj@gmail.com">eventsznj@gmail.com</a>.</p>
             @else
-                <p style="color:#38a169;"><strong>Congratulations! Your account has been verified.</strong></p>
-                <p>You now have full access to our platform. If you have any questions, feel free to reach out to us.</p>
+                <p style="color:#38a169;"><strong>Congratulations! Your account has been activated.</strong></p>
+                <p>You can now log in using your registered credentials. You have full access to our platform. If you have any questions, feel free to reach out to us at <a href="mailto:eventsznj@gmail.com">eventsznj@gmail.com</a>.</p>
             @endif
-        </div>
 
+        </div>    
+   
         <div class="email-footer">
             &copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.
         </div>

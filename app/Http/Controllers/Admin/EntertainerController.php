@@ -10,6 +10,7 @@ use App\Models\EntertainerFeatureAdsPackage;
 use App\Models\EntertainerPricePackage;
 use App\Models\TalentCategory;
 use App\Models\User;
+use App\Mail\EntertainerRegistration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -120,8 +121,8 @@ class EntertainerController extends Controller
 
         try {
 
-            Mail::to($request->email)->send(new UserLoginPassword($message));
-
+            // Mail::to($request->email)->send(new UserLoginPassword($message));
+            Mail::to($request->email)->send(new EntertainerRegistration($user->name, $user->email, $user->phone,$password));
             return redirect()->route('admin.user.index')->with(['status' => true, 'message' => 'Entertainer Created sucessfully']);
 
         } catch (\Throwable $th) {
