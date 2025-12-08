@@ -95,15 +95,15 @@ class EntertainerController extends Controller
     {
         // $data = EntertainerDetail::with('User','entertainerEventPhotos', 'entertainerPricePackage', 'talentCategory', 'reviews.user')->get();
         $data = EntertainerDetail::with([
-            'User',
+            'User' => function($query) {
+                $query->where('is_verify', '1');
+            },
             'entertainerEventPhotos',
             'entertainerPricePackage',
             'talentCategory',
             'reviews.user'
         ])
-        ->whereHas('User', function($query) {
-            $query->where('is_verify', 1);
-        })
+        ->latest()
         ->get();
         return $this->sendSuccess('Entertainer data', compact('data'));
     }
@@ -143,7 +143,9 @@ class EntertainerController extends Controller
 
         $userId = auth()->id();
         $categoryId = $data['category_id'];
-        $recordId = $entertainer->id; // jo record update ho raha hai
+        $currenEentertainer = EntertainerDetail::find($id);
+
+        $recordId = $currenEentertainer->id; // jo record update ho raha hai
 
         // Check if same category exists for this user, ignoring current record
         $exists = EntertainerDetail::where('user_id', $userId)
