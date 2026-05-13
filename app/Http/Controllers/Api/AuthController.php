@@ -217,6 +217,192 @@ class AuthController extends Controller
         }
     }
     // User Social Login
+    // public function userSocialLogin(Request $request)
+    // {
+    //     $apple_id = User::where('apple_social_id', $request->social_id)->first();
+    //     if (isset($apple_id)) {
+    //         $validator = Validator::make($request->all(), [
+    //             'social_id' => 'required',
+    //             'login_type' => 'required',
+    //         ]);
+    //     } else {
+    //         $validator = Validator::make($request->all(), [
+    //             'social_id' => 'required',
+    //             'login_type' => 'required',
+    //             'name' => 'required',
+    //             'email' => 'required',
+    //             // 'fcm_token' => 'required',
+    //         ]);
+    //     }
+    //     if ($validator->fails()) {
+    //         return $this->sendError($validator->errors()->first());
+    //     }
+    //     $login_type = $request->login_type;
+    //     if ($request->has('email') && !empty($request->email)) {
+    //         $find_user = User::where('email', $request->email)->where('role', $request->role)->first();
+    //         if ($find_user) {
+    //             if (empty($find_user->name)) {
+    //                 $find_user->name = $request->name;
+    //             }
+    //             if ($login_type == "facebook") {
+    //                 $find_user->facebook_social_id = $request->social_id;
+    //                 if ($request->has('image')) {
+    //                     $find_user->image = $request->image;
+    //                 }
+    //             }
+    //             if ($login_type == "google") {
+    //                 $find_user->google_social_id = $request->social_id;
+    //                 if ($request->has('image')) {
+    //                     $find_user->image = $request->image;
+    //                 }
+    //             }
+    //             if ($login_type == "apple") {
+    //                 $find_user->apple_social_id = $request->social_id;
+    //                 if ($request->has('image')) {
+    //                     $find_user->image = $request->image;
+    //                 }
+    //             }
+    //             $find_user->save();
+    //             $user = User::where('id', $find_user->id)->first();
+    //             $user['token'] = $find_user->createToken('znjToken')->plainTextToken;
+    //             $this->updateFcmToken($user->id, $request->fcm_token);
+    //             return $this->sendSuccess('Login Successfully', $user);
+    //         } else {
+    //             $validator = Validator::make($request->all(), [
+    //                 'role' => 'required',
+    //                 'email' => 'required|unique:users,email|email',
+    //             ]);
+    //             if ($validator->fails()) {
+    //                 return $this->sendError($validator->errors()->first());
+    //             }
+    //             $user = new User();
+    //             $user->name = $request->name;
+    //             $user->role = $request->role;
+    //             // $user->login_type = $request->login_type;
+    //             if ($login_type == "facebook") {
+    //                 if ($request->has('email') && !empty($request->email)) {
+    //                     $user->email = $request->email;
+    //                 }
+    //                 if ($request->has('phone') && !empty($request->phone)) {
+    //                     $user->phone = $request->phone;
+    //                 }
+    //                 if ($request->has('image')) {
+    //                     $user->image = $request->image;
+    //                 }
+    //                 $user->facebook_social_id = $request->social_id;
+    //                 $user->save();
+    //                 $user = User::where('id', $user->id)->first();
+    //                 $user['token'] = $user->createToken('znjToken')->plainTextToken;
+    //                 $this->updateFcmToken($user->id, $request->fcm_token);
+    //                 return $this->sendSuccess('Login Successfully', $user);
+    //             }
+    //             if ($login_type == "google") {
+    //                 if ($request->has('email') && !empty($request->email)) {
+    //                     $user->email = $request->email;
+    //                 }
+    //                 if ($request->has('phone') && !empty($request->phone)) {
+    //                     $user->phone = $request->phone;
+    //                 }
+    //                 if ($request->has('image')) {
+    //                     $user->image = $request->image;
+    //                 }
+    //                 $user->google_social_id = $request->social_id;
+    //                 $user->save();
+    //                 $user = User::where('id', $user->id)->first();
+    //                 // $accessToken = $user->createToken('znjToken')->accessToken;
+    //                 // $user['accessToken'] = $accessToken;
+    //                 $user['token'] = $user->createToken('znjToken')->plainTextToken;
+    //                 $this->updateFcmToken($user->id, $request->fcm_token);
+    //                 return $this->sendSuccess('Login Successfully', $user);
+    //             }
+    //             if ($login_type == "apple") {
+    //                 if ($request->has('email') && !empty($request->email)) {
+    //                     $user->email = $request->email;
+    //                 }
+    //                 if ($request->has('phone') && !empty($request->phone)) {
+    //                     $user->phone = $request->phone;
+    //                 }
+    //                 if ($request->has('image')) {
+    //                     $user->image = $request->image;
+    //                 }
+    //                 $user->apple_social_id = $request->social_id;
+    //                 $user->save();
+    //                 $user = User::where('id', $user->id)->first();
+    //                 $user['token'] = $user->createToken('znjToken')->plainTextToken;
+    //                 $this->updateFcmToken($user->id, $request->fcm_token);
+    //                 return $this->sendSuccess('Login Successfully', $user);
+    //             }
+    //         }
+    //     } else {
+    //         $user = User::where('facebook_social_id', $request->social_id)->orwhere('google_social_id', $request->social_id)->orwhere('apple_social_id', $request->social_id)->first();
+    //         if ($user) {
+    //             if ($user->role == $request->role) {
+    //                 $user->save();
+    //                 $user = User::where('id', $user->id)->first();
+    //                 $user['token'] = $user->createToken('znjToken')->plainTextToken;
+    //                 $this->updateFcmToken($user->id, $request->fcm_token);
+    //                 return $this->sendSuccess('Login Successfully', $user);
+    //             } else {
+    //                 return $this->sendError('Email has already been taken');
+    //             }
+
+    //             // $user->save();
+    //             // $user = User::where('id', $user->id)->first();
+    //             // $user['token'] = $user->createToken('znjToken')->plainTextToken;
+    //             // $this->updateFcmToken($user->id, $request->fcm_token);
+    //             // return $this->sendSuccess('Login Successfully', $user);
+    //         } else {
+    //             $validator = Validator::make($request->all(), [
+    //                 'role' => 'required',
+    //                 'email' => 'required|unique:users,email|email',
+    //             ]);
+    //             if ($validator->fails()) {
+    //                 return $this->sendError($validator->errors()->first());
+    //             }
+    //             $user = new User();
+    //             $user->name = $request->name;
+    //             $user->role = $request->role;
+    //             if ($request->has('phone')) {
+    //                 $user->phone = $request->phone;
+    //             }
+    //             if ($login_type == "facebook") {
+    //                 if ($request->has('image')) {
+    //                     $user->image = $request->image;
+    //                 }
+    //                 $user->facebook_social_id = $request->social_id;
+    //                 $user->save();
+    //                 $user = User::where('id', $user->id)->first();
+    //                 $user['token'] = $user->createToken('znjToken')->plainTextToken;
+    //                 $this->updateFcmToken($user->id, $request->fcm_token);
+    //                 return $this->sendSuccess('Login Successfully', $user);
+    //             }
+    //             if ($login_type == "google") {
+    //                 if ($request->has('image')) {
+    //                     $user->image = $request->image;
+    //                 }
+    //                 $user->google_social_id = $request->social_id;
+    //                 $user->save();
+    //                 $user = User::where('id', $user->id)->first();
+    //                 $user['token'] = $user->createToken('znjToken')->plainTextToken;
+    //                 $this->updateFcmToken($user->id, $request->fcm_token);
+    //                 return $this->sendSuccess('Login Successfully', $user);
+    //             }
+    //             if ($login_type == "apple") {
+    //                 if ($request->has('image')) {
+    //                     $user->image = $request->image;
+    //                 }
+    //                 $user->apple_social_id = $request->social_id;
+    //                 $user->save();
+    //                 $user = User::where('id', $user->id)->first();
+    //                 $user['token'] = $user->createToken('znjToken')->plainTextToken;
+    //                 $this->updateFcmToken($user->id, $request->fcm_token);
+    //                 return $this->sendSuccess('Login Successfully', $user);
+    //             }
+    //         }
+    //     }
+    // }
+
+     // User Social Login
     public function userSocialLogin(Request $request)
     {
         $apple_id = User::where('apple_social_id', $request->social_id)->first();
@@ -263,8 +449,15 @@ class AuthController extends Controller
                     }
                 }
                 $find_user->save();
+                if ($find_user->is_verify == 0 && $find_user->role == 'entertainer' && $find_user->is_login == 0) {
+                    return $this->sendError('Your account under consideration you will be notified once your account is activated via email.');
+                }
+                if ($find_user->is_verify == 0) {
+                return $this->sendError('Your account is deactivated.');
+                }
                 $user = User::where('id', $find_user->id)->first();
                 $user['token'] = $find_user->createToken('znjToken')->plainTextToken;
+
                 $this->updateFcmToken($user->id, $request->fcm_token);
                 return $this->sendSuccess('Login Successfully', $user);
             } else {
@@ -307,11 +500,18 @@ class AuthController extends Controller
                         $user->image = $request->image;
                     }
                     $user->google_social_id = $request->social_id;
+                    if($request->role == 'entertainer'){
+                        $user->is_verify = '0';
+                    }
                     $user->save();
+                    if ($user->is_verify == 0 && $user->role == 'entertainer' && $user->is_login == 0) {
+                       return $this->sendError('Entertainer Register Successfully. Your account under consideration you will be notified once your account is activated via email.');
+                    }
                     $user = User::where('id', $user->id)->first();
                     // $accessToken = $user->createToken('znjToken')->accessToken;
                     // $user['accessToken'] = $accessToken;
                     $user['token'] = $user->createToken('znjToken')->plainTextToken;
+    
                     $this->updateFcmToken($user->id, $request->fcm_token);
                     return $this->sendSuccess('Login Successfully', $user);
                 }
@@ -336,10 +536,17 @@ class AuthController extends Controller
         } else {
             $user = User::where('facebook_social_id', $request->social_id)->orwhere('google_social_id', $request->social_id)->orwhere('apple_social_id', $request->social_id)->first();
             if ($user) {
-                if ($user->role == $request->role) {
-                    $user->save();
+                    if ($user->role == $request->role) {
+                        $user->save();
+                        if ($user->is_verify == 0 && $user->role == 'entertainer' && $user->is_login == 0) {
+                        return $this->sendError('Your account under consideration you will be notified once your account is activated via email.');
+                        }
+                        if ($user->is_verify == 0) {
+                        return $this->sendError('Your account is deactivated.');
+                        }
                     $user = User::where('id', $user->id)->first();
                     $user['token'] = $user->createToken('znjToken')->plainTextToken;
+                    $user->update(['is_login'=> 1]);
                     $this->updateFcmToken($user->id, $request->fcm_token);
                     return $this->sendSuccess('Login Successfully', $user);
                 } else {
@@ -381,9 +588,16 @@ class AuthController extends Controller
                         $user->image = $request->image;
                     }
                     $user->google_social_id = $request->social_id;
+                    if($request->role == 'entertainer'){
+                        $user->is_verify = '0';
+                    }
                     $user->save();
+                    if ($user->is_verify == 0 && $user->role == 'entertainer' && $user->is_login == 0) {
+                       return $this->sendError('Entertainer Register Successfully. Your account under consideration you will be notified once your account is activated via email.');
+                    }
                     $user = User::where('id', $user->id)->first();
                     $user['token'] = $user->createToken('znjToken')->plainTextToken;
+    
                     $this->updateFcmToken($user->id, $request->fcm_token);
                     return $this->sendSuccess('Login Successfully', $user);
                 }
@@ -418,7 +632,7 @@ class AuthController extends Controller
     // Update Fcm Token
     protected function updateFcmToken($userId, $token)
     {
-        return User::where('id', $userId)->update(['fcm_token' => $token]);
+        return User::where('id', $userId)->update(['fcm_token' => $token,'is_login' => 1]);
     }
     // Edit Profile
     public function editProfile()

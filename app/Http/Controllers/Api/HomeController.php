@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use App\Models\Event;
-use App\Models\Introvideo;
 use App\Models\Venue;
+use App\Models\Introvideo;
 use Illuminate\Http\Request;
 use App\Models\TermCondition;
 use Illuminate\Support\Carbon;
@@ -47,9 +47,14 @@ class HomeController extends Controller
             //     )
             //     ->orderBy('distance', 'ASC')
             //     ->limit(10)->get();
-            $data['venue_event'] = Venue::with(['events' => function ($query) {
-                $query->where('date', '>=', now()->format('Y-m-d'));
-                $query->with('user'); // Load the user associated with each event
+            $data['venue_event'] = Venue::whereHas('events', function ($query) {
+                $query->where('date', '>=', now()->format('Y-m-d'))
+                    ->whereNull('delete_request');
+            })
+            ->with(['events' => function ($query) {
+                $query->where('date', '>=', now()->format('Y-m-d'))
+                    ->whereNull('delete_request')
+                    ->with('user');
             }])
             ->select(
                 "venues.id",
@@ -64,7 +69,7 @@ class HomeController extends Controller
             ->limit(10)
             ->get();
         } else {
-            $data['venue_event'] = Event::with('User', 'entertainerDetails', 'eventVenues')->get();
+            $data['venue_event'] = Event::with('User', 'entertainerDetails', 'eventVenues')->where('delete_request',null)->get();
         }
 
         $data['entertainer'] = EntertainerDetail::with('User', 'reviews.user', 'entertainerEventPhotos', 'entertainerPricePackage', 'talentCategory')->orderBy('avg_rating', 'DESC')->limit(10)->get();
@@ -118,9 +123,16 @@ class HomeController extends Controller
         return $this->sendSuccess('Data sent  Successfully', compact('data'));
     }
 
-    public function introVideo()
+     public function introvideo()
     {
-        $data = Introvideo::first();
-        return $this->sendSuccess('Intro Video', compact('data'));
+         $videos = Introvideo::pluck('video') // get only video column
+        ->map(function ($video) {
+            return asset('public/' . $video);
+        });
+
+        return response()->json([
+            'message' => 'Intro video fetched successfully',
+            'data' => $videos
+        ], 200);
     }
 }

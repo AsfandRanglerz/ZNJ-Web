@@ -93,12 +93,11 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('forget-password', 'AuthController@forgetPassword');
     Route::post('confirm-token', 'AuthController@confirmToken');
     Route::post('submit-reset-password', 'AuthController@submitResetPassword');
-    Route::get('intro-video', 'HomeController@introVideo');
 
-    Route::get('/intro-video', 'HomeController@introvideo');
+     Route::get('/intro-video', 'HomeController@introvideo');
 
     Route::post('/create-session', [BankAlfalahPaymentController::class, 'createCheckoutSession']);
-
+ 
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('logout', 'AuthController@logout');
         Route::post('user-location', 'AuthController@userLocation');
@@ -111,6 +110,9 @@ Route::group(['namespace' => 'Api'], function () {
         Route::post('create-event', 'EventController@createEvent');
         Route::get('events', 'EventController@getEvents');
         Route::get('event/{id}', 'EventController@event');
+	 	Route::get('entertainer/{entertainer_id}/events/{status}', 'EventController@getEntertainerApprovedEvents');
+		Route::get('venue/{venue_id}/events/{status}', 'EventController@getVenueProviderApprovedEvents');
+
         Route::get('entertainer-talent', 'EventController@entertainer_tallents');
         Route::get('user-events', 'EventController@userEvents');
         Route::post('event', 'EventController@getEvent');

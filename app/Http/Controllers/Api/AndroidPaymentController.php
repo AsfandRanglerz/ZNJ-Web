@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use App\Models\Wallet;
+use Illuminate\Support\Facades\DB;
 
 class AndroidPaymentController extends Controller
 {
@@ -77,15 +79,29 @@ class AndroidPaymentController extends Controller
             $sessionId = $sessionData['session']['id'];
             Log::info("✅ Session created successfully", ['session_id' => $sessionId]);
 
-            // ✅ Store temporary info
-            \App\Models\PaymentTemp::create([
-                'order_id' => $orderId,
-                'session_id' => $sessionId,
-                'user_id' => $userId,
-                'event_id' => $eventId,
-                'amount' => $amount,
-                'quantity' => $quantity,
-            ]);
+            if($request->payment_type == 'tickets'){
+                // ✅ Store temporary info
+                \App\Models\PaymentTemp::create([
+                    'order_id' => $orderId,
+                    'session_id' => $sessionId,
+                    'user_id' => $userId,
+                    'event_id' => $eventId,
+                    'amount' => $amount,
+                    'quantity' => $quantity,
+                ]);
+            }else if($request->payment_type == 'venue_payment' || $request->payment_type == 'entertainer_payment'){
+                DB::transaction(function () use ($request, $amount) {
+                    $wallet = Wallet::firstOrCreate(
+                        ['user_id' => $request->user_id],
+                        [
+                            'total_earnings' => 0,
+                            'remaining_earnings' => 0,
+                        ]
+                    );
+                    $wallet->increment('total_earnings', $amount);
+                    $wallet->increment('remaining_earnings', $amount);
+                });
+            }
 
             // ✅ Hosted checkout URL (for app webview)
             $checkoutPageUrl = url('/gateway/pay/' . $orderId . '?session_id=' . $sessionId);
